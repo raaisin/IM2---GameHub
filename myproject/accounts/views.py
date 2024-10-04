@@ -26,7 +26,7 @@ def signup_view(request):
             password = form.cleaned_data.get('password1')
             # Log the user in after signing up
             login(request, user)  # Use the user object directly
-            return redirect('home')  
+            return redirect('home')
     else:
         form = UserCreationForm()
     return render(request, 'signup.html', {'form': form})
@@ -34,3 +34,8 @@ def signup_view(request):
 @login_required
 def home_view(request):
     return render(request, 'home.html')
+
+def cart_view(request):
+    cart_items = cart_items.objects.filter(request, user=request.user)
+    return render(request, 'cart.html')
+
