@@ -36,6 +36,5 @@ def home_view(request):
     return render(request, 'home.html')
 
 def cart_view(request):
-    cart_items = cart_items.objects.filter(request, user=request.user)
+    cart_items = cart_items.object.filter(request, user=request.user)
     return render(request, 'cart.html')
-

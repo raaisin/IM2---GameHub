@@ -11,7 +11,7 @@ class Product(models.Model):
     product_name = models.CharField(max_length=100)
     description = models.TextField()
     price = models.DecimalField(max_digits=100, decimal_places=2)
-    quantity = models.IntegerField()  # Removed 'max_digits'
+    quantity = models.IntegerField()  
     date_created = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
@@ -30,3 +30,4 @@ class product_category(models.Model):
 
     def category_stuff(self):
         return self.category_name
+    

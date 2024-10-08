@@ -1,5 +1,8 @@
+
 <!DOCTYPE html>
+{% load static %}
 <html lang="en">
+
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -16,16 +19,30 @@
             font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
         }
 
-        /* Navbar styles */
-        .navbar {
-            background-color: crimson;
+        /* Upper black header styling */
+        .upper-header {
+            background-color: black;
             color: white;
-            padding: 15px 20px;
+            padding: 10px 20px;
             width: 100%;
             position: fixed;
             top: 0;
             left: 0;
             z-index: 1000;
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        /* Lower header styling */
+        .lower-header {
+            background-color: #5F0606;
+            color: white;
+            padding: 15px 20px;
+            width: 100%;
+            position: fixed;
+            top: 40px;
+            left: 0;
+            z-index: 999;
         }
 
         .navdiv {
@@ -36,7 +53,6 @@
             margin: 0 auto;
         }
 
-        /* Logo styles */
         .logo {
             display: flex;
             align-items: center;
@@ -48,10 +64,10 @@
             color: white;
         }
 
-        /* Add styles for the sandwich menu */
+        /* Sandwich Menu */
         .sandwich-menu {
             position: relative;
-            margin-left: 15px; /* Spacing between menu and logo */
+            margin-left: 15px;
         }
 
         .sandwich-button {
@@ -61,40 +77,98 @@
             padding: 10px;
         }
 
+        /* Updated sandwich-icon with 3 bars */
         .sandwich-icon {
             display: inline-block;
-            width: 20px;
-            height: 15px;
-            border-top: 2px solid white;
-            border-bottom: 2px solid white;
+            width: 25px;
+            height: 3px;
+            background-color: white;
+            position: relative;
         }
 
+        .sandwich-icon::before,
+        .sandwich-icon::after {
+            content: '';
+            display: block;
+            width: 25px;
+            height: 3px;
+            background-color: white;
+            position: absolute;
+            left: 0;
+        }
+
+        .sandwich-icon::before {
+            top: -8px;
+        }
+
+        .sandwich-icon::after {
+            top: 8px;
+        }
+
+        /* Dropdown Menu */
         .sandwich-links {
             position: absolute;
             top: 40px;
-            right: 0;
-            background-color: crimson;
-            padding: 10px;
-            display: none; /* Hidden by default */
+            left: 0;
+            background-color: #5F0606;
+            padding: 20px;
+            display: none;
+            width: 200px;
+            border-radius: 0 0 10px 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            z-index: 100;
         }
 
         .sandwich-links li {
-            margin-bottom: 10px;
+            margin-bottom: 15px;
         }
 
         .sandwich-links a {
             color: white;
-            font-size: 16px;
+            font-size: 18px;
         }
 
         .sandwich-links a:hover {
-            color: #ffebcd; /* Lighter color on hover */
+            color: #ffebcd;
         }
 
-        /* Navigation links */
+        .search-bar {
+            display: flex;
+            align-items: center;
+            margin: 10px 0;
+        }
+
+        .search-input {
+            padding: 10px;
+            border: none;
+            border-radius: 5px 0 0 5px;
+            width: 300px;
+            outline: none;
+        }
+
+        .search-button {
+            padding: 10px;
+            border: none;
+            background-color: #fff;
+            color: #5F0606;
+            border-radius: 0 5px 5px 0;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .search-button:hover {
+            background-color: #ffcccc;
+        }
+
         ul {
             display: flex;
             list-style: none;
+            align-items: center;
+        }
+
+        li {
+            display: flex;
+            align-items: center;
         }
 
         li a {
@@ -106,48 +180,95 @@
         }
 
         li a:hover {
-            color: #ffebcd; /* Lighter color on hover */
+            color: #ffebcd;
         }
 
-        /* Responsive styles */
-        @media (max-width: 768px) {
-            .navdiv {
-                flex-direction: column;
-            }
-
-            ul {
-                margin-top: 10px;
-                flex-wrap: wrap;
-                justify-content: center;
-            }
-
-            li {
-                margin-bottom: 10px;
-            }
-
-            li a {
-                margin-right: 0;
-                font-size: 16px;
-            }
-
-            .logo a {
-                font-size: 28px;
-            }
+        /* Image container styling */
+        .image-section {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+            margin-top: 120px;
+            padding: 20px;
         }
 
-        @media (max-width: 480px) {
-            .logo a {
-                font-size: 24px;
-            }
+        .image-section img {
+            width: 32%;
+            height: auto;
+            margin-bottom: 20px;
+            border: 2px solid #5F0606;
+            border-radius: 10px;
+        }
 
-            li a {
-                font-size: 14px;
-            }
+        /* Carousel and category section styling */
+        .category-label {
+            text-align: center;
+            font-size: 24px;
+            font-weight: bold;
+            padding: 10px 0;
+            color: #5F0606;
+        }
+
+        .carousel {
+            position: relative;
+            max-width: 1200px;
+            margin: 20px auto;
+            overflow: hidden;
+            border: 2px solid #5F0606;
+        }
+
+        .carousel-images {
+            display: flex;
+            transition: transform 0.5s ease-in-out;
+        }
+
+        .carousel img {
+            width: 100%;
+            height: 500px;
+            object-fit: cover;
+        }
+
+        .prev,
+        .next {
+            cursor: pointer;
+            position: absolute;
+            top: 50%;
+            width: auto;
+            margin-top: -22px;
+            padding: 16px;
+            color: white;
+            font-weight: bold;
+            font-size: 18px;
+            border-radius: 0 3px 3px 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            user-select: none;
+        }
+
+        .next {
+            right: 0;
+            border-radius: 3px 0 0 3px;
+        }
+
+        .prev:hover,
+        .next:hover {
+            background-color: rgba(0, 0, 0, 0.8);
         }
     </style>
 </head>
+
 <body>
-    <nav class="navbar">
+    <div class="upper-header">
+        <ul>
+            <li><a href="#">New</a></li>
+            <li><a href="#">Deals</a></li>
+            <li><a href="#">Active</a></li>
+            <li><a href="#">Laptop</a></li>
+            <li><a href="#">PC</a></li>
+            <li><a href="#">Accessories</a></li>
+        </ul>
+    </div>
+
+    <nav class="lower-header">
         <div class="navdiv">
             <div class="logo">
                 <div class="sandwich-menu">
@@ -155,36 +276,69 @@
                         <span class="sandwich-icon"></span>
                     </button>
                     <ul class="sandwich-links" id="sandwich-links">
-                        <li><a href="#">Settings</a></li>
-                        <li><a href="#">Log out</a></li>
+                        <li><a href="#">My Account</a></li>
+                        <li><a href="#">My Orders</a></li>
+                        <li><a href="#">Stored Payment Method</a></li>
+                        <li><a href="#">My Reward Point History</a></li>
                     </ul>
                 </div>
                 <a href="#">GameHub</a>
             </div>
-            <ul>
-                <li><a href="#">New</a></li>
-                <li><a href="#">Deals</a></li>
-                <li><a href="#">Active</a></li>
-                <li><a href="#">Laptop</a></li>
-                <li><a href="#">PC</a></li>
-                <li><a href="#">Accessories</a></li>
-                <li><a href="#">ALL</a></li>
-            </ul>
+            <div class="search-bar">
+                <input type="text" class="search-input" placeholder="Search for games...">
+                <button class="search-button">Search</button>
+            </div>
         </div>
     </nav>
 
+ 
+    <div class="image-section">
+        <img src="{% static 'images/phoneacc.jpg' %}" alt="Game 1">
+        <img src="https://via.placeholder.com/400x200/00FF00/FFFFFF?text=Game+2" alt="Game 2">
+        <img src="https://via.placeholder.com/400x200/0000FF/FFFFFF?text=Game+3" alt="Game 3">
+        <img src="https://via.placeholder.com/400x200/FFFF00/FFFFFF?text=Game+4" alt="Game 4">
+        <img src="https://via.placeholder.com/400x200/FF00FF/FFFFFF?text=Game+5" alt="Game 5">
+        <img src="https://via.placeholder.com/400x200/00FFFF/FFFFFF?text=Game+6" alt="Game 6">
+    </div>
+
+    <div class="category-label">CATEGORY</div>
+
+    <div class="carousel">
+        <div class="carousel-images" id="carousel-images">
+            <img src="https://via.placeholder.com/1200x500/FF0000/FFFFFF?text=Game+Category+1" alt="Category 1">
+            <img src="https://via.placeholder.com/1200x500/00FF00/FFFFFF?text=Game+Category+2" alt="Category 2">
+            <img src="https://via.placeholder.com/1200x500/0000FF/FFFFFF?text=Game+Category+3" alt="Category 3">
+        </div>
+        <a class="prev" id="prev">&#10094;</a>
+        <a class="next" id="next">&#10095;</a>
+    </div>
+
     <script>
+        const carouselImages = document.getElementById('carousel-images');
+        const images = document.querySelectorAll('.carousel img');
+        const prevButton = document.getElementById('prev');
+        const nextButton = document.getElementById('next');
+        let index = 0;
+
+        // Show next image
+        nextButton.addEventListener('click', () => {
+            index = (index + 1) % images.length;
+            carouselImages.style.transform = `translateX(${-index * 100}%)`;
+        });
+
+        // Show previous image
+        prevButton.addEventListener('click', () => {
+            index = (index - 1 + images.length) % images.length;
+            carouselImages.style.transform = `translateX(${-index * 100}%)`;
+        });
+
         const menuButton = document.getElementById('menu-button');
         const sandwichLinks = document.getElementById('sandwich-links');
 
-        menuButton.addEventListener('click', function() {
-            // Toggle display of sandwich links
-            if (sandwichLinks.style.display === 'block') {
-                sandwichLinks.style.display = 'none';
-            } else {
-                sandwichLinks.style.display = 'block';
-            }
+        menuButton.addEventListener('click', function () {
+            sandwichLinks.style.display = sandwichLinks.style.display === 'block' ? 'none' : 'block';
         });
     </script>
 </body>
+
 </html>
