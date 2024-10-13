@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            text-decoration: none;
+        }
+
+        body {
+            font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+            background-color: #f4f4f4;
+            padding-top: 100px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .profile-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .profile-header h2 {
+            font-size: 28px;
+            color: #5F0606;
+        }
+
+        .profile-header img {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            border: 4px solid #5F0606;
+            margin-bottom: 20px;
+        }
+
+        .profile-info {
+            margin-bottom: 30px;
+        }
+
+        .profile-info label {
+            font-weight: bold;
+            color: #333;
+        }
+
+        .profile-info p {
+            font-size: 18px;
+            color: #666;
+            margin-bottom: 15px;
+        }
+
+        .edit-button {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #5F0606;
+            color: #fff;
+            border-radius: 5px;
+            cursor: pointer;
+            text-align: center;
+            margin-top: 20px;
+            transition: background-color 0.3s;
+        }
+
+        .edit-button:hover {
+            background-color: #7c0808;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
+        .save-button {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #5F0606;
+            color: #fff;
+            border-radius: 5px;
+            cursor: pointer;
+            text-align: center;
+            margin-top: 20px;
+            transition: background-color 0.3s;
+        }
+
+        .save-button:hover {
+            background-color: #7c0808;
+        }
+
+        .cancel-button {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #ccc;
+            color: #333;
+            border-radius: 5px;
+            cursor: pointer;
+            text-align: center;
+            margin-top: 20px;
+            margin-left: 10px;
+        }
+
+        .cancel-button:hover {
+            background-color: #aaa;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="profile-header">
+            <img src="{% static 'images/profile-pic.jpg' %}" alt="Profile Picture">
+            <h2>My Profile</h2>
+        </div>
+        <div class="profile-info">
+            <label for="name">Name:</label>
+            <p id="name">Hanz Bacus</p>
+            <label for="email">Email:</label>
+            <p id="email">hanzbacus@gmail.com</p>
+            <label for="bio">Bio:</label>
+            <p id="bio">Gamer and tech enthusiast. Always looking for the latest gaming gear and software updates.</p>
+            <button class="edit-button" id="edit-button">Edit Profile</button>
+        </div>
+        <div class="profile-form" id="profile-form" style="display: none;">
+            <div class="form-group">
+                <label for="edit-name">Name:</label>
+                <input type="text" id="edit-name" value="Hanz Bacus">
+            </div>
+            <div class="form-group">
+                <label for="edit-email">Email:</label>
+                <input type="email" id="edit-email" value="hanzbacus@gmail.com">
+            </div>
+            <div class="form-group">
+                <label for="edit-bio">Bio:</label>
+                <textarea id="edit-bio" rows="4">Gamer and tech enthusiast. Always looking for the latest gaming gear and software updates.</textarea>
+            </div>
+            <button class="save-button" id="save-button">Save Changes</button>
+            <button class="cancel-button" id="cancel-button">Cancel</button>
+        </div>
+    </div>
+
+    <script>
+        const editButton = document.getElementById('edit-button');
+        const profileForm = document.getElementById('profile-form');
+        const profileInfo = document.querySelector('.profile-info');
+        const saveButton = document.getElementById('save-button');
+        const cancelButton = document.getElementById('cancel-button');
+
+        editButton.addEventListener('click', () => {
+            profileForm.style.display = 'block';
+            profileInfo.style.display = 'none';
+        });
+
+        cancelButton.addEventListener('click', () => {
+            profileForm.style.display = 'none';
+            profileInfo.style.display = 'block';
+        });
+
+        saveButton.addEventListener('click', () => {
+            const name = document.getElementById('edit-name').value;
+            const email = document.getElementById('edit-email').value;
+            const bio = document.getElementById('edit-bio').value;
+
+            document.getElementById('name').textContent = name;
+            document.getElementById('email').textContent = email;
+            document.getElementById('bio').textContent = bio;
+
+            profileForm.style.display = 'none';
+            profileInfo.style.display = 'block';
+        });
+    </script>
+</body>
+
+</html>

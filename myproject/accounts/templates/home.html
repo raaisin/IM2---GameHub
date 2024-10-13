@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 {% load static %}
 <html lang="en">
@@ -62,6 +61,17 @@
             font-size: 35px;
             font-weight: 600;
             color: white;
+        }
+
+        /* Cart Icon Styling */
+        .cart-icon {
+            width: 30px;
+            height: 30px;
+            cursor: pointer;
+        }
+
+        .cart {
+            margin-left: 20px;
         }
 
         /* Sandwich Menu */
@@ -276,7 +286,7 @@
                         <span class="sandwich-icon"></span>
                     </button>
                     <ul class="sandwich-links" id="sandwich-links">
-                        <li><a href="#">My Account</a></li>
+                        <li><a href="{% url 'profile' %}">My Account</a></li>
                         <li><a href="#">My Orders</a></li>
                         <li><a href="#">Stored Payment Method</a></li>
                         <li><a href="#">My Reward Point History</a></li>
@@ -288,31 +298,35 @@
                 <input type="text" class="search-input" placeholder="Search for games...">
                 <button class="search-button">Search</button>
             </div>
+            <!-- Cart Icon with link to cart.html -->
+            <div class="cart">
+                <a href="{% url 'cart' %}">
+                    <img src="{% static 'images/cart-icon.webp' %}" alt="Cart" class="cart-icon">
+                </a>
+            </div>
         </div>
     </nav>
 
- 
     <div class="image-section">
-        <img src="{% static 'images/phoneacc.jpg' %}" alt="Game 1">
-        <img src="https://via.placeholder.com/400x200/00FF00/FFFFFF?text=Game+2" alt="Game 2">
-        <img src="https://via.placeholder.com/400x200/0000FF/FFFFFF?text=Game+3" alt="Game 3">
-        <img src="https://via.placeholder.com/400x200/FFFF00/FFFFFF?text=Game+4" alt="Game 4">
-        <img src="https://via.placeholder.com/400x200/FF00FF/FFFFFF?text=Game+5" alt="Game 5">
-        <img src="https://via.placeholder.com/400x200/00FFFF/FFFFFF?text=Game+6" alt="Game 6">
+        <img src="{% static 'images/phonegamingacc.jpg' %}" alt="Game 1">
+        <img src="{% static 'images/gaming-mouse.webp' %}" alt="Game 2">
+        <img src="{% static 'images/mech-keyboard.jpg' %}" alt="Game 3">
+        <img src="{% static 'images/finger-sleeves.webp' %}" alt="Game 4">
+        <img src="{% static 'images/controller.jpg' %}" alt="Game 5">
+        <img src="{% static 'images/cooling-pad.png' %}" alt="Game 6">
     </div>
 
     <div class="category-label">CATEGORY</div>
 
     <div class="carousel">
         <div class="carousel-images" id="carousel-images">
-            <img src="https://via.placeholder.com/1200x500/FF0000/FFFFFF?text=Game+Category+1" alt="Category 1">
-            <img src="https://via.placeholder.com/1200x500/00FF00/FFFFFF?text=Game+Category+2" alt="Category 2">
-            <img src="https://via.placeholder.com/1200x500/0000FF/FFFFFF?text=Game+Category+3" alt="Category 3">
+            <img src="https://via.placeholder.com/1200x500/FF0000/FFFFFF?text=Featured+Game+1" alt="Featured Game 1">
+            <img src="https://via.placeholder.com/1200x500/00FF00/FFFFFF?text=Featured+Game+2" alt="Featured Game 2">
+            <img src="https://via.placeholder.com/1200x500/0000FF/FFFFFF?text=Featured+Game+3" alt="Featured Game 3">
         </div>
-        <a class="prev" id="prev">&#10094;</a>
-        <a class="next" id="next">&#10095;</a>
+        <a class="prev" id="prev" onclick="moveCarousel(-1)">&#10094;</a>
+        <a class="next" id="next" onclick="moveCarousel(1)">&#10095;</a>
     </div>
-
     <script>
         const carouselImages = document.getElementById('carousel-images');
         const images = document.querySelectorAll('.carousel img');
