@@ -10,4 +10,6 @@ urlpatterns = [
     path('home/', views.home_view, name='home'),
     path('cart/', views.cart_view, name='cart'),
     path('profile/', views.profile_view, name='profile'),
+    path('laptop/', views.laptop_view, name='laptop'),
+    
 ]

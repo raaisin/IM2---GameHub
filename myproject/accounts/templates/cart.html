@@ -1,174 +1,149 @@
-<!DOCTYPE html>
-{% load static %}
+    <!DOCTYPE html>
+    {% load static %}
 
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Order/Cart Page</title>
-    
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
-    
-    <style>
-        /* General Styles */
-        body {
-            font-family: 'Roboto', sans-serif;
-            background-color: #f4f4f4; /* Light gray background */
-            color: #333;
-            margin: 0;
-            padding: 0;
-        }
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Your Shopping Cart</title>
+        <link rel="stylesheet" href="{% static 'images/css/cart.css' %}">
+        <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    </head>
+    <body>
+        <header class="header">
+            <h1>Your Shopping Cart</h1>
+        </header>
 
-        h1 {
-            text-align: center;
-            color: #8B0000; /* Dark Red for the title */
-            margin: 20px 0;
-        }
-
-        /* Cart Container */
-        .cart-container {
-            max-width: 800px;
-            margin: 20px auto;
-            padding: 20px;
-            border: 2px solid #8B0000;
-            border-radius: 10px;
-            background-color: #fff; /* White background for contrast */
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-        }
-
-        .cart-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 15px;
-            border-bottom: 1px solid #ddd;
-            transition: background-color 0.3s;
-        }
-
-        .cart-item:hover {
-            background-color: #f9f9f9; /* Light hover effect */
-        }
-
-        .cart-item:last-child {
-            border-bottom: none;
-        }
-
-        .cart-item img {
-            width: 80px;
-            height: 80px;
-            object-fit: cover;
-            border-radius: 5px;
-        }
-
-        .item-info {
-            flex-grow: 1;
-            padding-left: 15px;
-        }
-
-        .item-name {
-            font-size: 18px;
-            color: #8B0000; /* Dark Red for item names */
-            font-weight: 700;
-        }
-
-        .item-price {
-            font-size: 16px;
-            color: #333; /* Dark gray for item prices */
-        }
-
-        .item-quantity {
-            font-size: 14px;
-            color: #666; /* Gray for quantity */
-        }
-
-        .checkout-btn {
-            display: block;
-            width: 100%;
-            padding: 12px;
-            background-color: #8B0000; /* Dark Red button */
-            color: white;
-            text-align: center;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
-            margin-top: 20px;
-            transition: background-color 0.3s;
-        }
-
-        .checkout-btn:hover {
-            background-color: #7A0000; /* Darker red for hover effect */
-        }
-
-        /* Summary Section */
-        .cart-summary {
-            margin-top: 20px;
-            padding: 15px;
-            background-color: #fff;
-            border: 1px solid #ddd;
-            border-radius: 10px;
-            display: flex;
-            justify-content: space-between;
-        }
-
-        .summary-text {
-            font-size: 18px;
-            color: #333;
-            font-weight: 700;
-        }
-
-        /* Responsive Styles */
-        @media screen and (max-width: 768px) {
-            .cart-item {
-                flex-direction: column;
-                align-items: flex-start;
-            }
-
-            .cart-item img {
-                margin-bottom: 10px;
-            }
-
-            .item-info {
-                padding-left: 0;
-            }
-
-            .checkout-btn {
-                font-size: 14px;
-            }
-        }
-    </style>
-</head>
-<body>
-
-    <h1>My Shopping Cart</h1>
-
-    <div class="cart-container">
-        <div class="cart-item">
-            <img src="{% static 'images/controller.jpg' %}" alt="Product 1 Image">
-            <div class="item-info">
-                <p class="item-name">Product 1</p>
-                <p class="item-price">$25.00</p>
+        <div class="cart-container">
+            <div class="cart-item">
+                <img src="{% static 'images/controller.jpg' %}" alt="Gaming Controller">
+                <div class="item-info">
+                    <p class="item-name">Gaming Controller</p>
+                    <p class="item-price" data-price="25.00">$25.00</p>
+                    <div class="quantity-control">
+                        <button class="quantity-btn decrease">-</button>
+                        <span class="quantity-display">2</span>
+                        <button class="quantity-btn increase">+</button>
+                    </div>
+                    <div class="color-options">
+                        <div class="color-option selected" style="background-color: #000000;" data-color="Black"></div>
+                        <div class="color-option" style="background-color: #FFFFFF;" data-color="White"></div>
+                        <div class="color-option" style="background-color: #FF0000;" data-color="Red"></div>
+                    </div>
+                    <div class="customization-options">
+                        <div class="customization-option">
+                            <label for="controller-grip">Grip Type:</label>
+                            <select id="controller-grip">
+                                <option value="standard">Standard</option>
+                                <option value="pro">Pro Grip</option>
+                                <option value="comfort">Comfort Grip</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <p class="item-quantity">Quantity: 2</p>
+            
+            <div class="cart-item">
+                <img src="{% static 'images/phonegamingacc.jpg' %}" alt="Phone Gaming Accessory">
+                <div class="item-info">
+                    <p class="item-name">Phone Gaming Accessory</p>
+                    <p class="item-price" data-price="45.00">$25.00</p>
+                    <div class="quantity-control">
+                        <button class="quantity-btn decrease">-</button>
+                        <span class="quantity-display">1</span>
+                        <button class="quantity-btn increase">+</button>
+                    </div>
+                    <div class="color-options">
+                        <div class="color-option selected" style="background-color: #000000;" data-color="Black"></div>
+                        <div class="color-option" style="background-color: #C0C0C0;" data-color="Silver"></div>
+                        <div class="color-option" style="background-color: #FFD700;" data-color="Gold"></div>
+                    </div>
+                    <div class="customization-options">
+                        <div class="customization-option">
+                            <label for="accessory-size">Size:</label>
+                            <select id="accessory-size">
+                                <option value="small">Small</option>
+                                <option value="medium">Medium</option>
+                                <option value="large">Large</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="cart-summary">
+                <div class="summary-row">
+                    <p class="summary-text">Subtotal:</p>
+                    <p class="summary-text">$90.00</p>
+                </div>
+                <div class="summary-row">
+                    <p class="summary-text">Tax:</p>
+                    <p class="summary-text">$7.20</p>
+                </div>
+                <div class="summary-row">
+                    <p class="summary-total">Total:</p>
+                    <p class="summary-total">$97.20</p>
+                </div>
+            </div>
+
+            <button class="checkout-btn">Proceed to Checkout</button>
         </div>
+
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                // Quantity control
+                const quantityControls = document.querySelectorAll('.quantity-control');
+                const taxRate = 0.08; // Assuming an 8% tax rate
+                
+                function updateCartTotals() {
+                    let subtotal = 0;
+                    const cartItems = document.querySelectorAll('.cart-item');
+                    cartItems.forEach(item => {
+                        const price = parseFloat(item.querySelector('.item-price').dataset.price);
+                        const quantity = parseInt(item.querySelector('.quantity-display').textContent);
+                        const itemTotal = price * quantity;
+                        
+                        subtotal += itemTotal;
+                        item.querySelector('.item-price').textContent = `$${itemTotal.toFixed(2)}`;
+                    });
         
-        <div class="cart-item">
-            <img src="{% static 'images/phonegamingacc.jpg' %}" alt="Product 2 Image">
-            <div class="item-info">
-                <p class="item-name">Product 2</p>
-                <p class="item-price">$40.00</p>
-            </div>
-            <p class="item-quantity">Quantity: 1</p>
-        </div>
-
-        <div class="cart-summary">
-            <p class="summary-text">Total:</p>
-            <p class="summary-text">$90.00</p>
-        </div>
-
-        <button class="checkout-btn">Proceed to Checkout</button>
-    </div>
-
-</body>
-</html>
+                    const tax = subtotal * taxRate;
+                    const total = subtotal + tax;
+        
+                    document.querySelector('.cart-summary .summary-text:nth-child(2)').textContent = `$${subtotal.toFixed(2)}`;
+                    document.querySelector('.cart-summary .summary-text:nth-child(4)').textContent = `$${tax.toFixed(2)}`;
+                    document.querySelector('.cart-summary .summary-total:nth-child(6)').textContent = `$${total.toFixed(2)}`;
+                }
+        
+                quantityControls.forEach(control => {
+                    const display = control.querySelector('.quantity-display');
+                    control.querySelector('.decrease').addEventListener('click', () => {
+                        let quantity = parseInt(display.textContent);
+                        if (quantity > 1) {
+                            display.textContent = quantity - 1;
+                            updateCartTotals();
+                        }
+                    });
+                    control.querySelector('.increase').addEventListener('click', () => {
+                        let quantity = parseInt(display.textContent);
+                        display.textContent = quantity + 1;
+                        updateCartTotals();
+                    });
+                });
+        
+                // Initial update
+                updateCartTotals();
+                
+                // Color selection
+                const colorOptions = document.querySelectorAll('.color-option');
+                colorOptions.forEach(option => {
+                    option.addEventListener('click', () => {
+                        option.parentElement.querySelector('.selected').classList.remove('selected');
+                        option.classList.add('selected');
+                    });
+                });
+            });
+        </script>
+        
+    </body>
+    </html>

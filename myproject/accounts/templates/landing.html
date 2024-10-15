@@ -1,57 +1,39 @@
 <!DOCTYPE html>
+{% load static %}
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Landing Page</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #1a1a1a;
-            color: #f4f4f4; 
-            margin: 0;
-            padding: 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-            text-align: center;
-        }
-        h1 {
-            font-size: 2.5em;
-            margin-bottom: 20px;
-            color: #FF4136;
-        }
-        nav {
-            margin-top: 20px;
-        }
-        nav a {
-            text-decoration: none;
-            color: #fff;
-            background-color: #FF4136; 
-            padding: 10px 20px;
-            border-radius: 5px;
-            margin: 0 10px;
-            transition: background-color 0.3s ease;
-        }
-        nav a:hover {
-            background-color: #b32c1f;
-        }
-        footer {
-            position: absolute;
-            bottom: 20px;
-            font-size: 0.9em;
-            color: #777;
-        }
-    </style>
+    <link rel="stylesheet" href="{% static 'images/css/landing.css' %}">
+    <title>GameHub</title>
+<style>
+    
+    body {
+    font-family: 'Roboto', Arial, sans-serif;
+    background-color: var(--background-color);
+    background-image: url("{% static 'images/bg.png' %}");
+    background-size: cover; /* Make the background cover the entire screen */
+    background-position: center; /* Center the background image */
+    background-repeat: no-repeat; /* Prevent the background from repeating */
+    color: var(--text-color);
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+</style>
 </head>
 <body>
-    <h1>Welcome to the GameHub!</h1>
-    <nav>
-        <a href="{% url 'login' %}">Login</a>
-        <a href="{% url 'signup' %}">Signup</a>
-    </nav>
+    <div class="container">
+        <h1></h1>
+        <h1></h1>
+        <h1></h1>
+        <nav>
+            <a href="{% url 'login' %}">Login</a>
+            <a href="{% url 'signup' %}">Sign Up</a>
+        </nav>
+    </div>
     <footer>
         <p>&copy; 2024 GameHub. All Rights Reserved.</p>
     </footer>

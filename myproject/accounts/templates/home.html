@@ -1,357 +1,148 @@
 <!DOCTYPE html>
-{% load static %}
 <html lang="en">
 
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            text-decoration: none;
-        }
-
-        body {
-            font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
-        }
-
-        /* Upper black header styling */
-        .upper-header {
-            background-color: black;
-            color: white;
-            padding: 10px 20px;
-            width: 100%;
-            position: fixed;
-            top: 0;
-            left: 0;
-            z-index: 1000;
-            display: flex;
-            justify-content: flex-end;
-        }
-
-        /* Lower header styling */
-        .lower-header {
-            background-color: #5F0606;
-            color: white;
-            padding: 15px 20px;
-            width: 100%;
-            position: fixed;
-            top: 40px;
-            left: 0;
-            z-index: 999;
-        }
-
-        .navdiv {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .logo {
-            display: flex;
-            align-items: center;
-        }
-
-        .logo a {
-            font-size: 35px;
-            font-weight: 600;
-            color: white;
-        }
-
-        /* Cart Icon Styling */
-        .cart-icon {
-            width: 30px;
-            height: 30px;
-            cursor: pointer;
-        }
-
-        .cart {
-            margin-left: 20px;
-        }
-
-        /* Sandwich Menu */
-        .sandwich-menu {
-            position: relative;
-            margin-left: 15px;
-        }
-
-        .sandwich-button {
-            background-color: transparent;
-            border: none;
-            cursor: pointer;
-            padding: 10px;
-        }
-
-        /* Updated sandwich-icon with 3 bars */
-        .sandwich-icon {
-            display: inline-block;
-            width: 25px;
-            height: 3px;
-            background-color: white;
-            position: relative;
-        }
-
-        .sandwich-icon::before,
-        .sandwich-icon::after {
-            content: '';
-            display: block;
-            width: 25px;
-            height: 3px;
-            background-color: white;
-            position: absolute;
-            left: 0;
-        }
-
-        .sandwich-icon::before {
-            top: -8px;
-        }
-
-        .sandwich-icon::after {
-            top: 8px;
-        }
-
-        /* Dropdown Menu */
-        .sandwich-links {
-            position: absolute;
-            top: 40px;
-            left: 0;
-            background-color: #5F0606;
-            padding: 20px;
-            display: none;
-            width: 200px;
-            border-radius: 0 0 10px 10px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-            z-index: 100;
-        }
-
-        .sandwich-links li {
-            margin-bottom: 15px;
-        }
-
-        .sandwich-links a {
-            color: white;
-            font-size: 18px;
-        }
-
-        .sandwich-links a:hover {
-            color: #ffebcd;
-        }
-
-        .search-bar {
-            display: flex;
-            align-items: center;
-            margin: 10px 0;
-        }
-
-        .search-input {
-            padding: 10px;
-            border: none;
-            border-radius: 5px 0 0 5px;
-            width: 300px;
-            outline: none;
-        }
-
-        .search-button {
-            padding: 10px;
-            border: none;
-            background-color: #fff;
-            color: #5F0606;
-            border-radius: 0 5px 5px 0;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-
-        .search-button:hover {
-            background-color: #ffcccc;
-        }
-
-        ul {
-            display: flex;
-            list-style: none;
-            align-items: center;
-        }
-
-        li {
-            display: flex;
-            align-items: center;
-        }
-
-        li a {
-            color: white;
-            font-size: 18px;
-            font-weight: bold;
-            margin-right: 25px;
-            transition: color 0.3s ease;
-        }
-
-        li a:hover {
-            color: #ffebcd;
-        }
-
-        /* Image container styling */
-        .image-section {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-around;
-            margin-top: 120px;
-            padding: 20px;
-        }
-
-        .image-section img {
-            width: 32%;
-            height: auto;
-            margin-bottom: 20px;
-            border: 2px solid #5F0606;
-            border-radius: 10px;
-        }
-
-        /* Carousel and category section styling */
-        .category-label {
-            text-align: center;
-            font-size: 24px;
-            font-weight: bold;
-            padding: 10px 0;
-            color: #5F0606;
-        }
-
-        .carousel {
-            position: relative;
-            max-width: 1200px;
-            margin: 20px auto;
-            overflow: hidden;
-            border: 2px solid #5F0606;
-        }
-
-        .carousel-images {
-            display: flex;
-            transition: transform 0.5s ease-in-out;
-        }
-
-        .carousel img {
-            width: 100%;
-            height: 500px;
-            object-fit: cover;
-        }
-
-        .prev,
-        .next {
-            cursor: pointer;
-            position: absolute;
-            top: 50%;
-            width: auto;
-            margin-top: -22px;
-            padding: 16px;
-            color: white;
-            font-weight: bold;
-            font-size: 18px;
-            border-radius: 0 3px 3px 0;
-            background-color: rgba(0, 0, 0, 0.5);
-            user-select: none;
-        }
-
-        .next {
-            right: 0;
-            border-radius: 3px 0 0 3px;
-        }
-
-        .prev:hover,
-        .next:hover {
-            background-color: rgba(0, 0, 0, 0.8);
-        }
-    </style>
+        {% load static %}
+    <link rel="stylesheet" href="{% static 'images/css/home.css' %}">
+    <title>GameHub</title>
+    
 </head>
 
 <body>
-    <div class="upper-header">
-        <ul>
-            <li><a href="#">New</a></li>
-            <li><a href="#">Deals</a></li>
-            <li><a href="#">Active</a></li>
-            <li><a href="#">Laptop</a></li>
-            <li><a href="#">PC</a></li>
-            <li><a href="#">Accessories</a></li>
-        </ul>
-    </div>
-
-    <nav class="lower-header">
-        <div class="navdiv">
+    <header class="header">
+        <div class="header-content">
             <div class="logo">
-                <div class="sandwich-menu">
-                    <button class="sandwich-button" id="menu-button">
-                        <span class="sandwich-icon"></span>
-                    </button>
-                    <ul class="sandwich-links" id="sandwich-links">
-                        <li><a href="{% url 'profile' %}">My Account</a></li>
-                        <li><a href="#">My Orders</a></li>
-                        <li><a href="#">Stored Payment Method</a></li>
-                        <li><a href="#">My Reward Point History</a></li>
-                    </ul>
-                </div>
-                <a href="#">GameHub</a>
+                <a href="{% url 'home' %}">GameHub</a>
             </div>
             <div class="search-bar">
-                <input type="text" class="search-input" placeholder="Search for games...">
+                <input type="text" class="search-input" placeholder="Search in GameHub">
                 <button class="search-button">Search</button>
             </div>
-            <!-- Cart Icon with link to cart.html -->
-            <div class="cart">
-                <a href="{% url 'cart' %}">
-                    <img src="{% static 'images/cart-icon.webp' %}" alt="Cart" class="cart-icon">
-                </a>
+            <div class="user-actions">
+                <a href="{% url 'cart' %}">🛒</a>
+                <a href="{% url 'profile' %}">Account</a>
             </div>
+        </div>
+    </header>
+    <nav class="nav">
+        <div class="nav-content">
+            <a href="#">New 👀</a>
+            <a href="#">Deals 🔥</a>
+            <a href="#">Active 📢</a>
+            <a href="{% url 'laptop' %}">Laptops 💻</a>
+            <a href="#">PC 👨</a>
+            <a href="#">Accessories ✨</a>
         </div>
     </nav>
 
-    <div class="image-section">
-        <img src="{% static 'images/phonegamingacc.jpg' %}" alt="Game 1">
-        <img src="{% static 'images/gaming-mouse.webp' %}" alt="Game 2">
-        <img src="{% static 'images/mech-keyboard.jpg' %}" alt="Game 3">
-        <img src="{% static 'images/finger-sleeves.webp' %}" alt="Game 4">
-        <img src="{% static 'images/controller.jpg' %}" alt="Game 5">
-        <img src="{% static 'images/cooling-pad.png' %}" alt="Game 6">
-    </div>
-
-    <div class="category-label">CATEGORY</div>
-
-    <div class="carousel">
-        <div class="carousel-images" id="carousel-images">
-            <img src="https://via.placeholder.com/1200x500/FF0000/FFFFFF?text=Featured+Game+1" alt="Featured Game 1">
-            <img src="https://via.placeholder.com/1200x500/00FF00/FFFFFF?text=Featured+Game+2" alt="Featured Game 2">
-            <img src="https://via.placeholder.com/1200x500/0000FF/FFFFFF?text=Featured+Game+3" alt="Featured Game 3">
+    <main class="main-content">
+        <div class="carousel">
+            <img src="{% static 'images/wildsale.jpg' %}" alt="Featured Game 1">
+            <a class="prev" onclick="moveCarousel(-1)">&#10094;</a>
+            <a class="next" onclick="moveCarousel(1)">&#10095;</a>
         </div>
-        <a class="prev" id="prev" onclick="moveCarousel(-1)">&#10094;</a>
-        <a class="next" id="next" onclick="moveCarousel(1)">&#10095;</a>
-    </div>
+
+        <section class="category-section">
+            <h2 class="category-label">Categories</h2>
+            <div class="category-grid">
+                <div class="category-item">
+                    <img src="{% static 'images/phonegamingacc.jpg' %}" alt="Phone Gaming Accessories">
+                    <p>Phone Gaming</p>
+                </div>
+                <div class="category-item">
+                    <img src="{% static 'images/gaming-mouse.webp' %}" alt="Gaming Mouse">
+                    <p>Gaming Mouse</p>
+                </div>
+                <div class="category-item">
+                    <img src="{% static 'images/mech-keyboard.jpg' %}" alt="Mechanical Keyboard">
+                    <p>Keyboards</p>
+                </div>
+                <div class="category-item">
+                    <img src="{% static 'images/finger-sleeves.webp' %}" alt="Finger Sleeves">
+                    <p>Finger Sleeves</p>
+                </div>
+                <div class="category-item">
+                    <img src="{% static 'images/controller.jpg' %}" alt="Controller">
+                    <p>Controllers</p>
+                </div>
+                <div class="category-item">
+                    <img src="{% static 'images/cooling-pad.png' %}" alt="Cooling Pad">
+                    <p>Cooling Pads</p>
+                </div>
+                <div class="category-item">
+                    <img src="{% static 'images/pc.webp' %}" alt="PC">
+                    <p>PC</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="category-section">
+            <h2 class="category-label">Just For You</h2>
+            <div class="product-grid">
+                <div class="product-item">
+                    <img src="{% static 'images/motherboard.webp' %}" alt="Gaming Mouse">
+                    <h3>N5105 ITX NAS DIY Motherboard 4 Cores 4</h3>
+                    <p>$149.99</p>
+                </div>
+                <div class="product-item">
+                    <img src="{% static 'images/cpu.webp' %}" alt="Gaming Mouse">
+                    <h3>CPU Unit Only AMD Desktop Ryzen 5 5600G Gaming PC</h3>
+                    <p>$149.99</p>
+                </div>
+                <div class="product-item">
+                    <img src="{% static 'images/ryzen.webp' %}" alt="Gaming Mouse">
+                    <h3>AMD Ryzen 5 3600 CPU, 16GB DDR4, B450M-PROS</h3>
+                    <p>$149.99</p>
+                </div>
+                <div class="product-item">
+                    <img src="{% static 'images/corsair.webp' %}" alt="Gaming Mouse">
+                    <h3>Corsair Vengeance RGB PRO 16GB</h3>
+                    <p>$149.99</p>
+                </div>
+                <div class="product-item">
+                    <img src="{% static 'images/asusrog.webp' %}" alt="Gaming Mouse">
+                    <h3>N5105 ITX NAS DIY Motherboard 4 Cores 4</h3>
+                    <p>$149.99</p>
+                </div>
+                <div class="product-item">
+                    <img src="{% static 'images/motherboard.webp' %}" alt="Gaming Mouse">
+                    <h3>N5105 ITX NAS DIY Motherboard 4 Cores 4</h3>
+                    <p>$149.99</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
     <script>
-        const carouselImages = document.getElementById('carousel-images');
-        const images = document.querySelectorAll('.carousel img');
-        const prevButton = document.getElementById('prev');
-        const nextButton = document.getElementById('next');
-        let index = 0;
+        let carouselIndex = 0;
+        const carouselImages = [
+            "{% static 'images/wildsale.jpg' %}",
+            "{% static 'images/hugesale.jpg' %}"
+        ];
 
-        // Show next image
-        nextButton.addEventListener('click', () => {
-            index = (index + 1) % images.length;
-            carouselImages.style.transform = `translateX(${-index * 100}%)`;
+        function updateCarousel() {
+            document.querySelector('.carousel img').src = carouselImages[carouselIndex];
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            updateCarousel();
+            setInterval(() => {
+                carouselIndex = (carouselIndex + 1) % carouselImages.length; 
+                updateCarousel();
+            }, 3000); 
         });
 
-        // Show previous image
-        prevButton.addEventListener('click', () => {
-            index = (index - 1 + images.length) % images.length;
-            carouselImages.style.transform = `translateX(${-index * 100}%)`;
-        });
-
-        const menuButton = document.getElementById('menu-button');
-        const sandwichLinks = document.getElementById('sandwich-links');
-
-        menuButton.addEventListener('click', function () {
-            sandwichLinks.style.display = sandwichLinks.style.display === 'block' ? 'none' : 'block';
-        });
+        function moveCarousel(n) {
+            carouselIndex += n;
+            if (carouselIndex >= carouselImages.length) {
+                carouselIndex = 0;
+            } else if (carouselIndex < 0) {
+                carouselIndex = carouselImages.length - 1;
+            }
+            updateCarousel();
+        }
     </script>
 </body>
 

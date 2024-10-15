@@ -21,7 +21,7 @@ class Product(models.Model):
 
 
 class CartItem(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)  # Links to the User model
+    user = models.ForeignKey(User, on_delete=models.CASCADE) 
     product_name = models.CharField(max_length=255)
     quantity = models.IntegerField(default=1)
     price = models.DecimalField(max_digits=10, decimal_places=2)
@@ -36,9 +36,9 @@ class product_category(models.Model):
     def category_stuff(self):
         return self.category_name
     
-#class Profile(models.Model):
-  #  user = models.OneToOneField(User, on_delete=models.CASCADE)
-  #  bio = models.TextField(blank=True)
+class Profile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    bio = models.TextField(blank=True)
 
-   # def __str__(self):
-      #  return self.user.username
+    def __str__(self):
+        return self.user.username
