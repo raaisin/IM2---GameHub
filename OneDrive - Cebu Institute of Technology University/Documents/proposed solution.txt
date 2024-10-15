@@ -1,0 +1,36 @@
+Proposed Solution: Study Group Finder Web App
+
+Overview:
+The Study Group Finder web app is designed to address the challenge of students struggling to find study partners or join study groups in high school and college settings. By providing a platform that simplifies the process of connecting with peers who share similar courses, study goals, and schedules, the app will enhance collaboration, improve academic performance, and foster a more engaging learning experience.
+
+Key Features:
+
+AI-Powered Group Matching (NOT FINALIZED): 
+-The app will utilize AI to match students with suitable study partners or groups based on their course enrollments, study habits, and availability.
+-Personalized recommendations will help students quickly connect with others who share similar academic goals.
+
+User Profiles:
+-Students will create profiles that include information on their current courses, preferred study times, and specific study needs.
+-Users can indicate preferences for group size, study environment (in-person or online), and focus areas (e.g., exam preparation, project work).
+
+Group Finder Tool:
+-A searching feature which will allow students to find existing study groups based on course, subject, or study focus.
+-The app is going to also suggest new groups to join or allow students to create their own, inviting peers with similar interests.
+
+Scheduling and Calendar Integration:
+-The app will feature a scheduling tool to help groups coordinate study sessions, with automatic integration with calendar apps.
+-Notifications and reminders will keep students informed of upcoming sessions and important deadlines.
+
+Collaboration Tools:
+-Integrated chat and video conferencing will enable seamless communication among group members, whether they are studying in person or remotely.
+-A shared workspace will allow members to upload and access notes, study materials, and other resources.
+
+Feedback and Group Ratings:
+-After each session, students can rate the group experience and provide feedback on the group's effectiveness.
+-This feedback will help improve future group matches and enhance the overall study experience.
+
+Customizable Study Goals:
+-Students can set specific goals for each study session, track their progress, and collaborate on shared objectives.
+-The app will provide tools to assign tasks, set deadlines, and monitor group performance.
+
+In conclusion, by offering these features, the Study Group Finder app will make it easier for students to connect with the right peers, create effective study groups, and achieve their academic goals through collaborative learning.

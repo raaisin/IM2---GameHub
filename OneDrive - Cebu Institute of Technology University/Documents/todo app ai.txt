@@ -1,0 +1,6 @@
+scatterplot
+age, daily usage - done
+age, posts per day - done
+age, dominant emotion - todo (bar)
+gender, platform - todo (bar)
+gender, posts per day - todo (bar)

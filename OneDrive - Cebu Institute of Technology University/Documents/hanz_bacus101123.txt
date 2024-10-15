@@ -1,0 +1,523 @@
+//=======================================================================NUMBER 1==========================================================================//
+section .data
+    ; Information strings
+    main_menu_info db 10, "MAIN MENU", 10, "1. Addition", 10, "2. Subtraction", 10, "3. Multiplication", 10, "4. Division", 10,"5. Exit",10
+    main_menu_info_len equ $ - main_menu_info
+    enter_choice_prompt db "Enter choice: "
+    enter_choice_prompt_len equ $ - enter_choice_prompt
+    newline_tab db " ", 10
+    newline_tab_len equ $ - newline_tab
+    tab1 db 0x03, " "
+    tab1_len equ $ - tab1
+    newline db " ",10
+    newline_len equ $ - newline
+    tab2 db "."
+    tab2_len equ $ - tab2
+    addition_info db "Addition", 10
+    addition_info_len equ $ - addition_info
+    subtraction_info db 10, "Subtraction", 10
+    subtraction_info_len equ $ - subtraction_info
+    multiplication_info db 10, "Multiplication", 10
+    multiplication_info_len equ $ - multiplication_info
+    division_info db 10, "Division", 10
+    division_info_len equ $ - division_info
+    input_first_number_prompt db "Input 1st number: "
+    input_first_number_prompt_len equ $ - input_first_number_prompt
+    input_second_number_prompt db "Input 2nd number: "
+    input_second_number_prompt_len equ $ - input_second_number_prompt
+ 
+
+    invalid_operand_error db "Invalid Choice!", 10
+    invalid_operand_error_len equ $ - invalid_operand_error
+    result_info db "Sum is "
+    result_info_len equ $ - result_info
+    result_info3 db "Product is "
+    result_info_len3 equ $ - result_info3
+    result_info2 db "Difference is "
+    result_info_len2 equ $ - result_info2
+    result_info4 db "Quotient is "
+    result_info_len4 equ $ - result_info4
+ 
+
+    exit_info db "Exiting Program. Thank you.",10
+    exit_info_len equ $ - exit_info
+    invalid_choice_error db "ERROR! Invalid choice!", 10
+    invalid_choice_error_len equ $ - invalid_choice_error
+section .text
+    global _start
+    _start:
+    ;Calling display everytime until exit is chosen.
+    _display:
+        mov eax, 4
+        mov ebx, 1
+        mov ecx, main_menu_info
+        mov edx, main_menu_info_len
+        int 0x80
+        mov eax, 4
+        mov ebx, 1
+        mov ecx, enter_choice_prompt
+        mov edx, enter_choice_prompt_len
+        int 0x80
+        xor ecx, ecx
+        mov eax, 3
+        mov ebx, 0
+        mov ecx, num
+        mov edx, 2
+        int 0x80
+        mov eax, 4
+        mov ebx, 1
+        mov ecx, newline_tab
+        mov edx, newline_tab_len
+        int 0x80
+        lea esi, [num]
+        movzx ecx, byte [esi]
+        cmp ecx, '1'
+        je _addition
+        cmp ecx, '2'
+        je _subtraction
+        cmp ecx, '3'
+        je _multiplication
+        cmp ecx, '4'
+        je _division
+        cmp ecx, '5'
+        je _exit
+        jmp _error
+    ; Block of code for performing addition;
+    _addition:
+        mov eax, 4
+        mov ebx, 1
+        mov ecx, addition_info
+        mov edx, addition_info_len
+        int 0x80
+        mov eax, 4
+        mov ebx, 1
+        mov ecx, input_first_number_prompt
+        mov edx, input_first_number_prompt_len
+        int 0x80
+        call _read_num1
+        mov eax, 4
+        mov ebx, 1
+        mov ecx, input_second_number_prompt
+        mov edx, input_second_number_prompt_len
+        int 0x80
+        call _read_num2
+        call _add_nums
+        mov eax, 4
+        mov ebx, 1
+        mov ecx, result_info
+        mov edx, result_info_len
+        int 0x80
+        call _print_result
+        mov eax, 4
+        mov ebx, 1
+        mov ecx, newline
+        mov edx, newline_len
+        int 80h
+        jmp _display
+    ; Block of code for performing subtraction;
+    _subtraction:
+        mov eax, 4
+        mov ebx, 1
+        mov ecx, subtraction_info
+        mov edx, subtraction_info_len
+        int 0x80
+         mov eax, 4
+        mov ebx, 1
+        mov ecx, input_first_number_prompt
+        mov edx, input_first_number_prompt_len
+        int 0x80
+        call _read_num1
+        mov eax, 4
+        mov ebx, 1
+        mov ecx, input_second_number_prompt
+        mov edx, input_second_number_prompt_len
+        int 0x80
+        call _read_num2
+        call _sub_nums
+        mov eax, 4
+        mov ebx, 1
+        mov ecx, result_info2
+        mov edx, result_info_len2
+        int 0x80
+        call _print_result
+        mov eax, 4
+        mov ebx, 1
+        mov ecx, newline
+        mov edx, newline_len
+        int 80h
+        jmp _display
+    ; Block of code for performing multiplication;
+    _multiplication:
+        mov eax, 4
+        mov ebx, 1
+        mov ecx, multiplication_info
+        mov edx, multiplication_info_len
+        int 0x80
+        mov eax, 4
+        mov ebx, 1
+        mov ecx, input_first_number_prompt
+        mov edx, input_first_number_prompt_len
+        int 0x80
+        call _read_num1
+        mov eax, 4
+        mov ebx, 1
+        mov ecx, input_second_number_prompt
+        mov edx, input_second_number_prompt_len
+        int 0x80
+        call _read_num2
+        call _mul_nums
+        mov eax, 4
+        mov ebx, 1
+        mov ecx, result_info3
+        mov edx, result_info_len3
+        int 0x80
+        call _print_result
+        mov eax, 4
+        mov ebx, 1
+        mov ecx, newline
+        mov edx, newline_len
+        int 80h
+        jmp _display
+    ; Block of code for performing division;
+    _division:
+        mov eax, 4
+        mov ebx, 1
+        mov ecx, division_info
+        mov edx, division_info_len
+        int 0x80
+        mov eax, 4
+        mov ebx, 1
+        mov ecx, input_first_number_prompt
+        mov edx, input_first_number_prompt_len
+        int 0x80
+        call _read_num1
+        mov eax, 4
+        mov ebx, 1
+        mov ecx, input_second_number_prompt
+        mov edx, input_second_number_prompt_len
+        int 0x80
+        call _read_num2
+        call _div_nums
+        mov eax, 4
+        mov ebx, 1
+        mov ecx, result_info4
+        mov edx, result_info_len4
+        int 0x80
+        call _print_result
+        mov eax, 4
+        mov ebx, 1
+        mov ecx, newline
+        mov edx, newline_len
+        int 80h
+        jmp _display
+    ; Error message when choice is invalid.
+    _error:
+        mov eax, 4
+        mov ebx, 1
+        mov ecx, invalid_choice_error
+        mov edx, invalid_choice_error_len
+        int 0x80
+        jmp _display
+    ; Error message when operand is invalid.
+    _error_operand:
+        mov eax, 4
+        mov ebx, 1
+        mov ecx, invalid_operand_error
+        mov edx, invalid_operand_error_len
+        int 0x80
+        jmp _display
+    _read_num1:
+        mov eax, 3
+        mov ebx, 0
+        lea ecx, [buffer1]
+        mov edx, 16
+        int 0x80
+        xor eax, eax
+        lea esi, [buffer1]
+        convert1:
+            movzx edx, byte [esi]
+            cmp dl, 10
+            je done1
+            sub edx, '0'
+            imul eax, 10
+            add eax, edx
+            inc esi
+            jmp convert1
+    done1:
+        mov edi, num1
+        mov [edi], eax
+        ret
+    _print_result:
+        mov eax, [res]
+    lea edi, [buffer3+15]
+    mov byte [edi], 10
+    convert3:
+        dec edi
+        xor edx, edx
+        mov ecx, 10
+        div ecx
+        add dl, '0'
+        mov [edi], dl
+        test eax, eax
+        jnz convert3
+    mov eax, 4
+    mov ebx, 1
+    lea ecx, [edi]
+    lea edx, [buffer3+15]
+    sub edx, ecx
+    int 80h
+    mov eax, 4
+    mov ebx, 1
+    mov ecx, tab2
+    mov edx, tab2_len
+    int 80h
+ 
+    ret
+    _add_nums:
+        mov eax, [num2]
+        mov ebx, [num1]
+        add eax, ebx
+        mov [res], eax
+        ret
+    _sub_nums:
+        mov eax, [num1]
+        mov ebx, [num2]
+        sub eax, ebx
+        mov [res], eax
+        ret
+    _mul_nums:
+        mov eax, [num1]
+        mov ebx, [num2]
+        imul eax, ebx
+        mov [res], eax
+        ret
+    _div_nums:
+        mov eax, [num1]
+        mov ebx, [num2]
+        cdq
+        idiv ebx
+        mov [res], eax
+        ret
+    _exit:
+        mov eax, 4
+        mov ebx, 1
+        mov ecx, exit_info
+        mov edx, exit_info_len
+        int 0x80
+        mov eax, 1
+        mov ebx, 0
+        int 0x80
+    _new_line:
+        mov eax, 4
+        mov ebx, 1
+        lea ecx, [newline_tab] ; Assuming "newline_tab" contains the newline character
+        mov edx, newline_tab_len ; Assuming "newline_tab_len" is the length of the newline character
+        int 0x80
+        ret
+    _read_num2:
+    mov eax, 3
+    mov ebx, 0
+    lea ecx, [buffer2]
+    mov edx, 16
+    int 80h
+ 
+    xor eax, eax
+    lea esi, [buffer2]
+    convert2:
+        movzx edx, byte [esi]
+        cmp dl, 10
+        je done2
+        sub edx, '0'
+        imul eax, 10
+        add eax, edx
+        inc esi
+        jmp convert2
+    done2:
+        mov edi, num2
+        mov [edi], eax
+    ret
+section .bss
+    num resb 2
+    num1 resb 4
+    num2 resb 4
+    res resb 4
+    buffer1 resb 16
+    buffer2 resb 16
+    buffer3 resb 16
+ 
+//==============================================================NUMBER 2===============================================================//
+ 
+global _start
+ 
+section .text
+_start:
+ 
+    mov eax, 0
+    mov [accountBalance], eax
+ 
+    mov eax, 4
+    mov ebx, 1
+    mov ecx, headerLine
+    mov edx, headerLineLen
+    int 80h
+    mainLoop:
+    mov eax, 4
+    mov ebx, 1
+    mov ecx, mainMenu
+    mov edx, mainMenuLen
+    int 80h
+    mov eax, 3
+    mov ebx, 0
+    mov ecx, inputChoice
+    mov edx, 2
+    int 80h
+    lea esi, [inputChoice]
+    movzx edx, byte [esi]
+    cmp edx, 0x31  
+    je runBalanceInquiry
+    cmp edx, 0x32  
+    je runDeposit
+    cmp edx, 0x33   
+    je runWithdrawal
+    cmp edx, 0x34   
+    je runExit
+    jmp runInvalid
+    exit:
+    mov eax, 1
+    mov ebx, 0
+    int 80h
+    runBalanceInquiry:
+    mov eax, 4
+    mov ebx, 1
+    mov ecx, balanceInquiry
+    mov edx, balanceInquiryLen
+    int 80h
+    mov eax, [accountBalance]
+    lea edi, [buffer+15]
+    mov byte[edi], 10
+    call convertString
+    mov eax, 4
+    mov ebx, 1
+    lea ecx, [edi]
+    lea edx, [buffer+16]
+    sub edx, ecx
+    int 80h
+    jmp mainLoop
+    runDeposit:
+    mov eax, 4
+    mov ebx, 1
+    mov ecx, deposit
+    mov edx, depositLen
+    int 80h
+    mov eax, 3
+    mov ebx, 0
+    lea ecx, [cashInput]
+    mov edx, 16
+    int 80h
+    xor eax, eax
+    lea esi, [cashInput]
+    call convertInt
+    mov ebx, [accountBalance]
+    add ebx, eax
+    mov [accountBalance], ebx
+    mov eax, 4
+    mov ebx, 1
+    mov ecx, newLine
+    mov edx, 1
+    int 80h
+    jmp mainLoop
+    runWithdrawal:
+    mov eax, 4
+    mov ebx, 1
+    mov ecx, withdrawal
+    mov edx, withdrawalLen
+    int 80h
+    mov eax, 3
+    mov ebx, 0
+    lea ecx, [cashInput]
+    mov edx, 16
+    int 80h
+    xor eax, eax
+    lea esi, [cashInput]
+    call convertInt
+    mov ebx, [accountBalance]
+    sub ebx, eax
+    cmp ebx, 0
+    jge positiveBalance
+    ;lesser
+    mov eax, 4
+    mov ebx, 1
+    mov ecx, insufficient
+    mov edx, insufficientLen
+    int 80h
+    jmp mainLoop
+    positiveBalance:
+    mov [accountBalance], ebx
+    mov eax, 4
+    mov ebx, 1
+    mov ecx, newLine
+    mov edx, 1
+    int 80h
+    jmp mainLoop
+    runExit:
+    mov eax, 4
+    mov ebx, 1
+    mov ecx, exitLine
+    mov edx, exitLineLen
+    int 80h
+    jmp exit
+    runInvalid:
+    mov eax, 4
+    mov ebx, 1
+    mov ecx, invalidChoiceLine
+    mov edx, invalidChoiceLineLen
+    int 80h
+    jmp mainLoop
+
+    convertInt:
+    movzx edx, byte [esi]
+    cmp dl, 0xA
+    je done 
+    sub edx, '0'
+    imul eax, 10
+    add eax, edx
+    inc esi
+    jmp convertInt
+    done:
+    ret
+    convertString:
+    dec edi
+    xor edx, edx 
+    mov ecx, 10
+    div ecx
+    add edx, '0'
+    mov [edi], dl
+    test eax, eax
+    jnz convertString
+    ret
+ 
+section .data
+ 
+    newLine db " ", 10
+ 
+    headerLine db "CIT-U", 10, "Automatic Teller Machine", 10, "Programmer: Hanz Chester Bacus"
+    headerLineLen equ $-headerLine
+    mainMenu db 10,"." ,10, "Main Menu", 10, "1. Balance Inquiry", 10, "2. Deposit", 10, "3. Withdrawal", 10, "4. Exit", 10, "Enter your choice: "
+    mainMenuLen equ $-mainMenu
+    balanceInquiry: db "Balance Inquiry", 10, "Your current balance: P"
+    balanceInquiryLen: equ $-balanceInquiry
+    deposit: db "Deposit", 10, "Enter deposit amount: P"
+    depositLen: equ $-deposit
+    withdrawal: db "Withdrawal", 10, "Enter withdrawal amount: P"
+    withdrawalLen: equ $-withdrawal
+    exitLine: db "Exiting ATM", 10, "Thank you!", 10
+    exitLineLen: equ $-exitLine
+    invalidChoiceLine: db "ERROR! Invalid choice!", 10
+    invalidChoiceLineLen: equ $-invalidChoiceLine
+    insufficient: db "ERROR! Insufficient Balance!", 10
+    insufficientLen: equ $-insufficient
+section .bss
+    inputChoice resb 1
+    cashInput resb 16
+    accountBalance resb 4
+    buffer resb 16    
