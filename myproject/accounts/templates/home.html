@@ -14,7 +14,7 @@
     <header class="header">
         <div class="header-content">
             <div class="logo">
-                <a href="{% url 'home' %}">GameHub</a>
+                <a href="{% url 'home' %}">GameHub 💻</a>
             </div>
             <div class="search-bar">
                 <input type="text" class="search-input" placeholder="Search in GameHub">
@@ -28,7 +28,7 @@
     </header>
     <nav class="nav">
         <div class="nav-content">
-            <a href="#">New 👀</a>
+            <a href="{% url 'new' %}">New 👀</a>
             <a href="#">Deals 🔥</a>
             <a href="#">Active 📢</a>
             <a href="{% url 'laptop' %}">Laptops 💻</a>
@@ -75,12 +75,16 @@
                     <img src="{% static 'images/pc.webp' %}" alt="PC">
                     <p>PC</p>
                 </div>
+                <div class="category-item">
+                    <img src="{% static 'images/gamingphone.webp' %}" alt="Gaming Phones">
+                    <p>Gaming Phones</p>
+                </div>
             </div>
         </section>
 
         <section class="category-section">
             <h2 class="category-label">Just For You</h2>
-            <div class="product-grid">
+            <div class="product-grid"> 
                 <div class="product-item">
                     <img src="{% static 'images/motherboard.webp' %}" alt="Gaming Mouse">
                     <h3>N5105 ITX NAS DIY Motherboard 4 Cores 4</h3>

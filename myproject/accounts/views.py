@@ -5,6 +5,8 @@ from django.contrib.auth.forms import UserCreationForm
 from .models import CartItem 
 from django.contrib.auth.models import User
 from django.contrib import messages
+
+
 def landing(request):
     print("Landing page view called") 
     return render(request, 'landing.html')
@@ -93,3 +95,5 @@ def laptop_view(request):
    
    return render(request, 'laptop.html')
 
+def new_view(request):
+    return render(request, 'new.html')
