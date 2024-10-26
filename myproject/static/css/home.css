@@ -105,34 +105,96 @@ body {
     border-radius: 10px;
 }
 
-/* Category Section */
+/* Category Section Styles */
 .category-section {
-    background-color: white;
-    border-radius: 4px;
+    max-width: 1200px;
+    margin: 20px auto;
     padding: 20px;
+    background-color: rgba(255, 255, 255, 0.8);
+    border-radius: 10px;
+  }
+  
+  .category-label {
     margin-bottom: 20px;
-}
-
-.category-label {
-    font-size: 18px;
-    font-weight: bold;
-    color: #0f146d;
-    margin-bottom: 15px;
-}
-
-.category-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 15px;
-    padding-bottom: 10px;
-}
-
-@media (max-width: 768px) {
-    .category-grid {
-        grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .category-container {
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .category-grid {
+    display: flex;
+    gap: 20px;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    padding: 10px 0 20px 0;
+  }
+  
+  /* Custom Scrollbar Styles */
+  .category-grid::-webkit-scrollbar {
+    height: 8px;
+    display: block;
+  }
+  
+  .category-grid::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+  }
+  
+  .category-grid::-webkit-scrollbar-thumb {
+    background: #0f146d;
+    border-radius: 4px;
+    transition: background 0.3s ease;
+  }
+  
+  .category-grid::-webkit-scrollbar-thumb:hover {
+    background: #1a237e;
+  }
+  
+  /* For Firefox */
+  .category-grid {
+    scrollbar-width: thin;
+    scrollbar-color: #0f146d #f1f1f1;
+  }
+  
+  .category-item {
+    flex: 0 0 auto;
+    width: 180px;
+    text-align: center;
+    transition: transform 0.3s;
+  }
+  
+  .category-item:hover {
+    transform: translateY(-5px);
+  }
+  
+  /* Fixed image dimensions */
+  .category-item img {
+    width: 180px;  /* Match the category-item width */
+    height: 180px; /* Make it square */
+    object-fit: cover;
+    border-radius: 8px;
+    margin-bottom: 8px;
+  }
+  
+  .category-item p {
+    color: #333;
+    font-weight: 500;
+    margin: 0;
+  }
+  
+  /* Responsive Styles */
+  @media (max-width: 768px) {
+    .category-item {
+      width: 150px;
     }
-}
-
+    
+    .category-item img {
+      width: 150px;  /* Match the responsive category-item width */
+      height: 150px; /* Keep it square */
+    }
+  }
 @media (max-width: 480px) {
     .category-grid {
         grid-template-columns: 1fr;

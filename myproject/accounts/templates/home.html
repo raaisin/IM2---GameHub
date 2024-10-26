@@ -4,10 +4,10 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        {% load static %}
-    <link rel="stylesheet" href="{% static 'images/css/home.css' %}">
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/home.css' %}">
     <title>GameHub</title>
-    
+   
 </head>
 
 <body>
@@ -26,6 +26,7 @@
             </div>
         </div>
     </header>
+
     <nav class="nav">
         <div class="nav-content">
             <a href="{% url 'new' %}">New 👀</a>
@@ -46,45 +47,48 @@
 
         <section class="category-section">
             <h2 class="category-label">Categories</h2>
-            <div class="category-grid">
-                <div class="category-item">
-                    <img src="{% static 'images/phonegamingacc.jpg' %}" alt="Phone Gaming Accessories">
-                    <p>Phone Gaming</p>
-                </div>
-                <div class="category-item">
-                    <img src="{% static 'images/gaming-mouse.webp' %}" alt="Gaming Mouse">
-                    <p>Gaming Mouse</p>
-                </div>
-                <div class="category-item">
-                    <img src="{% static 'images/mech-keyboard.jpg' %}" alt="Mechanical Keyboard">
-                    <p>Keyboards</p>
-                </div>
-                <div class="category-item">
-                    <img src="{% static 'images/finger-sleeves.webp' %}" alt="Finger Sleeves">
-                    <p>Finger Sleeves</p>
-                </div>
-                <div class="category-item">
-                    <img src="{% static 'images/controller.jpg' %}" alt="Controller">
-                    <p>Controllers</p>
-                </div>
-                <div class="category-item">
-                    <img src="{% static 'images/cooling-pad.png' %}" alt="Cooling Pad">
-                    <p>Cooling Pads</p>
-                </div>
-                <div class="category-item">
-                    <img src="{% static 'images/pc.webp' %}" alt="PC">
-                    <p>PC</p>
-                </div>
-                <div class="category-item">
-                    <img src="{% static 'images/gamingphone.webp' %}" alt="Gaming Phones">
-                    <p>Gaming Phones</p>
+            <div class="category-container">
+                <div class="category-grid">
+                    <div class="category-item">
+                        <img src="{% static 'images/phonegamingacc.jpg' %}" alt="Phone Gaming Accessories">
+                        <p>Phone Gaming</p>
+                    </div>
+                    <div class="category-item">
+                        <img src="{% static 'images/gaming-mouse.webp' %}" alt="Gaming Mouse">
+                        <p>Gaming Mouse</p>
+                    </div>
+                    <div class="category-item">
+                        <img src="{% static 'images/mech-keyboard.jpg' %}" alt="Mechanical Keyboard">
+                        <p>Keyboards</p>
+                    </div>
+                    <div class="category-item">
+                        <img src="{% static 'images/finger-sleeves.webp' %}" alt="Finger Sleeves">
+                        <p>Finger Sleeves</p>
+                    </div>
+                    <div class="category-item">
+                        <img src="{% static 'images/controller.jpg' %}" alt="Controller">
+                        <p>Controllers</p>
+                    </div>
+                    <div class="category-item">
+                        <img src="{% static 'images/cooling-pad.png' %}" alt="Cooling Pad">
+                        <p>Cooling Pads</p>
+                    </div>
+                    <div class="category-item">
+                        <img src="{% static 'images/pc.webp' %}" alt="PC">
+                        <p>PC</p>
+                    </div>
+                    <div class="category-item">
+                        <img src="{% static 'images/gamingphone.webp' %}" alt="Gaming Phones">
+                        <p>Gaming Phones</p>
+                    </div>
                 </div>
             </div>
         </section>
+        
 
         <section class="category-section">
             <h2 class="category-label">Just For You</h2>
-            <div class="product-grid"> 
+            <div class="product-grid">
                 <div class="product-item">
                     <img src="{% static 'images/motherboard.webp' %}" alt="Gaming Mouse">
                     <h3>N5105 ITX NAS DIY Motherboard 4 Cores 4</h3>
@@ -120,6 +124,7 @@
     </main>
 
     <script>
+        // Carousel functionality
         let carouselIndex = 0;
         const carouselImages = [
             "{% static 'images/wildsale.jpg' %}",
@@ -133,9 +138,9 @@
         document.addEventListener('DOMContentLoaded', function () {
             updateCarousel();
             setInterval(() => {
-                carouselIndex = (carouselIndex + 1) % carouselImages.length; 
+                carouselIndex = (carouselIndex + 1) % carouselImages.length;
                 updateCarousel();
-            }, 3000); 
+            }, 3000);
         });
 
         function moveCarousel(n) {
@@ -147,7 +152,50 @@
             }
             updateCarousel();
         }
+
+        // Category scroll functionality
+        function scrollCategories(direction) {
+            const container = document.querySelector('.category-grid');
+            const scrollAmount = 400; // Adjust this value to control scroll distance
+            
+            if (direction === 'left') {
+                container.scrollBy({
+                    left: -scrollAmount,
+                    behavior: 'smooth'
+                });
+            } else {
+                container.scrollBy({
+                    left: scrollAmount,
+                    behavior: 'smooth'
+                });
+            }
+        }
+
+        // Update scroll buttons visibility
+        function updateScrollButtons() {
+            const container = document.querySelector('.category-grid');
+            const leftBtn = document.querySelector('.scroll-left');
+            const rightBtn = document.querySelector('.scroll-right');
+            
+            if (container.scrollLeft >= container.scrollWidth - container.clientWidth) {
+                rightBtn.style.opacity = '0.5';
+            } else {
+                rightBtn.style.opacity = '1';
+            }
+        }
+
+        // Add scroll event listener for category section
+        document.querySelector('.category-grid').addEventListener('scroll', updateScrollButtons);
+        
+        // Initialize button states when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            updateScrollButtons();
+            updateCarousel();
+            setInterval(() => {
+                carouselIndex = (carouselIndex + 1) % carouselImages.length;
+                updateCarousel();
+            }, 3000);
+        });
     </script>
 </body>
-
 </html>
