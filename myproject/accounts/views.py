@@ -97,3 +97,15 @@ def laptop_view(request):
 
 def new_view(request):
     return render(request, 'new.html')
+
+def deals_view(request):
+    return render(request, 'deals.html')
+
+def pc_view(request):
+    return render(request, 'pc.html')
+
+def active_view(request):
+    return render(request, 'active.html')
+
+def accessories_view(request):
+    return render(request, 'accessories.html')

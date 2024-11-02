@@ -30,13 +30,14 @@
     <nav class="nav">
         <div class="nav-content">
             <a href="{% url 'new' %}">New 👀</a>
-            <a href="#">Deals 🔥</a>
-            <a href="#">Active 📢</a>
+            <a href="{% url 'deals' %}">Deals 🔥</a>
+            <a href="{% url 'active' %}">Active 📢</a>
             <a href="{% url 'laptop' %}">Laptops 💻</a>
-            <a href="#">PC 👨</a>
-            <a href="#">Accessories ✨</a>
+            <a href="{% url 'pc' %}">PC 👨</a>
+            <a href="{% url 'accessories' %}">Accessories ✨</a>
         </div>
     </nav>
+
 
     <main class="main-content">
         <div class="carousel">
