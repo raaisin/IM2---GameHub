@@ -9,7 +9,7 @@ Functional Requirements:
 
 
 Gantt chart:
-
+https://cebuinstituteoftechnology-my.sharepoint.com/:x:/g/personal/russelljoshua_palma_cit_edu/EW8BgyYGRYFMhLZZBPZv81IBRT8WtT-pP7IZIaXjFNUMWw?e=qDmzeW
 
 ERD:
 https://online.visual-paradigm.com/w/doxuyryq/app/diagrams/#diagram:workspace=doxuyryq&proj=0&id=11&type=ERDiagram&width=11&height=8.5&unit=inch
