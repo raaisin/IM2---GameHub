@@ -95,6 +95,10 @@ def laptop_view(request):
    
    return render(request, 'laptop.html')
 
+def phone_view(request):
+   
+   return render(request, 'phone.html')
+
 def new_view(request):
     return render(request, 'new.html')
 
