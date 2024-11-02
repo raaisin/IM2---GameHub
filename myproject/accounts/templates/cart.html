@@ -1,149 +1,190 @@
-    <!DOCTYPE html>
-    {% load static %}
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Shopping Cart</title>
+    <link rel="stylesheet" href="{% static 'css/cart.css' %}">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header class="header">
+        <a href="{% url 'home' %}" class="back-to-home">
+            ← Back to Shop
+        </a>
+        <h1>Your Shopping Cart</h1>
+    </header>
 
-    <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Your Shopping Cart</title>
-        <link rel="stylesheet" href="{% static 'css/cart.css' %}">
-        <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
-    </head> 
-    <body>
-        <header class="header">
-            <h1>Your Shopping Cart</h1>
-        </header>
-
-        <div class="cart-container">
-            <div class="cart-item">
-                <img src="{% static 'images/controller.jpg' %}" alt="Gaming Controller">
-                <div class="item-info">
-                    <p class="item-name">Gaming Controller</p>
-                    <p class="item-price" data-price="25.00">$25.00</p>
-                    <div class="quantity-control">
-                        <button class="quantity-btn decrease">-</button>
-                        <span class="quantity-display">2</span>
-                        <button class="quantity-btn increase">+</button>
-                    </div>
-                    <div class="color-options">
-                        <div class="color-option selected" style="background-color: #000000;" data-color="Black"></div>
-                        <div class="color-option" style="background-color: #FFFFFF;" data-color="White"></div>
-                        <div class="color-option" style="background-color: #FF0000;" data-color="Red"></div>
-                    </div>
-                    <div class="customization-options">
-                        <div class="customization-option">
-                            <label for="controller-grip">Grip Type:</label>
-                            <select id="controller-grip">
-                                <option value="standard">Standard</option>
-                                <option value="pro">Pro Grip</option>
-                                <option value="comfort">Comfort Grip</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="cart-item">
-                <img src="{% static 'images/phonegamingacc.jpg' %}" alt="Phone Gaming Accessory">
-                <div class="item-info">
-                    <p class="item-name">Phone Gaming Accessory</p>
-                    <p class="item-price" data-price="45.00">$25.00</p>
-                    <div class="quantity-control">
-                        <button class="quantity-btn decrease">-</button>
-                        <span class="quantity-display">1</span>
-                        <button class="quantity-btn increase">+</button>
-                    </div>
-                    <div class="color-options">
-                        <div class="color-option selected" style="background-color: #000000;" data-color="Black"></div>
-                        <div class="color-option" style="background-color: #C0C0C0;" data-color="Silver"></div>
-                        <div class="color-option" style="background-color: #FFD700;" data-color="Gold"></div>
-                    </div>
-                    <div class="customization-options">
-                        <div class="customization-option">
-                            <label for="accessory-size">Size:</label>
-                            <select id="accessory-size">
-                                <option value="small">Small</option>
-                                <option value="medium">Medium</option>
-                                <option value="large">Large</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="cart-summary">
-                <div class="summary-row">
-                    <p class="summary-text">Subtotal:</p>
-                    <p class="summary-text">$90.00</p>
-                </div>
-                <div class="summary-row">
-                    <p class="summary-text">Tax:</p>
-                    <p class="summary-text">$7.20</p>
-                </div>
-                <div class="summary-row">
-                    <p class="summary-total">Total:</p>
-                    <p class="summary-total">$97.20</p>
-                </div>
-            </div>
-
-            <button class="checkout-btn">Proceed to Checkout</button>
+    <div class="cart-container">
+        <div id="cart-items">
+            <!-- Cart items will be dynamically inserted here -->
         </div>
+    </div>
 
-        <script>
-            document.addEventListener('DOMContentLoaded', function() {
-                // Quantity control
-                const quantityControls = document.querySelectorAll('.quantity-control');
-                const taxRate = 0.08; // Assuming an 8% tax rate
-                
-                function updateCartTotals() {
-                    let subtotal = 0;
-                    const cartItems = document.querySelectorAll('.cart-item');
-                    cartItems.forEach(item => {
-                        const price = parseFloat(item.querySelector('.item-price').dataset.price);
-                        const quantity = parseInt(item.querySelector('.quantity-display').textContent);
-                        const itemTotal = price * quantity;
-                        
-                        subtotal += itemTotal;
-                        item.querySelector('.item-price').textContent = `$${itemTotal.toFixed(2)}`;
-                    });
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+    const cartContainer = document.querySelector('.cart-container');
+    const cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
+    const taxRate = 0.08;
+
+    // Debug log to check cart items and prices
+    console.log('Cart items loaded:', cartItems);
+
+    if (cartItems.length === 0) {
+        cartContainer.innerHTML = `
+            <div class="empty-cart">
+                <h2>Your cart is empty</h2>
+                <a href="{% url 'home' %}" class="continue-shopping">Continue Shopping</a>
+            </div>
+        `;
+        return;
+    }
+
+    // Clear existing cart items
+    cartContainer.innerHTML = '';
+
+    // Render cart items
+    cartItems.forEach(item => {
+        // Log each item's price for debugging
+        console.log(`Rendering ${item.name} with price: $${item.price}`);
         
-                    const tax = subtotal * taxRate;
-                    const total = subtotal + tax;
-        
-                    document.querySelector('.cart-summary .summary-text:nth-child(2)').textContent = `$${subtotal.toFixed(2)}`;
-                    document.querySelector('.cart-summary .summary-text:nth-child(4)').textContent = `$${tax.toFixed(2)}`;
-                    document.querySelector('.cart-summary .summary-total:nth-child(6)').textContent = `$${total.toFixed(2)}`;
+        const cartItemDiv = document.createElement('div');
+        cartItemDiv.className = 'cart-item';
+        cartItemDiv.innerHTML = `
+            <img src="${item.image}" alt="${item.name}">
+            <div class="item-info">
+                <div>
+                    <p class="item-name">${item.name}</p>
+                    <p class="item-specs">Color: ${item.color}</p>
+                    <p class="item-specs">${item.specification.name}: ${item.specification.value}</p>
+                    <p class="item-unit-price">Unit Price: $${item.price.toFixed(2)}</p>
+                    <p class="item-total-price" data-price="${item.price}">Total: $${(item.price * item.quantity).toFixed(2)}</p>
+                </div>
+                <div class="quantity-control">
+                    <button class="decrease">−</button>
+                    <span class="quantity-display">${item.quantity}</span>
+                    <button class="increase">+</button>
+                </div>
+            </div>
+            <button class="remove-item">Remove</button>
+        `;
+        cartContainer.appendChild(cartItemDiv);
+    });
+
+    // Add cart summary
+    updateCartTotals();
+
+    // Handle quantity controls and remove buttons
+    cartContainer.addEventListener('click', function(e) {
+        if (e.target.classList.contains('decrease') || 
+            e.target.classList.contains('increase') || 
+            e.target.classList.contains('remove-item')) {
+            
+            const cartItem = e.target.closest('.cart-item');
+            const itemName = cartItem.querySelector('.item-name').textContent;
+            const cartItems = JSON.parse(localStorage.getItem('cartItems'));
+            const itemIndex = cartItems.findIndex(item => item.name === itemName);
+
+            if (e.target.classList.contains('remove-item')) {
+                cartItems.splice(itemIndex, 1);
+                cartItem.style.transform = 'translateX(-100%)';
+                cartItem.style.opacity = '0';
+                setTimeout(() => {
+                    cartItem.remove();
+                    if (cartItems.length === 0) {
+                        location.reload();
+                    }
+                }, 300);
+            } else {
+                const quantityDisplay = cartItem.querySelector('.quantity-display');
+                let quantity = parseInt(quantityDisplay.textContent);
+
+                if (e.target.classList.contains('decrease') && quantity > 1) {
+                    quantity--;
+                } else if (e.target.classList.contains('increase')) {
+                    quantity++;
                 }
-        
-                quantityControls.forEach(control => {
-                    const display = control.querySelector('.quantity-display');
-                    control.querySelector('.decrease').addEventListener('click', () => {
-                        let quantity = parseInt(display.textContent);
-                        if (quantity > 1) {
-                            display.textContent = quantity - 1;
-                            updateCartTotals();
-                        }
-                    });
-                    control.querySelector('.increase').addEventListener('click', () => {
-                        let quantity = parseInt(display.textContent);
-                        display.textContent = quantity + 1;
-                        updateCartTotals();
-                    });
-                });
-        
-                // Initial update
-                updateCartTotals();
+
+                quantityDisplay.textContent = quantity;
+                cartItems[itemIndex].quantity = quantity;
                 
-                // Color selection
-                const colorOptions = document.querySelectorAll('.color-option');
-                colorOptions.forEach(option => {
-                    option.addEventListener('click', () => {
-                        option.parentElement.querySelector('.selected').classList.remove('selected');
-                        option.classList.add('selected');
-                    });
-                });
-            });
-        </script>
-        
-    </body>
-    </html>
+                // Update price display with correct calculations
+                const priceElement = cartItem.querySelector('.item-total-price');
+                const unitPrice = cartItems[itemIndex].price;
+                priceElement.textContent = `Total: $${(unitPrice * quantity).toFixed(2)}`;
+            }
+
+            localStorage.setItem('cartItems', JSON.stringify(cartItems));
+            updateCartTotals();
+        }
+    });
+
+    function generateOrderId() {
+        return 'ORD' + Date.now().toString(36).toUpperCase();
+    }
+
+    function updateCartTotals() {
+        const cartItems = JSON.parse(localStorage.getItem('cartItems'));
+        const subtotal = cartItems.reduce((sum, item) => {
+            return sum + (item.price * item.quantity);
+        }, 0);
+        const tax = subtotal * taxRate;
+        const total = subtotal + tax;
+
+        let summaryDiv = document.querySelector('.cart-summary');
+        if (!summaryDiv) {
+            summaryDiv = document.createElement('div');
+            summaryDiv.className = 'cart-summary';
+            cartContainer.appendChild(summaryDiv);
+        }
+
+        summaryDiv.innerHTML = `
+            <div class="summary-row">
+                <p class="summary-text">Subtotal:</p>
+                <p class="summary-text">$${subtotal.toFixed(2)}</p>
+            </div>
+            <div class="summary-row">
+                <p class="summary-text">Tax (8%):</p>
+                <p class="summary-text">$${tax.toFixed(2)}</p>
+            </div>
+            <div class="summary-row">
+                <p class="summary-total">Total:</p>
+                <p class="summary-total">$${total.toFixed(2)}</p>
+            </div>
+            <button class="checkout-btn">Proceed to Checkout</button>
+        `;
+
+        const checkoutBtn = document.querySelector('.checkout-btn');
+        checkoutBtn.addEventListener('click', function() {
+            // Create new order
+            const newOrder = {
+                orderId: generateOrderId(),
+                orderDate: new Date().toISOString(),
+                items: cartItems,
+                subtotal: subtotal,
+                tax: tax,
+                total: total
+            };
+
+            // Get existing orders or initialize empty array
+            const orders = JSON.parse(localStorage.getItem('orderHistory')) || [];
+            
+            // Add new order to history
+            orders.push(newOrder);
+            
+            // Save updated order history
+            localStorage.setItem('orderHistory', JSON.stringify(orders));
+            
+            // Clear cart
+            localStorage.removeItem('cartItems');
+            
+            // Show confirmation and redirect using Django URL name
+            alert('Thank you for your purchase! Redirecting to your orders...');
+            window.location.href = "{% url 'orders' %}";  // Changed this line to use Django URL pattern
+        });
+    }
+});
+    </script>
+</body>
+</html>

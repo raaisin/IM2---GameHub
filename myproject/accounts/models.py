@@ -1,25 +1,19 @@
 from django.db import models
 from django.contrib.auth.models import User
 
-class ProductCategory(models.Model):
-    category_name = models.CharField(max_length=100)
-    
-    def __str__(self):
-        return self.category_name
-    
-    class Meta:
-        verbose_name_plural = "Product Categories"
 
 class Product(models.Model):
-    product_name = models.CharField(max_length=100)
-    description = models.TextField()
-    product_price = models.DecimalField(max_digits=10, decimal_places=2)
-    quantity = models.IntegerField()
-    #category = models.ForeignKey(ProductCategory, on_delete=models.SET_NULL, null=True)
-    date_created = models.DateTimeField(auto_now_add=True)
-    
+    name = models.CharField(max_length=255)
+    price = models.DecimalField(max_digits=10, decimal_places=2)
+    rating = models.DecimalField(max_digits=3, decimal_places=1)
+    sold = models.IntegerField()
+    colors = models.JSONField(default=list)  # Store color options as a list
+    image = models.ImageField(upload_to='images/')  # Make sure to configure media settings
+
     def __str__(self):
-        return self.product_name
+        return self.name
+    
+
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)

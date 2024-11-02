@@ -5,7 +5,7 @@ from django.contrib.auth.forms import UserCreationForm
 from .models import CartItem 
 from django.contrib.auth.models import User
 from django.contrib import messages
-
+from .models import Product
 
 def landing(request):
     print("Landing page view called") 
@@ -27,54 +27,35 @@ from django.contrib import messages
 
 def signup_view(request):
     if request.method == 'POST':
-        signup_method = request.POST.get('signup_method')
+        first_name = request.POST.get('firstname')
+        last_name = request.POST.get('lastname')
+        username = request.POST.get('username')
+        email = request.POST.get('email')
+        password = request.POST.get('password')
 
-        if signup_method == 'gmail':
-            # Handle Gmail sign-up
-            first_name = request.POST.get('firstname', '').strip()
-            last_name = request.POST.get('lastname', '').strip()
-            username = request.POST.get('username', '').strip()
-            email = request.POST.get('email', '').strip()
-            password = request.POST.get('password', '').strip()
-            
-            # Validate form data
-            if not first_name or not last_name or not username or not email or not password:
-                messages.error(request, "All fields are required for Gmail sign-up.")
-                return render(request, 'signup.html')
-            
-            # Check if username or email already exists
-            if User.objects.filter(username=username).exists():
-                messages.error(request, "Username already taken. Please choose another one.")
-                return render(request, 'signup.html')
-            if User.objects.filter(email=email).exists():
-                messages.error(request, "An account with this email already exists.")
-                return render(request, 'signup.html')
-            
-            # Check if email is a Gmail address
-            if not email.endswith('@gmail.com'):
-                messages.error(request, "Please use a valid Gmail address.")
-                return render(request, 'signup.html')
+        # Check if the username already exists
+        if User.objects.filter(username=username).exists():
+            messages.error(request, "Username is already taken.")
+            return redirect('signup')
 
-            # Create a new user
-            user = User.objects.create_user(
-                username=username,
-                password=password,
-                first_name=first_name,
-                last_name=last_name,
-                email=email
-            )
-            
-            # Log the user in
-            login(request, user)
-            messages.success(request, "Account created successfully with Gmail!")
-            return redirect('home')
+        # Check if the email already exists
+        if User.objects.filter(email=email).exists():
+            messages.error(request, "Email is already registered.")
+            return redirect('signup')
 
-        elif signup_method == 'facebook':
-            # Placeholder for Facebook sign-up handling
-            messages.info(request, "Facebook sign-up is not yet implemented.")
-            return render(request, 'signup.html')
-    
+        # Create the user
+        user = User.objects.create_user(
+            username=username,
+            email=email,
+            password=password,
+            first_name=first_name,
+            last_name=last_name
+        )
+        user.save()
+        messages.success(request, "Account created successfully! Please log in.")
+        return redirect('login')
     return render(request, 'signup.html')
+
 
 
 @login_required
@@ -113,3 +94,29 @@ def active_view(request):
 
 def accessories_view(request):
     return render(request, 'accessories.html')
+@login_required
+def add_to_cart(request, product_id):
+    product = get_object_or_404(Product, id=product_id)
+    cart_item, created = CartItem.objects.get_or_create(user=request.user, product=product)
+    cart_item.quantity += 1
+    cart_item.save()
+    return redirect('cart') 
+
+@login_required
+def cart(request):
+    cart_items = CartItem.objects.filter(user=request.user)
+    total_price = sum(item.total_price for item in cart_items)
+    tax = total_price * 0.08  # 8% tax
+    grand_total = total_price + tax
+    return render(request, 'cart.html', {
+        'cart_items': cart_items,
+        'total_price': total_price,
+        'tax': tax,
+        'grand_total': grand_total,
+    })
+def laptops(request):
+    products = Product.objects.all()
+    return render(request, 'laptops.html', {'products': products})
+
+def orders(request):
+    return render(request, 'orders.html')
