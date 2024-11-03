@@ -4,6 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{% static 'css/profile.css' %}">
     <title>{{ user.username }}'s Profile</title>
 
@@ -34,8 +35,10 @@
         <div class="profile-content">
             <div class="sidebar">
                 <div class="menu-item active">Profile</div>
-                <div class="menu-item">Orders</div>
-                <div class="menu-item">Wishlist</div>
+                <a href="{% url 'orders' %}">
+                    <div class="menu-item">Orders</div>
+                </a>               
+                 <div class="menu-item">Wishlist</div>
                 <div class="menu-item">Reviews</div>
             </div>
             
@@ -71,71 +74,75 @@
         </div>
     </div>
 
-    <script>
-        const editButton = document.getElementById('edit-button');
-        const profileForm = document.getElementById('profile-form');
-        const profileInfo = document.getElementById('profile-info');
-        const saveButton = document.getElementById('save-button');
-        const cancelButton = document.getElementById('cancel-button');
+<script>
+    const editButton = document.getElementById('edit-button');
+    const profileForm = document.getElementById('profile-form');
+    const profileInfo = document.getElementById('profile-info');
+    const saveButton = document.getElementById('save-button');
+    const cancelButton = document.getElementById('cancel-button');
 
-        editButton.addEventListener('click', () => {
-            profileForm.style.display = 'block';
-            profileInfo.style.display = 'none';
+    // Toggle Edit Mode
+    editButton.addEventListener('click', () => {
+        profileForm.style.display = 'block';
+        profileInfo.style.display = 'none';
+    });
+
+    cancelButton.addEventListener('click', () => {
+        profileForm.style.display = 'none';
+        profileInfo.style.display = 'block';
+    });
+
+    // Save Profile Changes
+    saveButton.addEventListener('click', () => {
+        const name = document.getElementById('edit-name').value;
+        const username = document.getElementById('edit-username').value;
+        const email = document.getElementById('edit-email').value;
+        const bio = document.getElementById('edit-bio').value;
+
+        fetch('/update-profile/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': getCookie('csrftoken')
+            },
+            body: JSON.stringify({ name, username, email, bio })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                document.getElementById('display-name').textContent = name;
+                document.getElementById('display-username').textContent = '@' + username;
+                document.getElementById('display-email').textContent = email;
+                document.getElementById('bio').textContent = bio;
+
+                profileForm.style.display = 'none';
+                profileInfo.style.display = 'block';
+            } else {
+                alert(data.error || 'Failed to update profile. Please try again.');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('An error occurred. Please try again.');
         });
+    });
 
-        cancelButton.addEventListener('click', () => {
-            profileForm.style.display = 'none';
-            profileInfo.style.display = 'block';
-        });
-
-        saveButton.addEventListener('click', () => {
-            const name = document.getElementById('edit-name').value;
-            const username = document.getElementById('edit-username').value;
-            const email = document.getElementById('edit-email').value;
-            const bio = document.getElementById('edit-bio').value;
-
-            fetch('/update-profile/', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRFToken': getCookie('csrftoken') 
-                },
-                body: JSON.stringify({ name, username, email, bio })
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    document.getElementById('display-name').textContent = name;
-                    document.getElementById('display-username').textContent = '@' + username;
-                    document.getElementById('display-email').textContent = email;
-                    document.getElementById('bio').textContent = bio;
-
-                    profileForm.style.display = 'none';
-                    profileInfo.style.display = 'block';
-                } else {
-                    alert('Failed to update profile. Please try again.');
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert('An error occurred. Please try again.');
-            });
-        });
-
-        function getCookie(name) {
-            let cookieValue = null;
-            if (document.cookie && document.cookie !== '') {
-                const cookies = document.cookie.split(';');
-                for (let i = 0; i < cookies.length; i++) {
-                    const cookie = cookies[i].trim();
-                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                        break;
-                    }
+    // Helper function for CSRF token
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
                 }
             }
-            return cookieValue;
         }
-    </script>
+        return cookieValue;
+    }
+</script>
+
 </body>
 </html>

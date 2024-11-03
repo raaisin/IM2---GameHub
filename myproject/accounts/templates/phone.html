@@ -3,35 +3,34 @@
 <html lang="en">
 
 <script>
-    function changeQuantity(button, delta) {
-        const quantityInput = button.parentElement.querySelector('.quantity-input');
-        let currentQuantity = parseInt(quantityInput.value);
-
-        const newQuantity = currentQuantity + delta;
-
-        if (newQuantity >= 1 && newQuantity <= 5) {
-            quantityInput.value = newQuantity;
-        }
-    }
-    document.addEventListener('DOMContentLoaded', function() {
-    // Initialize cart in localStorage if it doesn't exist
+document.addEventListener('DOMContentLoaded', function() {
     if (!localStorage.getItem('cartItems')) {
         localStorage.setItem('cartItems', JSON.stringify([]));
     }
 
-    // Add click event listeners to all "Add to Cart" buttons
     const addToCartButtons = document.querySelectorAll('.add-to-cart');
     addToCartButtons.forEach(button => {
         button.addEventListener('click', function() {
             const productItem = this.closest('.product-item');
             
-            // Get the exact price text and parse it correctly
             const priceText = productItem.querySelector('.product-price').textContent;
-            const price = parseFloat(priceText.replace('$', '').replace(',', ''));
+            
+            let price;
+            if (priceText.includes('-')) {
+                price = parseFloat(priceText.split('-')[0]
+                    .replace('₱', '')
+                    .replace(',', '')
+                    .trim());
+            } else {
+                price = parseFloat(priceText
+                    .replace('₱', '')
+                    .replace(',', '')
+                    .trim());
+            }
             
             const product = {
                 name: productItem.querySelector('.product-title').textContent,
-                price: price, // This will now be the correct price like 1199.99
+                price: price,
                 image: productItem.querySelector('img').src,
                 color: productItem.querySelector('select:nth-of-type(1)').value,
                 quantity: parseInt(productItem.querySelector('input[type="number"]').value),
@@ -41,13 +40,8 @@
                 }
             };
 
-            // Log the product to verify the price
-            console.log('Adding product:', product);
-
-            // Get existing cart items
             let cartItems = JSON.parse(localStorage.getItem('cartItems'));
             
-            // Check if product already exists in cart
             const existingProductIndex = cartItems.findIndex(item => 
                 item.name === product.name && 
                 item.color === product.color && 
@@ -55,18 +49,13 @@
             );
 
             if (existingProductIndex !== -1) {
-                // Update quantity if product exists
                 cartItems[existingProductIndex].quantity += product.quantity;
             } else {
-                // Add new product if it doesn't exist
                 cartItems.push(product);
             }
 
-            // Save updated cart back to localStorage
             localStorage.setItem('cartItems', JSON.stringify(cartItems));
-
-            // Show confirmation message with the price
-            alert(`Added ${product.name} to carts at $${product.price.toFixed(2)}`);
+            alert(`Added ${product.name} to cart at ₱${product.price.toLocaleString()}`);
         });
     });
 });

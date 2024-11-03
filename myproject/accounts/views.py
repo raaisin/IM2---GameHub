@@ -6,6 +6,12 @@ from .models import CartItem
 from django.contrib.auth.models import User
 from django.contrib import messages
 from .models import Product
+from django.http import JsonResponse
+from django.views.decorators.http import require_http_methods
+import json
+from .models import Profile
+from django.core.exceptions import ObjectDoesNotExist
+
 
 def landing(request):
     print("Landing page view called") 
@@ -65,12 +71,33 @@ def home_view(request):
 def cart_view(request):
     return render(request, 'carts.html')
 
+# views.py
+from django.contrib.auth.decorators import login_required
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+import json
+
 @login_required
 def profile_view(request):
-    context = {
-        'user': request.user
-    }
-    return render(request, 'profile.html', context)
+    if request.method == "POST":
+        try:
+            data = json.loads(request.body)
+            # Update user fields
+            request.user.username = data.get('username', request.user.username)
+            request.user.email = data.get('email', request.user.email)
+            request.user.save()
+
+            # Update profile fields if you have a Profile model
+            profile, created = Profile.objects.get_or_create(user=request.user)
+            profile.bio = data.get('bio', profile.bio)  
+            profile.save()
+
+            return JsonResponse({"success": True})
+        except Exception as e:
+            return JsonResponse({"success": False, "error": str(e)})
+
+    # If the request is a GET, render the profile page
+    return render(request, 'profile.html', {'user': request.user})
 
 def laptop_view(request):
    
