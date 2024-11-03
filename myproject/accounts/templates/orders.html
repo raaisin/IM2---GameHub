@@ -43,6 +43,7 @@
         .order-header {
             display: flex;
             justify-content: space-between;
+            align-items: center;
             border-bottom: 1px solid #eee;
             padding-bottom: 1rem;
             margin-bottom: 1rem;
@@ -60,58 +61,31 @@
         .order-items {
             display: flex;
             flex-direction: column;
-            gap: 1rem;
         }
 
         .order-item {
             display: flex;
-            gap: 1rem;
-            padding: 1rem 0;
+            justify-content: space-between;
+            padding: 0.5rem 0;
             border-bottom: 1px solid #eee;
         }
 
-        .order-item img {
-            width: 100px;
-            height: 100px;
-            object-fit: cover;
-            border-radius: 4px;
-        }
-
-        .item-details {
-            flex-grow: 1;
-        }
-
         .item-name {
-            font-weight: 600;
-            margin: 0 0 0.5rem 0;
+            color: #333;
         }
 
-        .item-specs {
-            color: #666;
-            margin: 0.25rem 0;
-        }
-
-        .item-price {
-            font-weight: 500;
-            color: #2c2c2c;
-        }
-
-        .no-orders {
-            text-align: center;
-            padding: 2rem;
-            background: #fff;
-            border-radius: 8px;
-            margin-top: 2rem;
-        }
-
-        .continue-shopping {
-            display: inline-block;
-            margin-top: 1rem;
+        .delivered-btn {
+            background-color: #4CAF50; /* Green */
+            color: white;
             padding: 0.5rem 1rem;
-            background-color: #007bff;
-            color: #fff;
-            text-decoration: none;
+            border: none;
             border-radius: 4px;
+            cursor: pointer;
+            margin-top: 1rem;
+        }
+
+        .delivered-btn:hover {
+            background-color: #45a049;
         }
     </style>
 </head>
@@ -132,52 +106,49 @@
             const ordersContainer = document.getElementById('orders-container');
             const orders = JSON.parse(localStorage.getItem('orderHistory')) || [];
 
-            if (orders.length === 0) {
-                ordersContainer.innerHTML = `
-                    <div class="no-orders">
-                        <h2>No orders yet</h2>
-                        <p>Your order history will appear here once you make a purchase.</p>
-                        <a href="{% url 'home' %}" class="continue-shopping">Start Shopping</a>
-                    </div>
-                `;
-                return;
+            function renderOrders() {
+                ordersContainer.innerHTML = '';
+                
+                if (orders.length === 0) {
+                    ordersContainer.innerHTML = '<h2>No orders found</h2>';
+                    return;
+                }
+
+                orders.forEach((order, index) => {
+                    const orderCard = document.createElement('div');
+                    orderCard.className = 'order-card';
+                    orderCard.innerHTML = `
+                        <div class="order-header">
+                            <h3>Order ID: ${order.orderId}</h3>
+                            <span class="order-date">${new Date(order.orderDate).toLocaleString()}</span>
+                            <span class="order-total">Total: $${order.total.toFixed(2)}</span>
+                        </div>
+                        <div class="order-items">
+                            ${order.items.map(item => `
+                                <div class="order-item">
+                                    <span class="item-name">${item.name} (x${item.quantity})</span>
+                                    <span>$${(item.price * item.quantity).toFixed(2)}</span>
+                                </div>
+                            `).join('')}
+                        </div>
+                        <button class="delivered-btn" data-index="${index}">Mark as Delivered</button>
+                    `;
+                    ordersContainer.appendChild(orderCard);
+                });
             }
 
-            // Sort orders by date (newest first)
-            orders.sort((a, b) => new Date(b.orderDate) - new Date(a.orderDate));
-
-            orders.forEach(order => {
-                const orderCard = document.createElement('div');
-                orderCard.className = 'order-card';
-                
-                const orderHeader = `
-                    <div class="order-header">
-                        <div class="order-date">
-                            <h3>Order placed on ${new Date(order.orderDate).toLocaleDateString()}</h3>
-                            <p>Order ID: ${order.orderId}</p>
-                        </div>
-                        <div class="order-total">
-                            Total: $${order.total.toFixed(2)}
-                        </div>
-                    </div>
-                `;
-
-                const orderItems = order.items.map(item => `
-                    <div class="order-item">
-                        <img src="${item.image}" alt="${item.name}">
-                        <div class="item-details">
-                            <p class="item-name">${item.name}</p>
-                            <p class="item-specs">Color: ${item.color}</p>
-                            <p class="item-specs">${item.specification.name}: ${item.specification.value}</p>
-                            <p class="item-specs">Quantity: ${item.quantity}</p>
-                            <p class="item-price">$${(item.price * item.quantity).toFixed(2)}</p>
-                        </div>
-                    </div>
-                `).join('');
-
-                orderCard.innerHTML = orderHeader + `<div class="order-items">${orderItems}</div>`;
-                ordersContainer.appendChild(orderCard);
+            // Handle delivered button click
+            ordersContainer.addEventListener('click', function(e) {
+                if (e.target.classList.contains('delivered-btn')) {
+                    const index = e.target.getAttribute('data-index');
+                    orders.splice(index, 1); // Remove the order from the array
+                    localStorage.setItem('orderHistory', JSON.stringify(orders)); // Update local storage
+                    renderOrders(); // Re-render orders
+                }
             });
+
+            // Initial render of orders
+            renderOrders();
         });
     </script>
 </body>

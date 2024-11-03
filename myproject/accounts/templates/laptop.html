@@ -21,7 +21,7 @@
             <nav class="nav-links">
                 <a href="{% url 'home' %}" class="nav-link">Home</a>
                 <a href="#" class="nav-link">Categories</a>
-                <a href="{% url 'cart' %}" class="nav-link cart-icon">🛒</a>
+                <a href="{% url 'carts' %}" class="nav-link cart-icon">🛒</a>
             </nav>
         </div>
     </header>
@@ -228,7 +228,7 @@
             localStorage.setItem('cartItems', JSON.stringify(cartItems));
 
             // Show confirmation message with the price
-            alert(`Added ${product.name} to cart at $${product.price.toFixed(2)}`);
+            alert(`Added ${product.name} to carts at $${product.price.toFixed(2)}`);
         });
     });
 });

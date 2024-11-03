@@ -392,7 +392,7 @@
                 <a href="#" class="nav-link">
                     <span>🔧</span> Builds
                 </a>
-                <a href="{% url 'cart' %}" class="nav-link cart-icon">
+                <a href="{% url 'carts' %}" class="nav-link cart-icon">
                     🛒
                     <span class="cart-count">0</span>
                 </a>
@@ -720,29 +720,24 @@
     </div>
 
     <script>
-        // Add to cart functionality
-        document.querySelectorAll('.add-to-cart').forEach(button => {
-            button.addEventListener('click', () => {
-                const cartCount = document.querySelector('.cart-count');
-                cartCount.textContent = parseInt(cartCount.textContent) + 1;
-                button.innerHTML = '<span>✓</span> Added to Cart';
-                button.style.background = '#059669';
-                setTimeout(() => {
-                    button.innerHTML = '<span>🛒</span> Add to Cart';
-                    button.style.background = '#3b82f6';
-                }, 2000);
-            });
+       
+// Add event listeners for option changes
+document.querySelectorAll('.product-options select').forEach(select => {
+    select.addEventListener('change', function() {
+        const productItem = this.closest('.product-item');
+        const basePrice = parseFloat(productItem.querySelector('.product-price').textContent
+            .replace('$', '').split(' ')[0]);
+        
+        let additionalCost = 0;
+        productItem.querySelectorAll('.product-options select').forEach(opt => {
+            additionalCost += calculateOptionsPrice(opt.value);
         });
 
-        // Image gallery functionality
-        document.querySelectorAll('.thumbnail').forEach(thumb => {
-            thumb.addEventListener('click', () => {
-                const mainImage = thumb.parentElement.previousElementSibling;
-                const tempSrc = mainImage.src;
-                mainImage.src = thumb.src;
-                thumb.src = tempSrc;
-            });
-        });
+        const totalPrice = basePrice + additionalCost;
+        const priceDisplay = productItem.querySelector('.product-price');
+        priceDisplay.childNodes[0].textContent = `$${totalPrice.toFixed(2)} `;
+    });
+});
     </script>
 </body>
 </html>

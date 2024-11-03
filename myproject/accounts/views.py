@@ -63,7 +63,7 @@ def home_view(request):
     return render(request, 'home.html')
 
 def cart_view(request):
-    return render(request, 'cart.html')
+    return render(request, 'carts.html')
 
 @login_required
 def profile_view(request):
@@ -103,12 +103,12 @@ def add_to_cart(request, product_id):
     return redirect('cart') 
 
 @login_required
-def cart(request):
+def carts(request):
     cart_items = CartItem.objects.filter(user=request.user)
     total_price = sum(item.total_price for item in cart_items)
     tax = total_price * 0.08  # 8% tax
     grand_total = total_price + tax
-    return render(request, 'cart.html', {
+    return render(request, 'carts.html', {
         'cart_items': cart_items,
         'total_price': total_price,
         'tax': tax,
