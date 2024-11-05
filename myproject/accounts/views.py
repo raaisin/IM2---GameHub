@@ -8,10 +8,13 @@ from django.contrib import messages
 from .models import Product
 from django.http import JsonResponse
 from django.views.decorators.http import require_http_methods
-import json
 from .models import Profile
 from django.core.exceptions import ObjectDoesNotExist
-
+from .models import Order, OrderItem, Product
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+import json
+from decimal import Decimal
 
 def landing(request):
     print("Landing page view called") 
@@ -89,7 +92,7 @@ def profile_view(request):
 
             # Update profile fields if you have a Profile model
             profile, created = Profile.objects.get_or_create(user=request.user)
-            profile.bio = data.get('bio', profile.bio)  
+            profile.bio = data. get('bio', profile.bio)  
             profile.save()
 
             return JsonResponse({"success": True})
@@ -145,5 +148,87 @@ def laptops(request):
     products = Product.objects.all()
     return render(request, 'laptops.html', {'products': products})
 
+# views.py
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth.decorators import login_required
+from .models import Order
+from django.http import HttpResponseForbidden
+
+@login_required
 def orders(request):
-    return render(request, 'orders.html')
+    orders = Order.objects.filter(user=request.user).order_by('-date_ordered')
+    return render(request, 'orders.html', {'orders': orders})
+
+@login_required
+def mark_delivered(request, order_id):
+    if request.method == 'POST':
+        order = get_object_or_404(Order, id=order_id)
+        
+        # Ensure the user owns this order
+        if order.user != request.user:
+            return HttpResponseForbidden()
+            
+        order.delivered = True
+        order.save()
+        
+        return redirect('orders')
+    return redirect('orders')
+
+from django.http import JsonResponse
+from django.views.decorators.http import require_http_methods
+from django.views.decorators.csrf import csrf_protect
+from decimal import Decimal
+import json
+from .models import Order, OrderItem, Product
+
+@csrf_protect
+@require_http_methods(["POST"])
+def create_order(request):
+    """Handle order creation from cart checkout"""
+    if not request.user.is_authenticated:
+        return JsonResponse({'error': 'Please log in to place an order'}, status=401)
+    
+    try:
+        data = json.loads(request.body)
+        cart_items = data.get('items', [])
+        
+        if not cart_items:
+            return JsonResponse({'error': 'Cart is empty'}, status=400)
+        
+        # Calculate total amount
+        total_amount = sum(
+            Decimal(str(item['price'])) * int(item['quantity'])
+            for item in cart_items
+        )
+        
+        # Create the order
+        order = Order.objects.create(
+            user=request.user,
+            total_amount=total_amount,
+            status='PENDING'
+        )
+        
+        # Create order items
+        for item in cart_items:
+            try:
+                product = Product.objects.get(name=item['name'])
+                OrderItem.objects.create(
+                    order=order,
+                    product=product,
+                    quantity=item['quantity'],
+                    price=Decimal(str(item['price']))
+                )
+            except Product.DoesNotExist:
+                # If product doesn't exist, delete the order and return error
+                order.delete()
+                return JsonResponse({
+                    'error': f'Product not found: {item["name"]}'
+                }, status=400)
+        
+        return JsonResponse({
+            'message': 'Order created successfully',
+            'orderId': order.id
+        })
+        
+    except Exception as e:
+        return JsonResponse({'error': str(e)}, status=400)
