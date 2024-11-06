@@ -6,7 +6,34 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{% static 'css/login.css' %}">
     <title>Login</title>
+    <script src="https://accounts.google.com/gsi/client" async></script>
     <style>
+        .divider {
+            display: flex;
+            align-items: center;
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .divider::before,
+        .divider::after {
+            content: "";
+            flex: 1;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .divider span {
+            padding: 0 10px;
+            color: #777;
+            font-size: 14px;
+        }
+
+        #g_id_onload,
+        #googleSignIn {
+            display: flex;
+            justify-content: center;
+            margin: 10px 0;
+        }
     </style>
 </head>
 <body>
@@ -33,10 +60,41 @@
                 </div>
             </div>
             <button type="submit" class="login-button">Login</button>
-            <div class="signup-link">
-                <a href="{% url 'signup' %}">Create Account</a>
-            </div>
         </form>
+        
+        <div class="divider">
+            <span>OR</span>
+        </div>
+
+        <div id="g_id_onload"
+             data-client_id="YOUR_GOOGLE_CLIENT_ID"
+             data-context="signin"
+             data-ux_mode="popup"
+             data-callback="handleCredentialResponse"
+             data-auto_select="false">
+        </div>
+
+        <div class="g_id_signin"
+             data-type="standard"
+             data-shape="rectangular"
+             data-theme="outline"
+             data-text="signin_with"
+             data-size="large"
+             data-logo_alignment="left">
+        </div>
+
+        <div class="signup-link">
+            <a href="{% url 'signup' %}">Create Account</a>
+        </div>
     </div>
+
+    <script>
+        function handleCredentialResponse(response) {
+            // Send the token to your server
+            const token = response.credential;
+            // You can post this token to your backend for verification
+            console.log("Received token:", token);
+        }
+    </script>
 </body>
 </html>
