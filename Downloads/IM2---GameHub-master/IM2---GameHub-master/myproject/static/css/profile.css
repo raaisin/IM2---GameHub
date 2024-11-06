@@ -1,0 +1,409 @@
+/* Reset and Base Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg, #f6f9fc 0%, #eef2f7 100%);
+    color: #2d3748;
+    line-height: 1.6;
+    min-height: 100vh;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 0 1.5rem;
+}
+
+/* Fancy Profile Header */
+.profile-header {
+    background: linear-gradient(135deg, #ffffff 0%, #f8f9ff 100%);
+    padding: 3rem;
+    border-radius: 24px;
+    box-shadow: 
+        0 10px 20px rgba(0, 0, 0, 0.05),
+        0 6px 6px rgba(0, 0, 0, 0.03),
+        0 0 100px rgba(66, 153, 225, 0.05);
+    display: flex;
+    align-items: center;
+    gap: 3rem;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.profile-header::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 6px;
+    background: linear-gradient(90deg, #4299e1, #667eea, #764ba2);
+}
+
+.profile-header:hover {
+    transform: translateY(-5px);
+    box-shadow: 
+        0 15px 30px rgba(0, 0, 0, 0.08),
+        0 10px 10px rgba(0, 0, 0, 0.05),
+        0 0 120px rgba(66, 153, 225, 0.08);
+}
+
+.profile-picture {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 4px solid #fff;
+    box-shadow: 
+        0 8px 16px rgba(0, 0, 0, 0.1),
+        0 0 0 8px rgba(66, 153, 225, 0.1);
+    position: relative;
+}
+
+.profile-picture::after {
+    content: '';
+    position: absolute;
+    top: -10%;
+    left: -10%;
+    width: 120%;
+    height: 120%;
+    background: linear-gradient(45deg, transparent 40%, rgba(255, 255, 255, 0.3) 50%, transparent 60%);
+    animation: shimmer 3s infinite;
+}
+
+@keyframes shimmer {
+    0% { transform: translateX(-100%) rotate(45deg); }
+    100% { transform: translateX(100%) rotate(45deg); }
+}
+
+.profile-picture img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+}
+
+.profile-picture:hover img {
+    transform: scale(1.1);
+}
+
+.profile-details {
+    flex-grow: 1;
+}
+
+.profile-details h1 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    background: linear-gradient(90deg, #2d3748, #4a5568);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    letter-spacing: -0.5px;
+}
+
+#display-email {
+    color: #718096;
+    margin-bottom: 0.5rem;
+    font-size: 1.1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+#display-username {
+    color: #4a5568;
+    font-weight: 600;
+    font-size: 1.2rem;
+    position: relative;
+    display: inline-block;
+}
+
+#display-username::after {
+    content: '';
+    position: absolute;
+    bottom: -4px;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: linear-gradient(90deg, #4299e1, #667eea);
+    transform: scaleX(0);
+    transition: transform 0.3s ease;
+}
+
+#display-username:hover::after {
+    transform: scaleX(1);
+}
+
+/* Fancy Stats */
+.profile-stats {
+    display: flex;
+    gap: 2rem;
+    margin-top: 2rem;
+}
+
+.stat-item {
+    text-align: center;
+    padding: 1rem 2rem;
+    background: linear-gradient(135deg, #ffffff 0%, #f8f9ff 100%);
+    border-radius: 16px;
+    min-width: 120px;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.stat-item::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, transparent, rgba(66, 153, 225, 0.1));
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.stat-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+}
+
+.stat-item:hover::before {
+    opacity: 1;
+}
+
+.stat-value {
+    font-size: 2rem;
+    font-weight: 700;
+    background: linear-gradient(90deg, #4299e1, #667eea);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.stat-label {
+    font-size: 0.95rem;
+    color: #718096;
+    margin-top: 0.5rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Fancy Sidebar */
+.sidebar {
+    width: 300px;
+    background: linear-gradient(135deg, #ffffff 0%, #f8f9ff 100%);
+    border-radius: 20px;
+    padding: 2rem;
+    box-shadow: 
+        0 10px 20px rgba(0, 0, 0, 0.05),
+        0 6px 6px rgba(0, 0, 0, 0.03);
+}
+
+.menu-item {
+    padding: 1rem 1.5rem;
+    margin: 0.75rem 0;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: 500;
+    position: relative;
+    z-index: 1;
+    overflow: hidden;
+}
+
+.menu-item::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, #4299e1, #667eea);
+    opacity: 0;
+    z-index: -1;
+    transition: opacity 0.3s ease;
+    border-radius: 12px;
+}
+
+.menu-item:hover {
+    color: #fff;
+}
+
+.menu-item:hover::before {
+    opacity: 1;
+}
+
+.menu-item.active {
+    background: linear-gradient(90deg, #4299e1, #667eea);
+    color: #fff;
+    font-weight: 600;
+    box-shadow: 0 4px 12px rgba(66, 153, 225, 0.3);
+}
+
+/* Fancy Main Content */
+.main-content {
+    flex-grow: 1;
+    background: linear-gradient(135deg, #ffffff 0%, #f8f9ff 100%);
+    border-radius: 20px;
+    padding: 2.5rem;
+    box-shadow: 
+        0 10px 20px rgba(0, 0, 0, 0.05),
+        0 6px 6px rgba(0, 0, 0, 0.03);
+}
+
+.main-content h2 {
+    font-size: 1.8rem;
+    font-weight: 700;
+    margin-bottom: 2rem;
+    background: linear-gradient(90deg, #2d3748, #4a5568);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+/* Fancy Form Elements */
+.form-group {
+    margin-bottom: 2rem;
+    position: relative;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.75rem;
+    font-weight: 600;
+    color: #4a5568;
+    font-size: 1.1rem;
+}
+
+.form-group input,
+.form-group textarea {
+    width: 100%;
+    padding: 1rem 1.25rem;
+    border: 2px solid #e2e8f0;
+    border-radius: 12px;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    background: linear-gradient(135deg, #ffffff 0%, #f8f9ff 100%);
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: #4299e1;
+    box-shadow: 0 0 0 4px rgba(66, 153, 225, 0.15);
+    transform: translateY(-2px);
+}
+
+/* Fancy Buttons */
+.edit-button,
+.save-button,
+.cancel-button {
+    padding: 1rem 2rem;
+    border-radius: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: none;
+    font-size: 1rem;
+    letter-spacing: 0.5px;
+    position: relative;
+    overflow: hidden;
+}
+
+.edit-button,
+.save-button {
+    background: linear-gradient(90deg, #4299e1, #667eea);
+    color: white;
+    box-shadow: 0 4px 12px rgba(66, 153, 225, 0.3);
+}
+
+.edit-button::after,
+.save-button::after {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(45deg, transparent 40%, rgba(255, 255, 255, 0.2) 50%, transparent 60%);
+    transform: rotate(45deg);
+    transition: all 0.3s ease;
+}
+
+.edit-button:hover,
+.save-button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 16px rgba(66, 153, 225, 0.4);
+}
+
+.edit-button:hover::after,
+.save-button:hover::after {
+    animation: shimmer 1.5s infinite;
+}
+
+.cancel-button {
+    background: linear-gradient(90deg, #e2e8f0, #edf2f7);
+    color: #4a5568;
+    margin-left: 1rem;
+}
+
+.cancel-button:hover {
+    background: linear-gradient(90deg, #cbd5e0, #e2e8f0);
+    transform: translateY(-3px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .profile-content {
+        flex-direction: column;
+    }
+
+    .sidebar {
+        width: 100%;
+        margin-bottom: 2rem;
+    }
+
+    .profile-header {
+        flex-direction: column;
+        text-align: center;
+        padding: 2rem;
+    }
+
+    .profile-stats {
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+
+    .stat-item {
+        min-width: 140px;
+    }
+}
+
+@media (max-width: 480px) {
+    .container {
+        padding: 1rem;
+        margin: 1rem auto;
+    }
+
+    .profile-header {
+        padding: 1.5rem;
+    }
+
+    .profile-picture {
+        width: 120px;
+        height: 120px;
+    }
+
+    .profile-details h1 {
+        font-size: 2rem;
+    }
+}
