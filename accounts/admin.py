@@ -20,9 +20,3 @@ class OrderAdmin(admin.ModelAdmin):
 
 admin.site.unregister(Order)
 admin.site.register(Order, OrderAdmin)  
-
-
-
-
-
-

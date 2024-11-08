@@ -137,13 +137,12 @@
                 });
             }
 
-            // Handle delivered button click
             ordersContainer.addEventListener('click', function(e) {
                 if (e.target.classList.contains('delivered-btn')) {
                     const index = e.target.getAttribute('data-index');
-                    orders.splice(index, 1); // Remove the order from the array
-                    localStorage.setItem('orderHistory', JSON.stringify(orders)); // Update local storage
-                    renderOrders(); // Re-render orders
+                    orders.splice(index, 1);
+                    localStorage.setItem('orderHistory', JSON.stringify(orders)); 
+                    renderOrders();
                 }
             });
 
