@@ -176,3 +176,32 @@ select, input[type="number"] {
     color: var(--secondary-blue);
     margin-bottom: 10px;
 }
+.quantity-controls {
+    display: flex; 
+    align-items: center; 
+}
+
+.quantity-controls button {
+    background-color: #007bff; 
+    color: white; 
+    border: none; 
+    border-radius: 5px; 
+    padding: 10px 15px; 
+    cursor: pointer; 
+    font-size: 16px; 
+    transition: background-color 0.3s; 
+}
+
+.quantity-controls button:hover {
+    background-color: #0056b3;
+}
+
+.quantity-controls .quantity-input {
+    width: 50px; 
+    text-align: center; 
+    border: 1px solid #ccc;
+    border-radius: 5px; 
+    margin: 0 10px; 
+    font-size: 16px;
+    padding: 5px; 
+}
