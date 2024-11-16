@@ -3,62 +3,89 @@
 <html lang="en">
 
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-    if (!localStorage.getItem('cartItems')) {
-        localStorage.setItem('cartItems', JSON.stringify([]));
-    }
-
-    const addToCartButtons = document.querySelectorAll('.add-to-cart');
-    addToCartButtons.forEach(button => {
-        button.addEventListener('click', function() {
-            const productItem = this.closest('.product-item');
-            
-            const priceText = productItem.querySelector('.product-price').textContent;
-            
-            let price;
-            if (priceText.includes('-')) {
-                price = parseFloat(priceText.split('-')[0]
-                    .replace('₱', '')
-                    .replace(',', '')
-                    .trim());
-            } else {
-                price = parseFloat(priceText
-                    .replace('₱', '')
-                    .replace(',', '')
-                    .trim());
+    // le countdown clock
+    document.addEventListener('DOMContentLoaded', function() {
+        const countdownElement = document.getElementById('countdown');
+        const endDate = new Date('2024-11-23T23:59:59');
+    
+        function updateCountdown() {
+            const now = new Date();
+            const timeRemaining = endDate - now;
+    
+            if (timeRemaining <= 0) {
+                countdownElement.textContent = "Offer has ended!";
+                clearInterval(countdownInterval);
+                return;
             }
-            
-            const product = {
-                name: productItem.querySelector('.product-title').textContent,
-                price: price,
-                image: productItem.querySelector('img').src,
-                color: productItem.querySelector('select:nth-of-type(1)').value,
-                quantity: parseInt(productItem.querySelector('input[type="number"]').value),
-                specification: {
-                    name: productItem.querySelector('.option-label:nth-of-type(2)').textContent.trim().slice(0, -1),
-                    value: productItem.querySelector('select:nth-of-type(2)').value
+    
+            const hours = Math.floor((timeRemaining % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((timeRemaining % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((timeRemaining % (1000 * 60)) / 1000);
+    
+            countdownElement.textContent = `${hours}h ${minutes}m ${seconds}s`;
+        }
+    
+        const countdownInterval = setInterval(updateCountdown, 1000);
+        updateCountdown();
+    });
+
+    //le add to cart function thing
+    document.addEventListener('DOMContentLoaded', function() {
+        if (!localStorage.getItem('cartItems')) {
+            localStorage.setItem('cartItems', JSON.stringify([]));
+        }
+
+        const addToCartButtons = document.querySelectorAll('.add-to-cart');
+        addToCartButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const productItem = this.closest('.product-item');
+                
+                const priceText = productItem.querySelector('.product-price').textContent;
+                
+                let price;
+                if (priceText.includes('-')) {
+                    price = parseFloat(priceText.split('-')[0]
+                        .replace('₱', '')
+                        .replace(',', '')
+                        .trim());
+                } else {
+                    price = parseFloat(priceText
+                        .replace('₱', '')
+                        .replace(',', '')
+                        .trim());
                 }
-            };
+                
+                const product = {
+                    name: productItem.querySelector('.product-title').textContent,
+                    price: price,
+                    image: productItem.querySelector('img').src,
+                    color: productItem.querySelector('select:nth-of-type(1)').value,
+                    quantity: parseInt(productItem.querySelector('input[type="number"]').value),
+                    specification: {
+                        name: productItem.querySelector('.option-label:nth-of-type(2)').textContent.trim().slice(0, -1),
+                        value: productItem.querySelector('select:nth-of-type(2)').value
+                    }
+                };
 
-            let cartItems = JSON.parse(localStorage.getItem('cartItems'));
-            
-            const existingProductIndex = cartItems.findIndex(item => 
-                item.name === product.name && 
-                item.color === product.color && 
-                item.specification.value === product.specification.value
-            );
+                let cartItems = JSON.parse(localStorage.getItem('cartItems'));
+                
+                const existingProductIndex = cartItems.findIndex(item => 
+                    item.name === product.name && 
+                    item.color === product.color && 
+                    item.specification.value === product.specification.value
+                );
 
-            if (existingProductIndex !== -1) {
-                cartItems[existingProductIndex].quantity += product.quantity;
-            } else {
-                cartItems.push(product);
-            }
+                if (existingProductIndex !== -1) {
+                    cartItems[existingProductIndex].quantity += product.quantity;
+                } else {
+                    cartItems.push(product);
+                }
 
-            localStorage.setItem('cartItems', JSON.stringify(cartItems));
-            alert(`Added ${product.name} to cart at ₱${product.price.toLocaleString()}`);
+                localStorage.setItem('cartItems', JSON.stringify(cartItems));
+                alert(`Added ${product.name} to cart at ₱${product.price.toLocaleString()}`);
+            });
         });
     });
-});
 </script>
 
 <style>
@@ -93,6 +120,105 @@ document.addEventListener('DOMContentLoaded', function() {
         padding: 5px; 
     }
 
+    {% comment %} offer banner css {% endcomment %}
+
+    .offer-container {
+        display: flex; /* Use flexbox to arrange offers in a row */
+        justify-content: space-between; /* Space out the offers */
+        margin-bottom: 20px; /* Space below the offer section */
+    }
+    
+    .offer-banner {
+        border: 2px solid #007bff; /* Thick blue border */
+        padding: 0.5rem; /* Padding around the content */
+        flex: 1; /* Allow banners to grow equally */
+        margin: 0 10px; /* Margin between banners */
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Optional shadow for depth */
+    }
+    
+    .offer-image {
+        width: 100px; /* Placeholder image size */
+        height: auto;
+        margin-right: 20px;
+    }
+    
+    .offer-details {
+        flex-grow: 1;
+    }
+    
+    .discounted-price {
+        font-size: 24px;
+        color: #c82333; /* Red color for discounted price */
+        font-weight: bold;
+    }
+    
+    .original-price {
+        font-size: 18px;
+        color: #6c757d; /* Gray color for original price */
+        text-decoration: line-through; /* Strikethrough for original price */
+    }
+    
+    .countdown-timer {
+        font-size: 20px;
+        color: #155724; /* Dark green color for countdown */
+        font-weight: bold;
+    }
+    
+    /* Additional styles for the title and button can go here */
+
+    
+
+    {% comment %} phonetype css {% endcomment %}
+
+    .gaming-phone-title {
+        font-size: 36px; 
+        color: #007bff; 
+        text-align: center; 
+        margin-bottom: 10px; 
+        font-weight: bold; 
+        text-transform: uppercase;
+    }
+    
+    .more-button {
+        display: inline-block; 
+        background-color: #007bff; 
+        color: white; 
+        padding: 10px 20px; 
+        border-radius: 5px; 
+        text-decoration: none;
+        font-size: 18px; 
+        text-align: center; 
+        transition: background-color 0.3s; 
+    }
+    
+    .more-button:hover {
+        background-color: #0056b3; 
+    }
+
+    .button-container {
+        text-align: center; /* Center align the button */
+        margin-top: 10px; /* Space above the button */
+    }
+
+    {% comment %} topseller banner css {% endcomment %}
+
+    .top-sellers-container {
+        border: 2px solid #007bff; /* Blue border around the product section */
+        padding: 20px; /* Padding inside the border */
+        margin-top: 20px;
+        margin-left: 160px;
+        margin-right: 160px;
+        
+    }
+    
+    .top-sellers-title {
+        text-align: center; /* Center the title */
+        font-size: 28px; /* Font size for the title */
+        color: #007bff; /* Color of the title */
+        margin-bottom: 15px; /* Space below the title */
+    }
+
+
 </style>
 
 <head>
@@ -119,228 +245,245 @@ document.addEventListener('DOMContentLoaded', function() {
         </div>
     </header>
 
-    <div>
-
-        <h1>
-
-            Gaming Phones
-
-        </h1>
-        
-
-    </div>
-
-    <div class="product-section">
-        <div class="product-item">
-            <img src="{% static 'images/AsusROGPhone8Pro.jpg' %}" alt="Asus ROG Phone 8 Pro">
-            <div class="product-title">Asus ROG Phone 8 Pro</div>
-            <div class="product-rating">★★★★☆ (4.5)</div>
-            <div class="product-sold">5k+ sold</div>
-            <div class="product-price">₱58,995.00</div>
-            <div class="product-options">
-                <label class="option-label">Color:</label>
-                <select>
-                    <option>Black</option>
-                    <option>White</option>
-                </select>
-                <label class="option-label">RAM + Storage:</label>
-                <select>
-                    <option>16GB + 512GB</option>
-                    <option>32GB + 1TB</option>
-                </select>
-                <label class="option-label">Quantity:</label>
-                <div class="quantity-controls">
-                    <button class="decrease" onclick="changeQuantity(this, -1)">-</button>
-                    <input type="number" class="quantity-input" value="1" min="1" max="5" readonly>
-                    <button class="increase" onclick="changeQuantity(this, 1)">+</button>
-                </div>
+    <div style="padding-top: 25px;" class="offer-container">
+        <div class="offer-banner">
+            <img src="{% static 'images/placeholder.jpg' %}" alt="Limited Time Offer" class="offer-image">
+            <div class="offer-details">
+                <h2>Limited Time Offer!</h2>
+                <p class="product-name">Asus ROG Phone 8 Pro</p>
+                <p class="discounted-price">₱49,995.00</p>
+                <p class="original-price">₱58,995.00</p>
+                <div id="countdown" class="countdown-timer"></div>
             </div>
-            <button class="add-to-cart">Add to Cart</button>
         </div>
-
-        <div class="product-item">
-            <img src="{% static 'images/NubiaREDMAGIC.webp' %}" alt="ZTE Nubia RedMagic 9 Pro">
-            <div class="product-title">ZTE Nubia RedMagic 9 Pro</div>
-            <div class="product-rating">No ratings</div>
-            <div class="product-sold">100+ sold</div>
-            <div class="product-price">₱46,999</div>
-            <div class="product-options">
-                <label class="option-label">Color:</label>
-                <select>
-                    <option>Silver</option>
-                </select>
-                <label class="option-label">RAM + Storage:</label>
-                <select>
-                    <option>12GB + 256GB</option>
-                </select>
-                <label class="option-label">Quantity:</label>
-                <div class="quantity-controls">
-                    <button class="decrease" onclick="changeQuantity(this, -1)">-</button>
-                    <input type="number" class="quantity-input" value="1" min="1" max="5" readonly>
-                    <button class="increase" onclick="changeQuantity(this, 1)">+</button>
-                </div>
-            </div>
-            <button class="add-to-cart">Add to Cart</button>
-        </div>
-
-        <div class="product-item">
-            <img src="{% static 'images/BlackShark5.webp' %}" alt="Black Shark 5 Pro">
-            <div class="product-title">Black Shark 5 Pro</div>
-            <div class="product-rating">★★★★★ (4.9)</div>
-            <div class="product-sold">1,203 sold</div>
-            <div class="product-price">₱25,799 - ₱28,799</div>
-            <div class="product-options">
-                <label class="option-label">Color:</label>
-                <select>
-                    <option>Nebula White</option>
-                    <option>Stellar Black</option>
-                </select>
-                <label class="option-label">RAM + Storage:</label>
-                <select>
-                    <option>8GB + 128GB</option>
-                    <option>12GB + 256GB</option>
-                    <option>16GB + 256GB</option>
-                </select>
-                <label class="option-label">Quantity:</label>
-                <div class="quantity-controls">
-                    <button class="decrease" onclick="changeQuantity(this, -1)">-</button>
-                    <input type="number" class="quantity-input" value="1" min="1" max="5" readonly>
-                    <button class="increase" onclick="changeQuantity(this, 1)">+</button>
-                </div>
-            </div>
-            <button class="add-to-cart">Add to Cart</button>
-        </div>
-
-    </div>
-
-    <div>
-
-        <h1>
-
-            Non-Gaming Phones
-
-        </h1>
-        
-
-    </div>
-
-    <div class="product-section">
-        <div class="product-item">
-            <img src="{% static 'images/AppleIPhone.webp' %}" alt="Apple iPhone 15 Pro Max">
-            <div class="product-title">Apple iPhone 15 Pro Max</div>
-            <div class="product-rating">★★★★★ (4.9)</div>
-            <div class="product-sold">5k+ sold</div>
-            <div class="product-price">₱68,890</div>
-            <div class="product-options">
-                <label class="option-label">Color:</label>
-                <select>
-                    <option>Black Titanium</option>
-                    <option>White Titanium</option>
-                    <option>Natural Titanium</option>
-                    <option>Blue Titanium</option>
-                </select>
-                <label class="option-label">Storage:</label>
-                <select>
-                    <option>256GB</option>
-                    <option>512GB</option>
-                    <option>1TB</option>
-                </select>
-                <label class="option-label">Quantity:</label>
-                <div class="quantity-controls">
-                    <button class="decrease" onclick="changeQuantity(this, -1)">-</button>
-                    <input type="number" class="quantity-input" value="1" min="1" max="5" readonly>
-                    <button class="increase" onclick="changeQuantity(this, 1)">+</button>
-                </div>
-            </div>
-            <button class="add-to-cart">Add to Cart</button>
-        </div>
-
-        <div class="product-item">
-            <img src="{% static 'images/SamsungGalaxyUltra.webp' %}" alt="Samsung Galaxy S24 Ultra">
-            <div class="product-title">Samsung Galaxy S24 Ultra</div>
-            <div class="product-rating">★★★★★ (4.7)</div>
-            <div class="product-sold">3,789 sold</div>
-            <div class="product-price">₱77,768 - ₱106,990</div>
-            <div class="product-options">
-                <label class="option-label">Color:</label>
-                <select>
-                    <option>Titanium Black</option>
-                    <option>Titanium Gray</option>
-                    <option>Titanium Violet</option>
-                    <option>Titanium Yellow</option>
-                </select>
-                <label class="option-label">Storage:</label>
-                <select>
-                    <option>256GB</option>
-                    <option>512GB</option>
-                    <option>1TB</option>
-                </select>
-                <label class="option-label">Quantity:</label>
-                <div class="quantity-controls">
-                    <button class="decrease" onclick="changeQuantity(this, -1)">-</button>
-                    <input type="number" class="quantity-input" value="1" min="1" max="5" readonly>
-                    <button class="increase" onclick="changeQuantity(this, 1)">+</button>
-                </div>
-            </div>
-            <button class="add-to-cart">Add to Cart</button>
-        </div>
-
-        <div class="product-item">
-            <img src="{% static 'images/OnePlus12R.webp' %}" alt="OnePlus 12R">
-            <div class="product-title">OnePlus 12R</div>
-            <div class="product-rating">★★★★☆ (4.3)</div>
-            <div class="product-sold">3,314 sold</div>
-            <div class="product-price">₱43,690</div>
-            <div class="product-options">
-                <label class="option-label">Color:</label>
-                <select>
-                    <option>Cool Blue</option>
-                    <option>Iron Grey</option>
-                </select>
-                <label class="option-label">RAM + Storage:</label>
-                <select>
-                    <option>16GB + 256GB</option>
-                </select>
-                <label class="option-label">Quantity:</label>
-                <div class="quantity-controls">
-                    <button class="decrease" onclick="changeQuantity(this, -1)">-</button>
-                    <input type="number" class="quantity-input" value="1" min="1" max="5" readonly>
-                    <button class="increase" onclick="changeQuantity(this, 1)">+</button>
-                </div>
-            </div>
-            <button class="add-to-cart">Add to Cart</button>
-        </div>
-
-        <div class="product-item">
-            <img src="{% static 'images/GooglePixel.jpg' %}" alt="Google Pixel 8 PRO">
-            <div class="product-title">Google Pixel 8 PRO</div>
-            <div class="product-rating">★★★★☆ (3.9)</div>
-            <div class="product-sold">741 sold</div>
-            <div class="product-price">₱41,399</div>
-            <div class="product-options">
-                <label class="option-label">Color:</label>
-                <select>
-                    <option>Obsidian</option>
-                    <option>Bay</option>
-                    <option>Porcelain</option>
-                </select>
-                <label class="option-label">Storage:</label>
-                <select>
-                    <option>128GB</option>
-                    <option>256GB</option>
-                </select>
-                <label class="option-label">Quantity:</label>
-                <div class="quantity-controls">
-                    <button class="decrease" onclick="changeQuantity(this, -1)">-</button>
-                    <input type="number" class="quantity-input" value="1" min="1" max="5" readonly>
-                    <button class="increase" onclick="changeQuantity(this, 1)">+</button>
-                </div>
-            </div>
-            <button class="add-to-cart">Add to Cart</button>
-        </div>
-
-
     
-</body>
+        <div class="offer-banner">
+            <img src="{% static 'images/placeholder.jpg' %}" alt="Limited Time Offer" class="offer-image">
+            <div class="offer-details">
+                <h2>Limited Time Offer!</h2>
+                <p class="product-name">Xiaomi Black Shark 5</p>
+                <p class="discounted-price">₱39,995.00</p>
+                <p class="original-price">₱45,995.00</p>
+                <div id="countdown" class="countdown-timer"></div>
+            </div>
+        </div>
+    
+        <div class="offer-banner">
+            <img src="{% static 'images/placeholder.jpg' %}" alt="Limited Time Offer" class="offer-image">
+            <div class="offer-details">
+                <h2>Limited Time Offer!</h2>
+                <p class="product-name">Lenovo Legion Phone Duel 2</p>
+                <p class="discounted-price">₱44,995.00</p>
+                <p class="original-price">₱52,995.00</p>
+                <div id="countdown" class="countdown-timer"></div>
+            </div>
+        </div>
+    </div>
+
+    <div>
+        <h1 class="gaming-phone-title">Gaming Phones</h1>
+        <div class="button-container">
+            <a href="{% url 'gamingphone' %}" class="more-button">Click here for more</a>
+        </div>
+    </div>
+
+
+    <div class="top-sellers-container">
+        <h2 class="top-sellers-title">Top Sellers</h2>
+        <div class="product-section">
+
+            <div class="product-section">
+                <div class="product-item">
+                    <img src="{% static 'images/AsusROGPhone8Pro.jpg' %}" alt="Asus ROG Phone 8 Pro">
+                    <div class="product-title">Asus ROG Phone 8 Pro</div>
+                    <div class="product-rating">★★★★☆ (4.5)</div>
+                    <div class="product-sold">5k+ sold</div>
+                    <div class="product-price">₱58,995.00</div>
+                    <div class="product-options">
+                        <label class="option-label">Color:</label>
+                        <select>
+                            <option>Black</option>
+                            <option>White</option>
+                        </select>
+                        <label class="option-label">RAM + Storage:</label>
+                        <select>
+                            <option>16GB + 512GB</option>
+                            <option>32GB + 1TB</option>
+                        </select>
+                        <label class="option-label">Quantity:</label>
+                        <div class="quantity-controls">
+                            <button class="decrease" onclick="changeQuantity(this, -1)">-</button>
+                            <input type="number" class="quantity-input" value="1" min="1" max="5" readonly>
+                            <button class="increase" onclick="changeQuantity(this, 1)">+</button>
+                        </div>
+                    </div>
+                    <button class="add-to-cart">Add to Cart</button>
+                </div>
+
+                <div class="product-item">
+                    <img src="{% static 'images/NubiaREDMAGIC.webp' %}" alt="ZTE Nubia RedMagic 9 Pro">
+                    <div class="product-title">ZTE Nubia RedMagic 9 Pro</div>
+                    <div class="product-rating">No ratings</div>
+                    <div class="product-sold">100+ sold</div>
+                    <div class="product-price">₱46,999</div>
+                    <div class="product-options">
+                        <label class="option-label">Color:</label>
+                        <select>
+                            <option>Silver</option>
+                        </select>
+                        <label class="option-label">RAM + Storage:</label>
+                        <select>
+                            <option>12GB + 256GB</option>
+                        </select>
+                        <label class="option-label">Quantity:</label>
+                        <div class="quantity-controls">
+                            <button class="decrease" onclick="changeQuantity(this, -1)">-</button>
+                            <input type="number" class="quantity-input" value="1" min="1" max="5" readonly>
+                            <button class="increase" onclick="changeQuantity(this, 1)">+</button>
+                        </div>
+                    </div>
+                    <button class="add-to-cart">Add to Cart</button>
+                </div>
+
+                <div class="product-item">
+                    <img src="{% static 'images/BlackShark5.webp' %}" alt="Black Shark 5 Pro">
+                    <div class="product-title">Black Shark 5 Pro</div>
+                    <div class="product-rating">★★★★★ (4.9)</div>
+                    <div class="product-sold">1,203 sold</div>
+                    <div class="product-price">₱25,799 - ₱28,799</div>
+                    <div class="product-options">
+                        <label class="option-label">Color:</label>
+                        <select>
+                            <option>Nebula White</option>
+                            <option>Stellar Black</option>
+                        </select>
+                        <label class="option-label">RAM + Storage:</label>
+                        <select>
+                            <option>8GB + 128GB</option>
+                            <option>12GB + 256GB</option>
+                            <option>16GB + 256GB</option>
+                        </select>
+                        <label class="option-label">Quantity:</label>
+                        <div class="quantity-controls">
+                            <button class="decrease" onclick="changeQuantity(this, -1)">-</button>
+                            <input type="number" class="quantity-input" value="1" min="1" max="5" readonly>
+                            <button class="increase" onclick="changeQuantity(this, 1)">+</button>
+                        </div>
+                    </div>
+                    <button class="add-to-cart">Add to Cart</button>
+                </div>
+
+            </div>
+
+        </div>
+    </div>    
+        
+    <div>
+        <h1 style = "margin-top: 20px;" class="gaming-phone-title"> Non-Gaming Phones</h1>
+        <div class="button-container">
+            <a href="{% url 'nongamingphone' %}" class="more-button">Click here for more</a>
+        </div>
+    </div>
+
+    <div class="top-sellers-container">
+        <h2 class="top-sellers-title">Top Sellers</h2>
+        <div class="product-section">
+
+        <div class="product-section">
+            <div class="product-item">
+                <img src="{% static 'images/AppleIPhone.webp' %}" alt="Apple iPhone 15 Pro Max">
+                <div class="product-title">Apple iPhone 15 Pro Max</div>
+                <div class="product-rating">★★★★★ (4.9)</div>
+                <div class="product-sold">5k+ sold</div>
+                <div class="product-price">₱68,890</div>
+                <div class="product-options">
+                    <label class="option-label">Color:</label>
+                    <select>
+                        <option>Black Titanium</option>
+                        <option>White Titanium</option>
+                        <option>Natural Titanium</option>
+                        <option>Blue Titanium</option>
+                    </select>
+                    <label class="option-label">Storage:</label>
+                    <select>
+                        <option>256GB</option>
+                        <option>512GB</option>
+                        <option>1TB</option>
+                    </select>
+                    <label class="option-label">Quantity:</label>
+                    <div class="quantity-controls">
+                        <button class="decrease" onclick="changeQuantity(this, -1)">-</button>
+                        <input type="number" class="quantity-input" value="1" min="1" max="5" readonly>
+                        <button class="increase" onclick="changeQuantity(this, 1)">+</button>
+                    </div>
+                </div>
+                <button class="add-to-cart">Add to Cart</button>
+            </div>
+
+            <div class="product-item">
+                <img src="{% static 'images/SamsungGalaxyUltra.webp' %}" alt="Samsung Galaxy S24 Ultra">
+                <div class="product-title">Samsung Galaxy S24 Ultra</div>
+                <div class="product-rating">★★★★★ (4.7)</div>
+                <div class="product-sold">3,789 sold</div>
+                <div class="product-price">₱77,768 - ₱106,990</div>
+                <div class="product-options">
+                    <label class="option-label">Color:</label>
+                    <select>
+                        <option>Titanium Black</option>
+                        <option>Titanium Gray</option>
+                        <option>Titanium Violet</option>
+                        <option>Titanium Yellow</option>
+                    </select>
+                    <label class="option-label">Storage:</label>
+                    <select>
+                        <option>256GB</option>
+                        <option>512GB</option>
+                        <option>1TB</option>
+                    </select>
+                    <label class="option-label">Quantity:</label>
+                    <div class="quantity-controls">
+                        <button class="decrease" onclick="changeQuantity(this, -1)">-</button>
+                        <input type="number" class="quantity-input" value="1" min="1" max="5" readonly>
+                        <button class="increase" onclick="changeQuantity(this, 1)">+</button>
+                    </div>
+                </div>
+                <button class="add-to-cart">Add to Cart</button>
+            </div>
+
+            <div class="product-item">
+                <img src="{% static 'images/GooglePixel.jpg' %}" alt="Google Pixel 8 PRO">
+                <div class="product-title">Google Pixel 8 PRO</div>
+                <div class="product-rating">★★★★☆ (3.9)</div>
+                <div class="product-sold">741 sold</div>
+                <div class="product-price">₱41,399</div>
+                <div class="product-options">
+                    <label class="option-label">Color:</label>
+                    <select>
+                        <option>Obsidian</option>
+                        <option>Bay</option>
+                        <option>Porcelain</option>
+                    </select>
+                    <label class="option-label">Storage:</label>
+                    <select>
+                        <option>128GB</option>
+                        <option>256GB</option>
+                    </select>
+                    <label class="option-label">Quantity:</label>
+                    <div class="quantity-controls">
+                        <button class="decrease" onclick="changeQuantity(this, -1)">-</button>
+                        <input type="number" class="quantity-input" value="1" min="1" max="5" readonly>
+                        <button class="increase" onclick="changeQuantity(this, 1)">+</button>
+                    </div>
+                </div>
+                <button class="add-to-cart">Add to Cart</button>
+            </div>
+
+
+        </div>
+    </div>
+
+
+
+    </body>
 
 </html>

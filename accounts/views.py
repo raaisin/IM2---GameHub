@@ -110,6 +110,14 @@ def phone_view(request):
    
    return render(request, 'phone.html')
 
+def gamingphone_view(request):
+   
+   return render(request, 'gamingphone.html')
+
+def nongamingphone_view(request):
+   
+   return render(request, 'nongamingphone.html')
+
 def new_view(request):
     return render(request, 'new.html')
 
