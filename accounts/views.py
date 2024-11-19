@@ -132,6 +132,29 @@ def active_view(request):
 
 def accessories_view(request):
     return render(request, 'accessories.html')
+
+def lol_game(request):
+    return render(request, 'games/lol.html')
+
+def fortnite_game(request):
+    return render(request, 'games/fortnite.html')
+
+def valorant_game(request):
+    return render(request, 'games/valorant.html')
+
+def apex_game(request):
+    return render(request, 'games/apex.html')
+
+def csgo_game(request):
+    return render(request, 'games/csgo.html')
+
+def cyberpunk_game(request):
+    return render(request, 'games/cyberpunk.html')
+
+def eldenring_game(request):
+    return render(request, 'games/eldenring.html')
+
+
 @login_required
 def add_to_cart(request, product_id):
     product = get_object_or_404(Product, id=product_id)

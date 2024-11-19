@@ -201,7 +201,7 @@
             </h2>
             <div class="featured-content">
                 <!-- <img src="/api/placeholder/400/225" alt="Featured Game" class="featured-img"> -->
-                <!-- <img src="{% static 'images/active1.jpg' %}" alt="LOL"> --> 
+                <!-- <img src="{% static 'images/active1.jpg' %}" alt="LOL">
                 <img src="{% static 'images/active1.jpg' %}" alt="Featured Game" class="featured-img">
                 
                 <div class="featured-info">
@@ -209,7 +209,17 @@
                     <p>Join millions of players in the biggest gaming event of the year! Experience epic battles, amazing rewards, and exclusive content during this limited-time event.</p>
                     <a href="#" class="cta-button">Join Now</a>
                 </div>
+            </div>  --> 
+
+            <div class="featured-info">
+                <img src="{% static 'images/active1.jpg' %}" alt="Featured Game" class="featured-img">
+                <h3>League of Legends World Championship</h3>
+                <p>Join millions of players in the biggest gaming event of the year! Experience epic battles, amazing rewards, and exclusive content during this limited-time event.</p>
+                <a href="{% url 'lol_game' %}" class="cta-button">Purchase</a>
             </div>
+        </div>
+
+
         </section>
 
         <section class="banner-section">
@@ -222,19 +232,25 @@
                 <div class="banner-card">
                     <img src="{% static 'images/active2.jpg' %}" alt="Banner Game" class="banner-img">
                     <div class="banner-info">
-                        <h3 class="banner-title">Fortnite</h3>
+                        <a href="{% url 'fortnite_game' %}" class="banner-title-link">
+                            <h3 class="banner-title">Fortnite</h3>
+                        </a>
                         <div class="banner-stats">
                             <span><i class="fas fa-users"></i> 125K players</span>
                             <span><i class="fas fa-signal"></i> Very Active</span>
                         </div>
                     </div>
                 </div>
+            
+                
 
                 <!-- Banner Card 2 -->
                 <div class="banner-card">
                     <img src="{% static 'images/active3.jpg' %}" alt="Banner Game" class="banner-img">
                     <div class="banner-info">
-                        <h3 class="banner-title">Valorant</h3>
+                        <a href="{% url 'valorant_game' %}" class="banner-title-link">
+                            <h3 class="banner-title">Valorant</h3>
+                        </a>
                         <div class="banner-stats">
                             <span><i class="fas fa-users"></i> 89K players</span>
                             <span><i class="fas fa-signal"></i> Active</span>
@@ -246,7 +262,9 @@
                 <div class="banner-card">
                     <img src="{% static 'images/active4.jpg' %}" alt="Banner Game" class="banner-img">
                     <div class="banner-info">
-                        <h3 class="banner-title">CS:GO</h3>
+                        <a href="{% url 'csgo_game' %}" class="banner-title-link">
+                            <h3 class="banner-title">CS:GO</h3>
+                        </a>
                         <div class="banner-stats">
                             <span><i class="fas fa-users"></i> 200K players</span>
                             <span><i class="fas fa-signal"></i> Very Active</span>
@@ -258,7 +276,9 @@
                 <div class="banner-card">
                     <img src="{% static 'images/active5.jpg' %}" alt="Banner Game" class="banner-img">
                     <div class="banner-info">
-                        <h3 class="banner-title">Apex Legends</h3>
+                        <a href="{% url 'apex_game' %}" class="banner-title-link">
+                            <h3 class="banner-title">Apex Legends</h3>
+                        </a>
                         <div class="banner-stats">
                             <span><i class="fas fa-users"></i> 95K players</span>
                             <span><i class="fas fa-signal"></i> Active</span>
@@ -278,7 +298,9 @@
                 <div class="banner-card">
                     <img src="{% static 'images/active6.jpg' %}" alt="Banner Game" class="banner-img">
                     <div class="banner-info">
-                        <h3 class="banner-title">Cyberpunk 2077</h3>
+                        <a href="{% url 'cyberpunk_game' %}" class="banner-title-link">
+                            <h3 class="banner-title">Cyberpunk 2077</h3>
+                        </a>
                         <div class="banner-stats">
                             <span><i class="fas fa-users"></i> 75K players</span>
                             <span><i class="fas fa-signal"></i> Active</span>
@@ -290,7 +312,9 @@
                 <div class="banner-card">
                     <img src="{% static 'images/active7.jpg' %}" alt="Banner Game" class="banner-img">
                     <div class="banner-info">
-                        <h3 class="banner-title">Elden Ring</h3>
+                        <a href="{% url 'eldenring_game' %}" class="banner-title-link">
+                            <h3 class="banner-title">Elden Ring</h3>
+                        </a>
                         <div class="banner-stats">
                             <span><i class="fas fa-users"></i> 150K players</span>
                             <span><i class="fas fa-signal"></i> Very Active</span>

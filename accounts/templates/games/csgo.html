@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CS:GO Skin Market</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Stratum2', Arial, sans-serif;
+        }
+
+        body {
+            background-color: #1b2838;
+            color: #c6d4df;
+        }
+
+        header {
+            background: linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.8)),
+                        url('/api/placeholder/1920/400');
+            background-size: cover;
+            background-position: center;
+            padding: 40px 20px;
+            text-align: center;
+            border-bottom: 2px solid #66c0f4;
+        }
+
+        .logo {
+            font-size: 3.5em;
+            font-weight: bold;
+            color: #66c0f4;
+            text-transform: uppercase;
+            margin-bottom: 20px;
+            text-shadow: 0 0 10px rgba(102, 192, 244, 0.5);
+        }
+
+        .search-filters {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #2a475e;
+        }
+
+        .search-bar {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 15px;
+            background: #316282;
+            border: 1px solid #66c0f4;
+            color: #c6d4df;
+            font-size: 1em;
+        }
+
+        .filters {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .filter-select {
+            padding: 8px;
+            background: #316282;
+            border: 1px solid #66c0f4;
+            color: #c6d4df;
+            cursor: pointer;
+        }
+
+        .market-container {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 0 20px;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+        }
+
+        .skin-card {
+            background: #2a475e;
+            border: 1px solid #66c0f4;
+            transition: transform 0.2s;
+            position: relative;
+        }
+
+        .skin-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 0 15px rgba(102, 192, 244, 0.3);
+        }
+
+        .skin-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-bottom: 1px solid #66c0f4;
+        }
+
+        .skin-info {
+            padding: 15px;
+        }
+
+        .skin-name {
+            font-size: 1.2em;
+            color: #ffffff;
+            margin-bottom: 5px;
+        }
+
+        .weapon-type {
+            color: #66c0f4;
+            font-size: 0.9em;
+            margin-bottom: 10px;
+        }
+
+        .stat-trak {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: #CF6A32;
+            color: #fff;
+            padding: 3px 8px;
+            font-size: 0.8em;
+            border-radius: 3px;
+        }
+
+        .wear-rating {
+            display: flex;
+            align-items: center;
+            margin: 10px 0;
+            gap: 10px;
+        }
+
+        .wear-bar {
+            flex-grow: 1;
+            height: 4px;
+            background: #1b2838;
+            position: relative;
+        }
+
+        .wear-indicator {
+            position: absolute;
+            width: 4px;
+            height: 8px;
+            background: #ffffff;
+            top: -2px;
+        }
+
+        .wear-value {
+            font-size: 0.8em;
+            color: #8f98a0;
+        }
+
+        .rarity {
+            padding: 3px 8px;
+            font-size: 0.8em;
+            border-radius: 3px;
+            display: inline-block;
+            margin-bottom: 10px;
+        }
+
+        .covert {
+            background: #EB4B4B;
+            color: white;
+        }
+
+        .classified {
+            background: #D32CE6;
+            color: white;
+        }
+
+        .restricted {
+            background: #8847FF;
+            color: white;
+        }
+
+        .mil-spec {
+            background: #4B69FF;
+            color: white;
+        }
+
+        .price-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid #66c0f4;
+        }
+
+        .price {
+            font-size: 1.2em;
+            color: #ffffff;
+        }
+
+        .buy-button {
+            background: #66c0f4;
+            color: #ffffff;
+            border: none;
+            padding: 8px 15px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .buy-button:hover {
+            background: #417a9b;
+        }
+
+        .float-value {
+            color: #8f98a0;
+            font-size: 0.9em;
+            margin: 5px 0;
+        }
+
+        @media (max-width: 768px) {
+            .logo {
+                font-size: 2.5em;
+            }
+            
+            .filters {
+                flex-direction: column;
+            }
+            
+            .market-container {
+                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1 class="logo">CS:GO Market</h1>
+        <div class="search-filters">
+            <!-- Retain only the search bar -->
+            <input type="text" class="search-bar" placeholder="Search for skins...">
+        </div>
+    </header>
+</body>
+
+
+    <div class="market-container">
+        <div class="skin-card">
+            <span class="stat-trak">StatTrak™</span>
+           <!-- <img src="/api/placeholder/400/200" alt="AK-47 Asiimov" class="skin-image"> -->
+            <img src="{% static 'images/csgo1.jpg' %}" alt="AK-47 Asiimov" class="skin-image">
+            <div class="skin-info">
+                <span class="rarity covert">Covert</span>
+                <h2 class="skin-name">Asiimov</h2>
+                <p class="weapon-type">AK-47</p>
+                <div class="wear-rating">
+                    <span class="wear-value">Factory New</span>
+                    <div class="wear-bar">
+                        <div class="wear-indicator" style="left: 5%"></div>
+                    </div>
+                </div>
+                <p class="float-value">Float: 0.012</p>
+                <div class="price-info">
+                    <span class="price">$245.50</span>
+                    <button class="buy-button">Purchase</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="skin-card">
+            <img src="{% static 'images/csgo2.jpg' %}" alt="AWP Dragon Lore" class="skin-image">
+            <div class="skin-info">
+                <span class="rarity covert">Covert</span>
+                <h2 class="skin-name">Dragon Lore</h2>
+                <p class="weapon-type">AWP</p>
+                <div class="wear-rating">
+                    <span class="wear-value">Minimal Wear</span>
+                    <div class="wear-bar">
+                        <div class="wear-indicator" style="left: 15%"></div>
+                    </div>
+                </div>
+                <p class="float-value">Float: 0.089</p>
+                <div class="price-info">
+                    <span class="price">$3,450.00</span>
+                    <button class="buy-button">Purchase</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="skin-card">
+            <img src="{% static 'images/csgo3.jpg' %}" alt="M4A4 Howl" class="skin-image">
+            <div class="skin-info">
+                <span class="rarity contraband">Contraband</span>
+                <h2 class="skin-name">Howl</h2>
+                <p class="weapon-type">M4A4</p>
+                <div class="wear-rating">
+                    <span class="wear-value">Field-Tested</span>
+                    <div class="wear-bar">
+                        <div class="wear-indicator" style="left: 35%"></div>
+                    </div>
+                </div>
+                <p class="float-value">Float: 0.167</p>
+                <div class="price-info">
+                    <span class="price">$1,890.00</span>
+                    <button class="buy-button">Purchase</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="skin-card">
+            <span class="stat-trak">StatTrak™</span>
+            <img src="{% static 'images/csgo4.png' %}" alt="USP-S Kill Confirmed" class="skin-image">
+            <div class="skin-info">
+                <span class="rarity classified">Classified</span>
+                <h2 class="skin-name">Kill Confirmed</h2>
+                <p class="weapon-type">USP-S</p>
+                <div class="wear-rating">
+                    <span class="wear-value">Factory New</span>
+                    <div class="wear-bar">
+                        <div class="wear-indicator" style="left: 2%"></div>
+                    </div>
+                </div>
+                <p class="float-value">Float: 0.009</p>
+                <div class="price-info">
+                    <span class="price">$178.50</span>
+                    <button class="buy-button">Purchase</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
