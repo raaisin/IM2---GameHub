@@ -240,3 +240,6 @@ def create_order(request):
         
     except Exception as e:
         return JsonResponse({'error': str(e)}, status=400)
+    
+def payment_view(request):
+    return render(request, 'payment.html')

@@ -1,15 +1,12 @@
 <!DOCTYPE html>
 {% load static %}
 <html lang="en">
-
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{% static 'css/laptop.css' %}">
     <title>Laptops</title>
-    
 </head>
-
 <body>
     <header class="header">
         <div class="header-content">
@@ -173,133 +170,127 @@
             <button class="add-to-cart">Add to Cart</button>
         </div>
     </div>
+
+    <!-- JavaScript to manage cart -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize cart in localStorage if it doesn't exist
+            if (!localStorage.getItem('cartItems')) {
+                localStorage.setItem('cartItems', JSON.stringify([]));
+            }
+
+            // Add click event listeners to all "Add to Cart" buttons
+            const addToCartButtons = document.querySelectorAll('.add-to-cart');
+            addToCartButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const productItem = this.closest('.product-item');
+
+                    // Get product details
+                    const priceText = productItem.querySelector('.product-price').textContent;
+                    const price = parseFloat(priceText.replace('$', '').replace(',', ''));
+
+                    const product = {
+                        name: productItem.querySelector('.product-title').textContent,
+                        price: price,
+                        image: productItem.querySelector('img').src,
+                        color: productItem.querySelector('select:nth-of-type(1)').value,
+                        quantity: parseInt(productItem.querySelector('input[type="number"]').value),
+                        specification: {
+                            name: productItem.querySelector('.option-label:nth-of-type(2)').textContent.trim().slice(0, -1),
+                            value: productItem.querySelector('select:nth-of-type(2)').value
+                        }
+                    };
+
+                    // Retrieve and update cart
+                    let cartItems = JSON.parse(localStorage.getItem('cartItems'));
+
+                    const existingProductIndex = cartItems.findIndex(item =>
+                        item.name === product.name &&
+                        item.color === product.color &&
+                        item.specification.value === product.specification.value
+                    );
+
+                    if (existingProductIndex !== -1) {
+                        cartItems[existingProductIndex].quantity += product.quantity;
+                    } else {
+                        cartItems.push(product);
+                    }
+
+                    localStorage.setItem('cartItems', JSON.stringify(cartItems));
+
+                    // Update button UI
+                    button.textContent = 'Added to Cart';
+                    button.style.backgroundColor = '#4CAF50'; // Change to green
+                    button.style.color = 'white';
+                    button.disabled = true; // Disable further clicks
+                });
+            });
+
+            // Add Checkout Button in Header
+            const cartContainer = document.querySelector('.nav-links');
+            const checkoutBtn = document.createElement('button');
+            checkoutBtn.textContent = 'Checkout';
+            checkoutBtn.className = 'nav-link checkout-button';
+            checkoutBtn.style.backgroundColor = '#4CAF50';
+            checkoutBtn.style.color = 'white';
+            checkoutBtn.style.border = 'none';
+            checkoutBtn.style.padding = '8px 16px';
+            checkoutBtn.style.borderRadius = '4px';
+            checkoutBtn.style.cursor = 'pointer';
+            cartContainer.appendChild(checkoutBtn);
+
+            // Checkout functionality
+            checkoutBtn.addEventListener('click', function() {
+                const cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
+
+                if (cartItems.length === 0) {
+                    alert('Your cart is empty!');
+                    return;
+                }
+
+                // Send order to backend
+                fetch('/api/create-order/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': getCookie('csrftoken')
+                    },
+                    body: JSON.stringify({ items: cartItems })
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    // Clear cart after successful order
+                    localStorage.setItem('cartItems', JSON.stringify([]));
+                    alert('Order placed successfully! Order ID: ' + data.orderId);
+                    window.location.href = '/orders/';  // Redirect to orders page
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Error placing order. Please try again.');
+                });
+            });
+
+            // Function to get CSRF token from cookies
+            function getCookie(name) {
+                let cookieValue = null;
+                if (document.cookie && document.cookie !== '') {
+                    const cookies = document.cookie.split(';');
+                    for (let i = 0; i < cookies.length; i++) {
+                        const cookie = cookies[i].trim();
+                        if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                            break;
+                        }
+                    }
+                }
+                return cookieValue;
+            }
+        });
+    </script>
 </body>
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-    // Initialize cart in localStorage if it doesn't exist
-    if (!localStorage.getItem('cartItems')) {
-        localStorage.setItem('cartItems', JSON.stringify([]));
-    }
-
-    // Add click event listeners to all "Add to Cart" buttons
-    const addToCartButtons = document.querySelectorAll('.add-to-cart');
-    addToCartButtons.forEach(button => {
-        button.addEventListener('click', function() {
-            const productItem = this.closest('.product-item');
-            
-            // Get the exact price text and parse it correctly
-            const priceText = productItem.querySelector('.product-price').textContent;
-            const price = parseFloat(priceText.replace('$', '').replace(',', ''));
-            
-            const product = {
-                name: productItem.querySelector('.product-title').textContent,
-                price: price, // This will now be the correct price like 1199.99
-                image: productItem.querySelector('img').src,
-                color: productItem.querySelector('select:nth-of-type(1)').value,
-                quantity: parseInt(productItem.querySelector('input[type="number"]').value),
-                specification: {
-                    name: productItem.querySelector('.option-label:nth-of-type(2)').textContent.trim().slice(0, -1),
-                    value: productItem.querySelector('select:nth-of-type(2)').value
-                }
-            };
-
-            // Log the product to verify the price
-            console.log('Adding product:', product);
-
-            // Get existing cart items
-            let cartItems = JSON.parse(localStorage.getItem('cartItems'));
-            
-            // Check if product already exists in cart
-            const existingProductIndex = cartItems.findIndex(item => 
-                item.name === product.name && 
-                item.color === product.color && 
-                item.specification.value === product.specification.value
-            );
-
-            if (existingProductIndex !== -1) {
-                // Update quantity if product exists
-                cartItems[existingProductIndex].quantity += product.quantity;
-            } else {
-                // Add new product if it doesn't exist
-                cartItems.push(product);
-            }
-
-            // Save updated cart back to localStorage
-            localStorage.setItem('cartItems', JSON.stringify(cartItems));
-
-            // Show confirmation message with the price
-            alert(`Added ${product.name} to carts at $${product.price.toFixed(2)}`);
-            // Add this to your laptop.html, just after your existing cart JavaScript
-document.addEventListener('DOMContentLoaded', function() {
-    // Add checkout button to the cart
-    const cartContainer = document.querySelector('.nav-links');
-    const checkoutBtn = document.createElement('button');
-    checkoutBtn.textContent = 'Checkout';
-    checkoutBtn.className = 'nav-link checkout-button';
-    checkoutBtn.style.backgroundColor = '#4CAF50';
-    checkoutBtn.style.color = 'white';
-    checkoutBtn.style.border = 'none';
-    checkoutBtn.style.padding = '8px 16px';
-    checkoutBtn.style.borderRadius = '4px';
-    checkoutBtn.style.cursor = 'pointer';
-    cartContainer.appendChild(checkoutBtn);
-
-    // Handle checkout process
-    checkoutBtn.addEventListener('click', function() {
-        const cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
-        
-        if (cartItems.length === 0) {
-            alert('Your cart is empty!');
-            return;
-        }
-
-        // Send order to backend
-        fetch('/api/create-order/', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRFToken': getCookie('csrftoken')  // Add CSRF token
-            },
-            body: JSON.stringify({
-                items: cartItems
-            })
-        })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            return response.json();
-        })
-        .then(data => {
-            // Clear cart after successful order
-            localStorage.setItem('cartItems', JSON.stringify([]));
-            alert('Order placed successfully! Order ID: ' + data.orderId);
-            window.location.href = '/orders/';  // Redirect to orders page
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            alert('Error placing order. Please try again.');
-        });
-    });
-
-    // Function to get CSRF token from cookies
-    function getCookie(name) {
-        let cookieValue = null;
-        if (document.cookie && document.cookie !== '') {
-            const cookies = document.cookie.split(';');
-            for (let i = 0; i < cookies.length; i++) {
-                const cookie = cookies[i].trim();
-                if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                    break;
-                }
-            }
-        }
-        return cookieValue;
-    }
-});
-        });
-    });
-});
-</script>
 </html>

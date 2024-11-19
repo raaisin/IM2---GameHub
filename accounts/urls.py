@@ -22,5 +22,6 @@ urlpatterns = [
     path('orders/', views.orders, name='orders'),
     path('api/create-order/', views.create_order, name='create_order'),
         path('orders/<int:order_id>/mark-delivered/', views.mark_delivered, name='mark_delivered'),
+    path('payment/', views.payment_view, name="payment"),
 
 ]

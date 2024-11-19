@@ -212,3 +212,30 @@ body {
         margin-left: 20px;
     }
 }
+
+.divider {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    margin: 20px 0;
+}
+
+.divider::before,
+.divider::after {
+    content: "";
+    flex: 1;
+    border-bottom: 1px solid #ddd;
+}
+
+.divider span {
+    padding: 0 10px;
+    color: #777;
+    font-size: 14px;
+}
+
+#g_id_onload,
+#googleSignIn {
+    display: flex;
+    justify-content: center;
+    margin: 10px 0;
+}
