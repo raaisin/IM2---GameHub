@@ -247,22 +247,14 @@ from django.http import HttpResponseForbidden
 
 @login_required
 def orders(request):
-    orders = Order.objects.filter(user=request.user).order_by('-date_ordered')
-    return render(request, 'orders.html', {'orders': orders})
+    user_orders = Order.objects.filter(user=request.user).order_by('-date_ordered')
+    return render(request, 'orders.html', {'orders': user_orders})
 
 @login_required
-def mark_delivered(request, order_id):
-    if request.method == 'POST':
-        order = get_object_or_404(Order, id=order_id)
-        
-        # Ensure the user owns this order
-        if order.user != request.user:
-            return HttpResponseForbidden()
-            
-        order.delivered = True
-        order.save()
-        
-        return redirect('orders')
+def mark_as_delivered(request, order_id):
+    order = get_object_or_404(Order, id=order_id, user=request.user)
+    order.status = 'DELIVERED'
+    order.save()
     return redirect('orders')
 
 from django.http import JsonResponse
