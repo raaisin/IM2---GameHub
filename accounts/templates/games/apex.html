@@ -1,4 +1,307 @@
+{% load static %}
 <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Apex Legends Store</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background-color: #1a1a1a;
+            color: white;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .skin-image {
+            width: 100%;
+            height: 225px; /* or adjust as needed */
+            object-fit: contain;
+            background-color: #1F2326; /* Matches the card background */
+            transition: transform 0.3s ease;
+        }
+
+        /* Header Styles */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+            border-bottom: 1px solid #333;
+        }
+
+        .nav {
+            display: flex;
+            gap: 20px;
+        }
+
+        .nav a {
+            color: white;
+            text-decoration: none;
+        }
+
+        .sign-in {
+            padding: 8px 16px;
+            background: transparent;
+            color: white;
+            border: 1px solid #333;
+            cursor: pointer;
+        }
+
+        /* Battle Pass Section */
+        .battle-pass-section {
+            margin-top: 40px;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .countdown {
+            color: #888;
+            font-size: 14px;
+        }
+
+        .battle-pass-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .battle-pass-card {
+            background: linear-gradient(45deg, #1e1e1e, #2a2a2a);
+            border-radius: 8px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .battle-pass-image {
+            width: 100%;
+            height: 200px;
+            background-color: #333;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #666;
+            font-size: 14px;
+        }
+
+        .battle-pass-content {
+            padding: 20px;
+        }
+
+        .price {
+            font-size: 24px;
+            font-weight: bold;
+            margin-top: 20px;
+        }
+
+        .rewards-list {
+            list-style-type: none;
+            margin: 10px 0;
+        }
+
+        .rewards-list li {
+            font-size: 14px;
+            margin: 5px 0;
+            padding-left: 15px;
+            position: relative;
+        }
+
+        .rewards-list li::before {
+            content: "•";
+            position: absolute;
+            left: 0;
+        }
+
+        /* Coins Section */
+        .coins-section {
+            margin-top: 40px;
+        }
+
+        .coins-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .coin-card {
+            background-color: #2a2a2a;
+            border-radius: 8px;
+            padding: 20px;
+            position: relative;
+        }
+
+        .coin-image {
+            width: 100%;
+            height: 220px;
+            background-color: #333;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #666;
+            font-size: 14px;
+        }
+
+        .best-seller {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: #ff4444;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+        }
+
+        .coin-amount {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .coin-price {
+            color: #888;
+        }
+
+        @media (max-width: 768px) {
+            .battle-pass-grid,
+            .coins-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <div>
+                <h1>APEX LEGENDS™</h1>
+                {% comment %} <nav class="nav">
+                    <a href="#">Store</a>
+                    <a href="#">FAQ</a>
+                </nav> {% endcomment %}
+            </div>
+            {% comment %} <button class="sign-in">Sign in</button> {% endcomment %}
+        </header>
+
+        <section class="battle-pass-section">
+            <div class="section-header">
+                <h2>FROM THE RIFT BATTLE PASSES</h2>
+                {% comment %} <span class="countdown">25 days until the next Battle Pass</span> {% endcomment %}
+            </div>
+
+            <div class="battle-pass-grid">
+                <div class="battle-pass-card">
+                    <div class="battle-pass-image">
+                        <img src="{% static 'images/Battlepass_ultimatePlus.webp' %}" class = "skin-image" >
+
+                    </div>
+                    <div class="battle-pass-content">
+                        <h3>Ultimate+ Battle Pass</h3>
+                        <p>Split 1</p>
+                        <ul class="rewards-list">
+                            <li>1300 Apex Coins (200 from Free Track)</li>
+                            <li>1200 Crafting Metals</li>
+                            <li>14 Apex Packs (7 from Free Track)</li>
+                            <li>10 Exotic Shards</li>
+                        </ul>
+                        <p class="price">₱1,200.00</p>
+                    </div>
+                </div>
+
+                <div class="battle-pass-card">
+                    <div class="battle-pass-image">
+                        <img src="{% static 'images/Battlepass.webp' %}" class = "skin-image" >
+                    </div>
+                    <div class="battle-pass-content">
+                        <h3>Premium Battle Pass</h3>
+                        <p>Split 1</p>
+                        <ul class="rewards-list">
+                            <li>3 Reactive Weapon variants</li>
+                            <li>2 Legendary Character Skins</li>
+                            <li>1 Legendary Weapon Skin</li>
+                            <li>1300 Apex Coins (200 from Free Track)</li>
+                        </ul>
+                        <p class="price">₱950.00</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="coins-section">
+            <h2>APEX COINS</h2>
+            <div class="coins-grid">
+                <div class="coin-card">
+                    <div class="coin-image">
+                        <img src="{% static 'images\Apex-coins-500-game-art-1x1.avif' %}" class = "coin-image" >
+                    </div>
+                    <div class="coin-amount">500</div>
+                    <div class="coin-price">₱300.00</div>
+                </div>
+
+                <div class="coin-card">
+                    <div class="coin-image">
+                        <img src="{% static 'images\Apex-coins-1000-game-art-1x1.avif' %}" class = "coin-image" >
+                    </div>
+                    <div class="coin-amount">1,000</div>
+                    <div class="coin-price">₱600.00</div>
+                </div>
+
+                <div class="coin-card">
+                    <div class="coin-image">
+                        <img src="{% static 'images\ApexCoins2000Dark.avif' %}" class = "coin-image" >
+                    </div>
+                    <span class="best-seller">BEST SELLER</span>
+                    <div class="coin-amount">2,150</div>
+                    <div class="coin-price">₱1,200.00</div>
+                </div>
+
+                <div class="coin-card">
+                    <div class="coin-image">
+                        <img src="{% static 'images\ApexCoins4000Dark.avif' %}" class = "coin-image" >
+                    </div>
+                    <div class="coin-amount">4,350</div>
+                    <div class="coin-price">₱2,400.00</div>
+                </div>
+
+                <div class="coin-card">
+                    <div class="coin-image">
+                        <img src="{% static 'images\ApexCoins6000Dark.avif' %}" class = "coin-image" >
+                    </div>
+                    <div class="coin-amount">6,700</div>
+                    <div class="coin-price">₱3,600.00</div>
+                </div>
+
+                <div class="coin-card">
+                    <div class="coin-image">
+                        <img src="{% static 'images\ApexCoins10000Dark.avif' %}" class = "coin-image" >
+                    </div>
+                    <div class="coin-amount">11,500</div>
+                    <div class="coin-price">₱6,000.00</div>
+                </div>
+            </div>
+        </section>
+    </div>
+</body>
+</html>
+
+{% comment %} <!DOCTYPE html>
 {% load static %}
 <html lang="en">
 <head>
@@ -210,4 +513,4 @@
         </div>
     </div>
 </body>
-</html>
+</html> {% endcomment %}

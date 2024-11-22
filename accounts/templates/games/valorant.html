@@ -112,8 +112,9 @@
 
         .skin-image {
             width: 100%;
-            height: 200px;
-            object-fit: cover;
+            height: 200px; /* or adjust as needed */
+            object-fit: contain;
+            background-color: #1F2326; /* Matches the card background */
             transition: transform 0.3s ease;
         }
 
@@ -217,26 +218,24 @@
 <body>
     <header>
         <h1 class="logo">VALORANT</h1>
-        <p class="tagline">Premium Weapon Skins</p>
-        <div class="search-container">
+        <p class="tagline">Valo Points</p>
+        {% comment %} <div class="search-container">
             <input type="text" class="search-bar" placeholder="Search weapon skins...">
-        </div>
+        </div> {% endcomment %}
     </header>
 
 
     <div class="skins-container">
         <div class="skin-card">
-            <span class="edition-tag">Premium Edition</span>
             <!-- <img src="/api/placeholder/400/200" alt="Reaver Vandal" class="skin-image"> -->
-            <img src="{% static 'images/valo1.jpg' %}" alt="Reaver Vandal" class="skin-image">
+            <img src="{% static 'images\Valorant_Points_WHITE.webp' %}" alt="Reaver Vandal" class="skin-image">
             <div class="skin-info">
-                <h2 class="skin-name">Reaver</h2>
-                <p class="weapon-type">Vandal</p>
-                <p class="skin-description">Channel dark magic with every shot. Features custom animations, visual effects, and finisher.</p>
+                <h2 class="skin-name">475</h2>
+                <p class="weapon-type">VP</p>
                 <div class="skin-footer">
                     <div class="price">
-                        <span class="vp-icon">VP</span>
-                        1775
+                        <span class="vp-icon">$</span>
+                        1.99
                     </div>
                     <button class="buy-btn">Purchase</button>
                 </div>
@@ -244,16 +243,16 @@
         </div>
 
         <div class="skin-card">
-            <span class="edition-tag">Exclusive Edition</span>
-            <img src="{% static 'images/valo2.jpg' %}" alt="Prime Phantom" class="skin-image">
+            <span class="edition-tag">Best Value</span>
+            <!-- <img src="/api/placeholder/400/200" alt="Reaver Vandal" class="skin-image"> -->
+            <img src="{% static 'images\Valorant_Points_WHITE.webp' %}" alt="Reaver Vandal" class="skin-image">
             <div class="skin-info">
-                <h2 class="skin-name">Prime</h2>
-                <p class="weapon-type">Phantom</p>
-                <p class="skin-description">High-tech precision meets elegant design. Includes custom reload animation and kill effects.</p>
+                <h2 class="skin-name">1000</h2>
+                <p class="weapon-type">VP</p>
                 <div class="skin-footer">
                     <div class="price">
-                        <span class="vp-icon">VP</span>
-                        1775
+                        <span class="vp-icon">$</span>
+                        3.99
                     </div>
                     <button class="buy-btn">Purchase</button>
                 </div>
@@ -261,16 +260,15 @@
         </div>
 
         <div class="skin-card">
-            <span class="edition-tag">Ultra Edition</span>
-            <img src="{% static 'images/valo2.jpg' %}" alt="Elder Flame Operator" class="skin-image">
+            <!-- <img src="/api/placeholder/400/200" alt="Reaver Vandal" class="skin-image"> -->
+            <img src="{% static 'images\Valorant_Points_WHITE.webp' %}" alt="Reaver Vandal" class="skin-image">
             <div class="skin-info">
-                <h2 class="skin-name">Elder Flame</h2>
-                <p class="weapon-type">Operator</p>
-                <p class="skin-description">Transform your weapon into a living dragon. Features unique animations and sound effects.</p>
+                <h2 class="skin-name">2050</h2>
+                <p class="weapon-type">VP</p>
                 <div class="skin-footer">
                     <div class="price">
-                        <span class="vp-icon">VP</span>
-                        2475
+                        <span class="vp-icon">$</span>
+                        12.99
                     </div>
                     <button class="buy-btn">Purchase</button>
                 </div>
@@ -278,16 +276,49 @@
         </div>
 
         <div class="skin-card">
-            <span class="edition-tag">Premium Edition</span>
-            <img src="{% static 'images/valo4.jpg' %}" alt="Oni Phantom" class="skin-image">
+            <!-- <img src="/api/placeholder/400/200" alt="Reaver Vandal" class="skin-image"> -->
+            <img src="{% static 'images\Valorant_Points_WHITE.webp' %}" alt="Reaver Vandal" class="skin-image">
             <div class="skin-info">
-                <h2 class="skin-name">Oni</h2>
-                <p class="weapon-type">Phantom</p>
-                <p class="skin-description">Inspired by Japanese demons. Features custom VFX and a menacing finisher.</p>
+                <h2 class="skin-name">3650</h2>
+                <p class="weapon-type">VP</p>
                 <div class="skin-footer">
                     <div class="price">
-                        <span class="vp-icon">VP</span>
-                        1775
+                        <span class="vp-icon">$</span>
+                        29.99
+                    </div>
+                    <button class="buy-btn">Purchase</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="skin-card">
+            <span class="edition-tag">Best Seller</span>
+            <!-- <img src="/api/placeholder/400/200" alt="Reaver Vandal" class="skin-image"> -->
+            <img src="{% static 'images\Valorant_Points_WHITE.webp' %}" alt="Reaver Vandal" class="skin-image">
+            <div class="skin-info">
+                <h2 class="skin-name">5350</h2>
+                <p class="weapon-type">VP</p>
+                <div class="skin-footer">
+                    <div class="price">
+                        <span class="vp-icon">$</span>
+                        39.99
+                    </div>
+                    <button class="buy-btn">Purchase</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="skin-card">
+            
+            <!-- <img src="/api/placeholder/400/200" alt="Reaver Vandal" class="skin-image"> -->
+            <img src="{% static 'images\Valorant_Points_WHITE.webp' %}" alt="Reaver Vandal" class="skin-image">
+            <div class="skin-info">
+                <h2 class="skin-name">11000</h2>
+                <p class="weapon-type">VP</p>
+                <div class="skin-footer">
+                    <div class="price">
+                        <span class="vp-icon">$</span>
+                        79.99
                     </div>
                     <button class="buy-btn">Purchase</button>
                 </div>
