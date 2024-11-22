@@ -125,6 +125,15 @@
             font-weight: 500;
         }
 
+        .logout-menu-item {
+            color: #dc2626;
+        }
+
+        .logout-menu-item:hover {
+            background: #fee2e2;
+            color: #b91c1c;
+        }
+
         .main-content {
             flex: 1;
             background: white;
@@ -249,6 +258,8 @@
                 <div class="menu-item">Reviews</div>
                 <div class="menu-item">Address Book</div>
                 <div class="menu-item">Payment Methods</div>
+                <!-- New Logout Menu Item -->
+                <div class="menu-item logout-menu-item" id="logout-button">Logout</div>
             </div>
             
             <div class="main-content">
@@ -289,6 +300,7 @@
         const profileInfo = document.getElementById('profile-info');
         const saveButton = document.getElementById('save-button');
         const cancelButton = document.getElementById('cancel-button');
+        const logoutButton = document.getElementById('logout-button');
 
         editButton.addEventListener('click', () => {
             profileForm.style.display = 'block';
@@ -331,6 +343,28 @@
             .catch(error => {
                 console.error('Error:', error);
                 alert('An error occurred. Please try again.');
+            });
+        });
+
+        // Updated logout functionality to go to login.html
+        logoutButton.addEventListener('click', () => {
+            fetch('{% url "landing" %}', {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': getCookie('csrftoken')
+                }
+            })
+            .then(response => {
+                if (response.ok) {
+                    // Redirect specifically to login.html
+                    window.location.href = '{% url "login" %}';
+                } else {
+                    alert('Logout failed. Please try again.');
+                }
+            })
+            .catch(error => {
+                console.error('Logout error:', error);
+                alert('An error occurred during logout. Please try again.');
             });
         });
 
