@@ -198,3 +198,84 @@
     </div>
 </body>
 </html>
+
+<div class="product-section">
+    <div class="product-item">
+        <img src="{% static 'images/AsusROGPhone8Pro.jpg' %}" alt="Asus ROG Phone 8 Pro">
+        <div class="product-title">Asus ROG Phone 8 Pro</div>
+        <div class="product-rating">★★★★☆ (4.5)</div>
+        <div class="product-sold">5k+ sold</div>
+        <div class="product-price">₱58,995.00</div>
+        <div class="product-options">
+            <label class="option-label">Color:</label>
+            <select>
+                <option>Black</option>
+                <option>White</option>
+            </select>
+            <label class="option-label">RAM + Storage:</label>
+            <select>
+                <option>16GB + 512GB</option>
+                <option>32GB + 1TB</option>
+            </select>
+            <label class="option-label">Quantity:</label>
+            <div class="quantity-controls">
+                <button class="decrease" onclick="changeQuantity(this, -1)">-</button>
+                <input type="number" class="quantity-input" value="1" min="1" max="5" readonly>
+                <button class="increase" onclick="changeQuantity(this, 1)">+</button>
+            </div>
+        </div>
+        <button class="add-to-cart">Add to Cart</button>
+    </div>
+
+    <div class="product-item">
+        <img src="{% static 'images/NubiaREDMAGIC.webp' %}" alt="ZTE Nubia RedMagic 9 Pro">
+        <div class="product-title">ZTE Nubia RedMagic 9 Pro</div>
+        <div class="product-rating">No ratings</div>
+        <div class="product-sold">100+ sold</div>
+        <div class="product-price">₱46,999</div>
+        <div class="product-options">
+            <label class="option-label">Color:</label>
+            <select>
+                <option>Silver</option>
+            </select>
+            <label class="option-label">RAM + Storage:</label>
+            <select>
+                <option>12GB + 256GB</option>
+            </select>
+            <label class="option-label">Quantity:</label>
+            <div class="quantity-controls">
+                <button class="decrease" onclick="changeQuantity(this, -1)">-</button>
+                <input type="number" class="quantity-input" value="1" min="1" max="5" readonly>
+                <button class="increase" onclick="changeQuantity(this, 1)">+</button>
+            </div>
+        </div>
+        <button class="add-to-cart">Add to Cart</button>
+    </div>
+
+    <div class="product-item">
+        <img src="{% static 'images/BlackShark5.webp' %}" alt="Black Shark 5 Pro">
+        <div class="product-title">Black Shark 5 Pro</div>
+        <div class="product-rating">★★★★★ (4.9)</div>
+        <div class="product-sold">1,203 sold</div>
+        <div class="product-price">₱25,799 - ₱28,799</div>
+        <div class="product-options">
+            <label class="option-label">Color:</label>
+            <select>
+                <option>Nebula White</option>
+                <option>Stellar Black</option>
+            </select>
+            <label class="option-label">RAM + Storage:</label>
+            <select>
+                <option>8GB + 128GB</option>
+                <option>12GB + 256GB</option>
+                <option>16GB + 256GB</option>
+            </select>
+            <label class="option-label">Quantity:</label>
+            <div class="quantity-controls">
+                <button class="decrease" onclick="changeQuantity(this, -1)">-</button>
+                <input type="number" class="quantity-input" value="1" min="1" max="5" readonly>
+                <button class="increase" onclick="changeQuantity(this, 1)">+</button>
+            </div>
+        </div>
+        <button class="add-to-cart">Add to Cart</button>
+    </div>

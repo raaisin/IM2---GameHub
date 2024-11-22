@@ -1,4 +1,3 @@
-/* Reset and Global Styles */
 * {
     margin: 0;
     padding: 0;
@@ -38,26 +37,32 @@ body {
 .search-bar {
     display: flex;
     align-items: center;
-    background-color: white;
-    border-radius: 4px;
+    background-color: #ffffff;
+    border: 2px solid #0f146d;
+    border-radius: 25px;
     overflow: hidden;
-    width: 50%;
+    width: 60%; /* Adjust width as needed */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .search-input {
-    padding: 10px;
+    padding: 12px 15px;
     border: none;
-    width: 100%;
+    flex: 1;
+    font-size: 16px;
     outline: none;
 }
 
 .search-button {
-    padding: 10px 20px;
+    padding: 12px 20px;
     border: none;
     background-color: #f57224;
     color: white;
+    font-weight: bold;
+    font-size: 16px;
     cursor: pointer;
     transition: background-color 0.3s;
+    border-left: 2px solid #0f146d;
 }
 
 .search-button:hover {
@@ -299,4 +304,15 @@ body {
 .product-item p {
     color: #f57224;
     font-weight: bold;
+}
+
+.category-item img {
+    width: 150px; /* Adjust as needed */
+    height: 150px; /* Adjust as needed */
+    object-fit: cover;
+    display: block;
+    margin: 0 auto; /* Center images */
+}
+.category-item {
+    text-align: center; /* Center text below the images */
 }
