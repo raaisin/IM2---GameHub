@@ -16,6 +16,7 @@ from django.views.decorators.csrf import csrf_exempt
 import json
 from decimal import Decimal
 
+
 def landing(request):
     print("Landing page view called") 
     return render(request, 'landing.html')
@@ -266,3 +267,19 @@ def create_order(request):
     
 def payment_view(request):
     return render(request, 'payment.html')
+
+
+def deals_view(request):
+    # Get the category from the query parameters
+    category = request.GET.get('category', None)
+    
+    # Filter products by category if a category is selected
+    if category:
+        products = Product.objects.filter(category__icontains=category)
+    else:
+        products = Product.objects.all()
+
+    return render(request, 'deals.html', {
+        'products': products,
+        'selected_category': category,
+    })

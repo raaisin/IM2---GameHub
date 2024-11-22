@@ -1,20 +1,20 @@
 <!DOCTYPE html>
+{% load static %}
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>New Deals</title>
-    <link rel="stylesheet" href="style.css">
+    <title>GameHub - New Deals</title>
 </head>
 <style>
     :root {
-    --primary-blue: #1a237e;
-    --secondary-blue: #3f51b5;
-    --primary-orange: #ff6f00;
-    --secondary-orange: #ffa000;
+    --primary-blue: #2B0B98;
+    --secondary-blue: #4527A0;
+    --primary-color: #ffffff;
+    --secondary-color: #e0e0e0;
     --white: #ffffff;
-    --light-gray: #f5f5f5;
+    --light-gray: #ffffff;
     --text-dark: #333333;
 }
 
@@ -34,7 +34,7 @@ body {
 
 .header {
     background-color: var(--primary-blue);
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    box-shadow: 0 2px 5px rgba(0,0,0,0.3);
     position: fixed;
     top: 0;
     left: 0;
@@ -66,9 +66,11 @@ body {
 .search-input {
     width: 100%;
     padding: 10px 40px 10px 15px;
-    border: 2px solid var(--primary-orange);
+    border: 2px solid var(--primary-blue);
     border-radius: 4px;
     font-size: 14px;
+    background-color: #ffffff;
+    color: var(--text-dark);
 }
 
 .search-button {
@@ -78,7 +80,7 @@ body {
     transform: translateY(-50%);
     background: none;
     border: none;
-    color: var(--primary-orange);
+    color: var(--primary-blue);
     cursor: pointer;
 }
 
@@ -95,7 +97,7 @@ body {
 
 .cart-icon {
     font-size: 20px;
-    color: var(--primary-orange);
+    color: var(--white);
 }
 
 .product-section {
@@ -110,13 +112,18 @@ body {
 }
 
 .product-item {
-    background-color: var(--white);
-    border: 1px solid #ddd;
+    background-color: #ffffff;
+    border: 1px solid #e0e0e0;
     border-radius: 8px;
     padding: 20px;
     margin-bottom: 20px;
     width: 300px;
     box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    transition: transform 0.2s;
+}
+
+.product-item:hover {
+    transform: translateY(-5px);
 }
 
 .product-item img {
@@ -131,12 +138,12 @@ body {
     font-size: 18px;
     font-weight: bold;
     margin-bottom: 10px;
-    color: var(--primary-blue);
+    color: var(--text-dark);
 }
 
 .product-price {
     font-size: 20px;
-    color: var(--primary-orange);
+    color: var(--primary-blue);
     font-weight: bold;
     margin-bottom: 15px;
 }
@@ -149,19 +156,21 @@ body {
     display: block;
     margin-bottom: 5px;
     font-weight: bold;
-    color: var(--secondary-blue);
+    color: var(--text-dark);
 }
 
 select, input[type="number"] {
     width: 100%;
     padding: 8px;
     margin-bottom: 10px;
-    border: 1px solid var(--secondary-blue);
+    border: 1px solid var(--primary-blue);
     border-radius: 4px;
+    background-color: #ffffff;
+    color: var(--text-dark);
 }
 
 .add-to-cart {
-    background-color: var(--primary-orange);
+    background-color: var(--primary-blue);
     color: var(--white);
     border: none;
     padding: 10px 15px;
@@ -169,38 +178,44 @@ select, input[type="number"] {
     cursor: pointer;
     width: 100%;
     font-size: 16px;
+    transition: background-color 0.2s;
 }
 
 .add-to-cart:hover {
-    background-color: var(--secondary-orange);
+    background-color: var(--secondary-blue);
 }
 
 .product-rating {
-    color: var(--secondary-orange);
+    color: #ffd700;
     font-size: 18px;
     margin-bottom: 10px;
 }
 
 .product-sold {
     font-size: 14px;
-    color: var(--secondary-blue);
+    color: var(--text-dark);
     margin-bottom: 10px;
 }
 
+footer {
+    text-align: center;
+    padding: 20px;
+    color: var(--white);
+    background-color: var(--primary-blue);
+    margin-top: 40px;
+}
 </style>
 <body>
     <header class="header">
         <div class="header-content">
-            <div class="logo">New Deals</div>
+            <div class="logo">GameHub</div>
             <div class="search-bar">
-                <input type="text" class="search-input" placeholder="Search for products...">
-                <button class="search-button">&#128269;</button>
+                <input type="text" class="search-input" placeholder="Search for games...">
+                <button class="search-button">🔍</button>
             </div>
             <nav class="nav-links">
                 <a href="{% url 'home' %}" class="nav-link">Home</a>
-                <a href="about.html" class="nav-link">About</a>
-                <a href="contact.html" class="nav-link">Contact</a>
-                <a href="{% url 'carts' %}" class="nav-link cart-icon">&#128722;</a>
+                <a href="{% url 'carts' %}" class="nav-link cart-icon">🛒</a>
             </nav>
         </div>
     </header>
@@ -208,120 +223,131 @@ select, input[type="number"] {
     <main>
         <section class="product-section">
             <div class="product-item">
-                <img src="product1.jpg" alt="Product 1">
-                <h3 class="product-title">Product 1</h3>
+                <img src="{% static 'images/cyber1.jpg' %}" alt="Cyberpunk 2077">
+                <h3 class="product-title">Cyberpunk 2077</h3>
                 <div class="product-rating">★★★★☆</div>
-                <div class="product-sold">Sold: 150</div>
-                <div class="product-price">$49.99</div>
+                <div class="product-sold">Sold: 1250</div>
+                <div class="product-price">$59.99</div>
                 <div class="product-options">
-                    <label class="option-label" for="size1">Size:</label>
-                    <select id="size1">
-                        <option value="small">Small</option>
-                        <option value="medium">Medium</option>
-                        <option value="large">Large</option>
+                    <label class="option-label" for="platform1">Platform:</label>
+                    <select id="platform1">
+                        <option value="pc">PC</option>
+                        <option value="ps5">PS5</option>
+                        <option value="xbox">Xbox Series X</option>
                     </select>
-                    <label class="option-label" for="quantity1">Quantity:</label>
-                    <input type="number" id="quantity1" min="1" value="1">
-                </div>
-                <button class="add-to-cart">Add to Cart</button>
-            </div>
-            <div class="product-item">
-                <img src="product1.jpg" alt="Product 1">
-                <h3 class="product-title">Product 1</h3>
-                <div class="product-rating">★★★★☆</div>
-                <div class="product-sold">Sold: 150</div>
-                <div class="product-price">$49.99</div>
-                <div class="product-options">
-                    <label class="option-label" for="size1">Size:</label>
-                    <select id="size1">
-                        <option value="small">Small</option>
-                        <option value="medium">Medium</option>
-                        <option value="large">Large</option>
+                    <label class="option-label" for="edition1">Edition:</label>
+                    <select id="edition1">
+                        <option value="standard">Standard</option>
+                        <option value="deluxe">Deluxe</option>
+                        <option value="collectors">Collector's</option>
                     </select>
-                    <label class="option-label" for="quantity1">Quantity:</label>
-                    <input type="number" id="quantity1" min="1" value="1">
-                </div>
-                <button class="add-to-cart">Add to Cart</button>
-            </div>
-            <div class="product-item">
-                <img src="product1.jpg" alt="Product 1">
-                <h3 class="product-title">Product 1</h3>
-                <div class="product-rating">★★★★☆</div>
-                <div class="product-sold">Sold: 150</div>
-                <div class="product-price">$49.99</div>
-                <div class="product-options">
-                    <label class="option-label" for="size1">Size:</label>
-                    <select id="size1">
-                        <option value="small">Small</option>
-                        <option value="medium">Medium</option>
-                        <option value="large">Large</option>
-                    </select>
-                    <label class="option-label" for="quantity1">Quantity:</label>
-                    <input type="number" id="quantity1" min="1" value="1">
-                </div>
-                <button class="add-to-cart">Add to Cart</button>
-            </div>
-            <div class="product-item">
-                <img src="product1.jpg" alt="Product 1">
-                <h3 class="product-title">Product 1</h3>
-                <div class="product-rating">★★★★☆</div>
-                <div class="product-sold">Sold: 150</div>
-                <div class="product-price">$49.99</div>
-                <div class="product-options">
-                    <label class="option-label" for="size1">Size:</label>
-                    <select id="size1">
-                        <option value="small">Small</option>
-                        <option value="medium">Medium</option>
-                        <option value="large">Large</option>
-                    </select>
-                    <label class="option-label" for="quantity1">Quantity:</label>
-                    <input type="number" id="quantity1" min="1" value="1">
                 </div>
                 <button class="add-to-cart">Add to Cart</button>
             </div>
 
             <div class="product-item">
-                <img src="product2.jpg" alt="Product 2">
-                <h3 class="product-title">Product 2</h3>
-                <div class="product-rating">★★★☆☆</div>
-                <div class="product-sold">Sold: 80</div>
-                <div class="product-price">$29.99</div>
+                <img src="{% static 'images/ragna.webp' %}" alt="God of War Ragnarök">
+                <h3 class="product-title">God of War Ragnarök</h3>
+                <div class="product-rating">★★★★★</div>
+                <div class="product-sold">Sold: 2100</div>
+                <div class="product-price">$69.99</div>
                 <div class="product-options">
-                    <label class="option-label" for="size2">Size:</label>
-                    <select id="size2">
-                        <option value="small">Small</option>
-                        <option value="medium">Medium</option>
-                        <option value="large">Large</option>
+                    <label class="option-label" for="platform2">Platform:</label>
+                    <select id="platform2">
+                        <option value="ps5">PS5</option>
+                        <option value="ps4">PS4</option>
                     </select>
-                    <label class="option-label" for="quantity2">Quantity:</label>
-                    <input type="number" id="quantity2" min="1" value="1">
+                    <label class="option-label" for="edition2">Edition:</label>
+                    <select id="edition2">
+                        <option value="standard">Standard</option>
+                        <option value="deluxe">Digital Deluxe</option>
+                    </select>
                 </div>
                 <button class="add-to-cart">Add to Cart</button>
             </div>
+
             <div class="product-item">
-                <img src="product1.jpg" alt="Product 1">
-                <h3 class="product-title">Product 1</h3>
+                <img src="{% static 'images/razerrr.jpg' %}" alt="Gaming Headset Pro">
+                <h3 class="product-title">Razer Kraken Gaming Headset</h3>
                 <div class="product-rating">★★★★☆</div>
-                <div class="product-sold">Sold: 150</div>
-                <div class="product-price">$49.99</div>
+                <div class="product-sold">Sold: 850</div>
+                <div class="product-price">$79.99</div>
                 <div class="product-options">
-                    <label class="option-label" for="size1">Size:</label>
-                    <select id="size1">
-                        <option value="small">Small</option>
-                        <option value="medium">Medium</option>
-                        <option value="large">Large</option>
+                    <label class="option-label" for="color3">Color:</label>
+                    <select id="color3">
+                        <option value="black">Black</option>
+                        <option value="white">White</option>
+                        <option value="green">Razer Green</option>
                     </select>
-                    <label class="option-label" for="quantity1">Quantity:</label>
-                    <input type="number" id="quantity1" min="1" value="1">
+                    <label class="option-label" for="quantity3">Quantity:</label>
+                    <input type="number" id="quantity3" min="1" value="1">
                 </div>
                 <button class="add-to-cart">Add to Cart</button>
             </div>
-            <!-- Add more product items as needed -->
+
+            <div class="product-item">
+                <img src="{% static 'images/nintendo.jpg' %}" alt="Nintendo Switch OLED">
+                <h3 class="product-title">Nintendo Switch OLED</h3>
+                <div class="product-rating">★★★★★</div>
+                <div class="product-sold">Sold: 1800</div>
+                <div class="product-price">$349.99</div>
+                <div class="product-options">
+                    <label class="option-label" for="color4">Color:</label>
+                    <select id="color4">
+                        <option value="white">White</option>
+                        <option value="neon">Neon Blue/Red</option>
+                    </select>
+                    <label class="option-label" for="quantity4">Quantity:</label>
+                    <input type="number" id="quantity4" min="1" value="1">
+                </div>
+                <button class="add-to-cart">Add to Cart</button>
+            </div>
+
+            <div class="product-item">
+                <img src="{% static 'images/logitech1.jpg' %}" alt="Gaming Mouse">
+                <h3 class="product-title">Logitech G Pro X Superlight</h3>
+                <div class="product-rating">★★★★★</div>
+                <div class="product-sold">Sold: 1200</div>
+                <div class="product-price">$149.99</div>
+                <div class="product-options">
+                    <label class="option-label" for="color5">Color:</label>
+                    <select id="color5">
+                        <option value="black">Black</option>
+                        <option value="white">White</option>
+                        <option value="pink">Magenta</option>
+                    </select>
+                    <label class="option-label" for="quantity5">Quantity:</label>
+                    <input type="number" id="quantity5" min="1" value="1">
+                </div>
+                <button class="add-to-cart">Add to Cart</button>
+            </div>
+
+            <div class="product-item">
+                <img src="{% static 'images/elden.jpg' %}" alt="Elden Ring">
+                <h3 class="product-title">Elden Ring</h3>
+                <div class="product-rating">★★★★★</div>
+                <div class="product-sold">Sold: 2500</div>
+                <div class="product-price">$59.99</div>
+                <div class="product-options">
+                    <label class="option-label" for="platform6">Platform:</label>
+                    <select id="platform6">
+                        <option value="pc">PC</option>
+                        <option value="ps5">PS5</option>
+                        <option value="xbox">Xbox Series X</option>
+                    </select>
+                    <label class="option-label" for="edition6">Edition:</label>
+                    <select id="edition6">
+                        <option value="standard">Standard</option>
+                        <option value="deluxe">Deluxe</option>
+                    </select>
+                </div>
+                <button class="add-to-cart">Add to Cart</button>
+            </div>
         </section>
     </main>
 
     <footer>
-        <p>&copy; 2024 New Deals. All rights reserved.</p>
+        <p>&copy; 2024 GameHub. All rights reserved.</p>
     </footer>
 </body>
 </html>
