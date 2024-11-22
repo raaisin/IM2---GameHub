@@ -191,46 +191,67 @@
             <section class="orders-section">
                 <div class="orders-header">
                     <h2>Recent Orders</h2>
-                    <button class="delivered-btn">Mark All Delivered</button>
+                    <button class="delivered-btn" id="mark-all-delivered">Mark All Delivered</button>
                 </div>
                 <div class="order-list" id="order-list">
-                    {% for order in recent_orders %}
-                    <div class="order-item">
-                        <div>
-                            <strong>Order ID: {{ order.order_id }}</strong>
-                            <p>{{ order.order_date|date:"F d, Y H:i" }}</p>
-                            <p>{{ order.items_count }} items</p>
-                        </div>
-                        <div>
-                            <p>${{ order.total|floatformat:2 }}</p>
-                            <button class="delivered-btn" data-order-id="{{ order.order_id }}">Mark Delivered</button>
-                        </div>
-                    </div>
-                    {% empty %}
-                    <div class="order-item">No recent orders</div>
-                    {% endfor %}
+                    <!-- Orders will be dynamically inserted here -->
                 </div>
             </section>
         </main>
     </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             const orderList = document.getElementById('order-list');
-            const markAllDeliveredBtn = document.querySelector('.orders-header .delivered-btn');
-
-            orderList.addEventListener('click', function(e) {
+            const markAllDeliveredBtn = document.getElementById('mark-all-delivered');
+            const orders = JSON.parse(localStorage.getItem('orderHistory')) || [];
+    
+            // Render Orders
+            function renderOrders() {
+                orderList.innerHTML = '';
+    
+                if (orders.length === 0) {
+                    orderList.innerHTML = '<div class="order-item">No recent orders</div>';
+                    return;
+                }
+    
+                orders.forEach((order, index) => {
+                    const orderItem = document.createElement('div');
+                    orderItem.className = 'order-item';
+                    orderItem.innerHTML = `
+                        <div>
+                            <strong>Order ID: ${order.orderId}</strong>
+                            <p>${new Date(order.orderDate).toLocaleString()}</p>
+                            <p>${order.items.length} items</p>
+                        </div>
+                        <div>
+                            <p>$${order.total.toFixed(2)}</p>
+                            <button class="delivered-btn" data-index="${index}">Mark Delivered</button>
+                        </div>
+                    `;
+                    orderList.appendChild(orderItem);
+                });
+            }
+    
+            // Event Listener for Individual Delivered Buttons
+            orderList.addEventListener('click', function (e) {
                 if (e.target.classList.contains('delivered-btn')) {
-                    const orderItem = e.target.closest('.order-item');
-                    orderItem.remove();
-                    // In a real app, you'd send an AJAX request to mark the order as delivered
+                    const index = e.target.getAttribute('data-index');
+                    orders.splice(index, 1);
+                    localStorage.setItem('orderHistory', JSON.stringify(orders));
+                    renderOrders();
                 }
             });
-
-            markAllDeliveredBtn.addEventListener('click', function() {
-                orderList.innerHTML = '<div class="order-item">No recent orders</div>';
-                // In a real app, you'd send an AJAX request to mark all orders as delivered
+    
+            // Event Listener for "Mark All Delivered"
+            markAllDeliveredBtn.addEventListener('click', function () {
+                orders.length = 0;
+                localStorage.setItem('orderHistory', JSON.stringify(orders));
+                renderOrders();
             });
+    
+            // Initial Render
+            renderOrders();
         });
     </script>
 </body>
