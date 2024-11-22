@@ -18,19 +18,30 @@ class Profile(models.Model):
 
     def __str__(self):
         return self.user.username
-
 class CartItem(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    """
+    Cart item model that ensures user-specific cart functionality
+    """
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='cart_items')
+    product_name = models.CharField(max_length=255)
     quantity = models.PositiveIntegerField(default=1)
-    date_added = models.DateTimeField(auto_now_add=True)
+    price = models.DecimalField(max_digits=10, decimal_places=2)
+    added_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f'{self.product.name} ({self.quantity})'  # Changed from product_name to name
+        return f"{self.product_name} ({self.quantity}) - {self.user.username}"
 
     @property
     def total_price(self):
-        return self.quantity * self.product.price
+        """
+        Calculate the total price for this cart item
+        """
+        return self.quantity * self.price
+
+    class Meta:
+        # Ensure uniqueness of product per user to prevent duplicate entries
+        unique_together = ('user', 'product_name')
+        ordering = ['-added_at']
 
 class Order(models.Model):
     STATUS_CHOICES = [

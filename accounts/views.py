@@ -15,6 +15,10 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 import json
 from decimal import Decimal
+from django.contrib.auth.decorators import login_required
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+import json
 
 def landing(request):
     print("Landing page view called") 
@@ -24,11 +28,44 @@ def login_view(request):
     if request.method == 'POST':
         username = request.POST['username']
         password = request.POST['password']
+        login_type = request.POST.get('login_type', 'user')
+        
         user = authenticate(request, username=username, password=password)
+        
         if user is not None:
-            login(request, user)
-            return redirect('home') 
+            # Check login type for routing
+            if login_type == 'admin' and user.is_staff:
+                login(request, user)
+                return redirect('dashboard')  # Redirect to admin dashboard
+            elif login_type == 'user' and not user.is_staff:
+                login(request, user)
+                return redirect('home')  # Redirect to user home
+            else:
+                # Unauthorized access attempt
+                return render(request, 'login.html', {'error': 'Unauthorized access'})
+        
+        return render(request, 'login.html', {'error': 'Invalid credentials'})
+    
     return render(request, 'login.html')
+@login_required
+def dashboard_view(request):
+    return render(request, 'dashboard.html')
+
+def dashboard(request):
+    # Fetch recent orders
+    recent_orders = Order.objects.all().order_by('-order_date')[:10]  
+    
+    context = {
+        'recent_orders': recent_orders,
+        'total_sales': calculate_total_sales(),
+        'total_orders': Order.objects.count(),
+        'total_products': Product.objects.count(),
+        'total_customers': Customer.objects.count()
+    }
+    
+    return render(request, 'dashboard.html', context)
+
+
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
 from django.contrib.auth import login
@@ -47,12 +84,10 @@ def signup_view(request):
             messages.error(request, "Username is already taken.")
             return redirect('signup')
 
-        # Check if the email already exists
         if User.objects.filter(email=email).exists():
             messages.error(request, "Email is already registered.")
             return redirect('signup')
 
-        # Create the user
         user = User.objects.create_user(
             username=username,
             email=email,
@@ -71,14 +106,39 @@ def signup_view(request):
 def home_view(request):
     return render(request, 'home.html')
 
+@login_required
 def cart_view(request):
-    return render(request, 'carts.html')
+    if request.method == 'GET':
+        cart_items = CartItem.objects.filter(user=request.user)
+        return render(request, 'carts.html', {'cart_items': cart_items})
+    
+    elif request.method == 'POST':
+        try:
+            data = json.loads(request.body)
+            # Extract product details
+            product_name = data.get('product_name')
+            quantity = data.get('quantity', 1)
+            price = data.get('price', 0.0)
 
-# views.py
-from django.contrib.auth.decorators import login_required
-from django.http import JsonResponse
-from django.views.decorators.csrf import csrf_exempt
-import json
+            # Check if the product already exists in the cart
+            cart_item, created = CartItem.objects.get_or_create(
+                user=request.user,
+                product_name=product_name,
+                defaults={'quantity': quantity, 'price': price}
+            )
+            
+            if not created:
+                # Update quantity if the item already exists
+                cart_item.quantity += quantity
+                cart_item.save()
+
+            return JsonResponse({'success': True, 'message': 'Item added to cart!'})
+        except Exception as e:
+            return JsonResponse({'success': False, 'message': str(e)})
+
+        
+
+
 
 @login_required
 def profile_view(request):
