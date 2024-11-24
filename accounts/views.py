@@ -1,3 +1,4 @@
+
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.decorators import login_required
@@ -318,3 +319,5 @@ def create_order(request):
     
 def payment_view(request):
     return render(request, 'payment.html')
+def noitemsfound(request):
+    return render(request, 'noitemsfound.html')

@@ -31,5 +31,6 @@ urlpatterns = [
         path('orders/<int:order_id>/mark-delivered/', views.mark_as_delivered, name='mark_delivered'),
     path('payment/', views.payment_view, name="payment"),
         path('dashboard/', views.dashboard_view, name="dashboard"),
+    path('noitemsfound/', views.noitemsfound, name='noitemsfound'),  
 
 ]
