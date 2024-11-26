@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+    if (!localStorage.getItem('cartItems')) {
+        localStorage.setItem('cartItems', JSON.stringify([]));
+    }
+
+    // Function to check if a product is already in the cart
+    function isProductInCart(product) {
+        const cartItems = JSON.parse(localStorage.getItem('cartItems'));
+        return cartItems.some(item => 
+            item.name === product.name && 
+            item.color === product.color && 
+            item.specification.value === product.specification.value
+        );
+    }
+
+    // Function to update add to cart button
+    function updateAddToCartButton(button, isInCart) {
+        if (isInCart) {
+            button.textContent = 'In Cart';
+            button.disabled = true;
+            button.style.backgroundColor = '#6c757d';
+            button.style.cursor = 'not-allowed';
+        } else {
+            button.textContent = 'Add to Cart';
+            button.disabled = false;
+            button.style.backgroundColor = 'var(--primary-orange)';
+            button.style.cursor = 'pointer';
+        }
+    }
+
+    const addToCartButtons = document.querySelectorAll('.add-to-cart');
+    addToCartButtons.forEach(button => {
+        const productItem = button.closest('.product-item');
+        
+        const priceText = productItem.querySelector('.product-price').textContent;
+        
+        let price;
+        if (priceText.includes('-')) {
+            price = parseFloat(priceText.split('-')[0]
+                .replace('₱', '')
+                .replace(',', '')
+                .trim());
+        } else {
+            price = parseFloat(priceText
+                .replace('₱', '')
+                .replace(',', '')
+                .trim());
+        }
+        
+        const product = {
+            name: productItem.querySelector('.product-title').textContent,
+            price: price,
+            image: productItem.querySelector('img').src,
+            color: productItem.querySelector('select:nth-of-type(1)').value,
+            quantity: parseInt(productItem.querySelector('input[type="number"]').value),
+            specification: {
+                name: productItem.querySelector('.option-label:nth-of-type(2)').textContent.trim().slice(0, -1),
+                value: productItem.querySelector('select:nth-of-type(2)').value
+            }
+        };
+
+        // Check if product is already in cart and update button accordingly
+        updateAddToCartButton(button, isProductInCart(product));
+
+        button.addEventListener('click', function() {
+            let cartItems = JSON.parse(localStorage.getItem('cartItems'));
+            
+            const existingProductIndex = cartItems.findIndex(item => 
+                item.name === product.name && 
+                item.color === product.color && 
+                item.specification.value === product.specification.value
+            );
+
+            if (existingProductIndex !== -1) {
+                cartItems[existingProductIndex].quantity += product.quantity;
+            } else {
+                cartItems.push(product);
+            }
+
+            localStorage.setItem('cartItems', JSON.stringify(cartItems));
+            
+            // Update button to show it's in cart
+            updateAddToCartButton(button, true);
+        });
+    });
+});
+    
+</script>
+
+<style>
+    :root {
+    --primary-blue: #1a237e;
+    --secondary-blue: #3f51b5;
+    --primary-orange: #ff6f00;
+    --secondary-orange: #ffa000;
+    --white: #ffffff;
+    --light-gray: #f5f5f5;
+    --text-dark: #333333;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    text-decoration: none;
+}
+
+body {
+    font-family: 'Roboto', Arial, sans-serif;
+    background-color: var(--light-gray);
+    padding-top: 60px;
+    color: var(--text-dark);
+}
+
+.header {
+    background-color: var(--primary-blue);
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+}
+
+.header-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.logo {
+    font-size: 24px;
+    font-weight: bold;
+    color: var(--white);
+}
+
+.search-bar {
+    flex-grow: 1;
+    margin: 0 20px;
+    position: relative;
+}
+
+.search-input {
+    width: 100%;
+    padding: 10px 40px 10px 15px;
+    border: 2px solid var(--primary-orange);
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.search-button {
+    position: absolute;
+    right: 5px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: var(--primary-orange);
+    cursor: pointer;
+}
+
+.nav-links {
+    display: flex;
+    align-items: center;
+}
+
+.nav-link {
+    margin-left: 20px;
+    color: var(--white);
+    font-size: 14px;
+}
+
+.cart-icon {
+    font-size: 20px;
+    color: var(--primary-orange);
+}
+
+.product-section {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    margin-top: 20px;
+    padding: 20px;
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.product-item {
+    background-color: var(--white);
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+    width: 300px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.product-item img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 8px;
+    margin-bottom: 10px;
+}
+
+.product-title {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 10px;
+    color: var(--primary-blue);
+}
+
+.product-price {
+    font-size: 20px;
+    color: var(--primary-orange);
+    font-weight: bold;
+    margin-bottom: 15px;
+}
+
+.product-options {
+    margin-bottom: 15px;
+}
+
+.option-label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: var(--secondary-blue);
+}
+
+select, input[type="number"] {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+    border: 1px solid var(--secondary-blue);
+    border-radius: 4px;
+}
+
+.add-to-cart {
+    background-color: var(--primary-orange);
+    color: var(--white);
+    border: none;
+    padding: 10px 15px;
+    border-radius: 4px;
+    cursor: pointer;
+    width: 100%;
+    font-size: 16px;
+}
+
+.add-to-cart:hover {
+    background-color: var(--secondary-orange);
+}
+
+.product-rating {
+    color: var(--secondary-orange);
+    font-size: 18px;
+    margin-bottom: 10px;    
+}
+
+.product-sold {
+    font-size: 14px;
+    color: var(--secondary-blue);
+    margin-bottom: 10px;
+}
+.quantity-controls {
+    display: flex; 
+    align-items: center; 
+}
+
+.quantity-controls button {
+    background-color: #007bff; 
+    color: white; 
+    border: none; 
+    border-radius: 5px; 
+    padding: 10px 15px; 
+    cursor: pointer; 
+    font-size: 16px; 
+    transition: background-color 0.3s; 
+}
+
+.quantity-controls button:hover {
+    background-color: #0056b3;
+}
+
+.quantity-controls .quantity-input {
+    width: 50px; 
+    text-align: center; 
+    border: 1px solid #ccc;
+    border-radius: 5px; 
+    margin: 0 10px; 
+    font-size: 16px;
+    padding: 5px; 
+}
+
+    .quantity-controls {
+        display: flex; 
+        align-items: center; 
+    }
+    
+    .quantity-controls button {
+        background-color: #007bff; 
+        color: white; 
+        border: none; 
+        border-radius: 5px; 
+        padding: 10px 15px; 
+        cursor: pointer; 
+        font-size: 16px; 
+        transition: background-color 0.3s; 
+    }
+    
+    .quantity-controls button:hover {
+        background-color: #0056b3;
+    }
+    
+    .quantity-controls .quantity-input {
+        width: 50px; 
+        text-align: center; 
+        border: 1px solid #ccc;
+        border-radius: 5px; 
+        margin: 0 10px; 
+        font-size: 16px;
+        padding: 5px; 
+    }
+
+    {% comment %} offer banner css {% endcomment %}
+
+    .offer-container {
+        display: flex; /* Use flexbox to arrange offers in a row */
+        justify-content: space-between; /* Space out the offers */
+        margin-bottom: 20px; /* Space below the offer section */
+    }
+    
+    .offer-banner {
+        border: 2px solid #007bff; /* Thick blue border */
+        padding: 0.5rem; /* Padding around the content */
+        flex: 1; /* Allow banners to grow equally */
+        margin: 0 10px; /* Margin between banners */
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Optional shadow for depth */
+    }
+    
+    .offer-image {
+        width: 100px; /* Placeholder image size */
+        height: auto;
+        margin-right: 20px;
+    }
+    
+    .offer-details {
+        flex-grow: 1;
+    }
+    
+    .discounted-price {
+        font-size: 24px;
+        color: #c82333; /* Red color for discounted price */
+        font-weight: bold;
+    }
+    
+    .original-price {
+        font-size: 18px;
+        color: #6c757d; /* Gray color for original price */
+        text-decoration: line-through; /* Strikethrough for original price */
+    }
+    
+    .countdown-timer {
+        font-size: 20px;
+        color: #155724; /* Dark green color for countdown */
+        font-weight: bold;
+    }
+    
+    /* Additional styles for the title and button can go here */
+
+    
+
+    {% comment %} phonetype css {% endcomment %}
+
+    .gaming-phone-title {
+        font-size: 36px; 
+        color: #007bff; 
+        text-align: center; 
+        margin-bottom: 10px; 
+        font-weight: bold; 
+        text-transform: uppercase;
+    }
+    
+    .more-button {
+        display: inline-block; 
+        background-color: #007bff; 
+        color: white; 
+        padding: 10px 20px; 
+        border-radius: 5px; 
+        text-decoration: none;
+        font-size: 18px; 
+        text-align: center; 
+        transition: background-color 0.3s; 
+    }
+    
+    .more-button:hover {
+        background-color: #0056b3; 
+    }
+
+    .button-container {
+        text-align: center; /* Center align the button */
+        margin-top: 10px; /* Space above the button */
+    }
+
+    {% comment %} topseller banner css {% endcomment %}
+
+    .top-sellers-container {
+        border: 2px solid #007bff; /* Blue border around the product section */
+        padding: 20px; /* Padding inside the border */
+        margin-top: 20px;
+        margin-left: 160px;
+        margin-right: 160px;
+        
+    }
+    
+    .top-sellers-title {
+        text-align: center; /* Center the title */
+        font-size: 28px; /* Font size for the title */
+        color: #007bff; /* Color of the title */
+        margin-bottom: 15px; /* Space below the title */
+    }
+
+
+</style>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/phone.css' %}">
+    <title>Laptops</title>
+    
+</head>
+
+<body>
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">Phones</div>
+            <div class="search-bar">
+                <input type="text" class="search-input" placeholder="Search for phones..." value="">
+                <button class="search-button">🔍</button>
+            </div>
+            <nav class="nav-links">
+                <a href="{% url 'home' %}" class="nav-link">Home</a>
+                <a href="#" class="nav-link">Categories</a>
+                <a href="{% url 'carts' %}" class="nav-link cart-icon">🛒</a>
+            </nav>
+        </div>
+    </header>
+
+    <div style="padding-top: 25px;" class="offer-container">
+        <div class="offer-banner">
+            <img src="{% static 'images/placeholder.jpg' %}" alt="Limited Time Offer" class="offer-image">
+            <div class="offer-details">
+                <h2>Limited Time Offer!</h2>
+                <p class="product-name">Asus ROG Phone 8 Pro</p>
+                <p class="discounted-price">₱49,995.00</p>
+                <p class="original-price">₱58,995.00</p>
+                <div id="countdown" class="countdown-timer"></div>
+            </div>
+        </div>
+    
+        <div class="offer-banner">
+            <img src="{% static 'images/placeholder.jpg' %}" alt="Limited Time Offer" class="offer-image">
+            <div class="offer-details">
+                <h2>Limited Time Offer!</h2>
+                <p class="product-name">Xiaomi Black Shark 5</p>
+                <p class="discounted-price">₱39,995.00</p>
+                <p class="original-price">₱45,995.00</p>
+                <div id="countdown" class="countdown-timer"></div>
+            </div>
+        </div>
+    
+        <div class="offer-banner">
+            <img src="{% static 'images/placeholder.jpg' %}" alt="Limited Time Offer" class="offer-image">
+            <div class="offer-details">
+                <h2>Limited Time Offer!</h2>
+                <p class="product-name">Lenovo Legion Phone Duel 2</p>
+                <p class="discounted-price">₱44,995.00</p>
+                <p class="original-price">₱52,995.00</p>
+                <div id="countdown" class="countdown-timer"></div>
+            </div>
+        </div>
+    </div>
+
+    <div>
+        <h1 class="gaming-phone-title">Gaming Phones</h1>
+        <div class="button-container">
+            <a href="{% url 'gamingphone' %}" class="more-button">Click here for more</a>
+        </div>
+    </div>
+
+
+    <div class="top-sellers-container">
+        <h2 class="top-sellers-title">Top Sellers</h2>
+        <div class="product-section">
+
+            <div class="product-section">
+                <div class="product-item">
+                    <img src="{% static 'images/AsusROGPhone8Pro.jpg' %}" alt="Asus ROG Phone 8 Pro">
+                    <div class="product-title">Asus ROG Phone 8 Pro</div>
+                    <div class="product-rating">★★★★☆ (4.5)</div>
+                    <div class="product-sold">5k+ sold</div>
+                    <div class="product-price">₱58,995.00</div>
+                    <div class="product-options">
+                        <label class="option-label">Color:</label>
+                        <select>
+                            <option>Black</option>
+                            <option>White</option>
+                        </select>
+                        <label class="option-label">RAM + Storage:</label>
+                        <select>
+                            <option>16GB + 512GB</option>
+                            <option>32GB + 1TB</option>
+                        </select>
+                        <label class="option-label">Quantity:</label>
+                        <div class="quantity-controls">
+                            <button class="decrease" onclick="changeQuantity(this, -1)">-</button>
+                            <input type="number" class="quantity-input" value="1" min="1" max="5" readonly>
+                            <button class="increase" onclick="changeQuantity(this, 1)">+</button>
+                        </div>
+                    </div>
+                    <button class="add-to-cart">Add to Cart</button>
+                </div>
+
+                <div class="product-item">
+                    <img src="{% static 'images/NubiaREDMAGIC.webp' %}" alt="ZTE Nubia RedMagic 9 Pro">
+                    <div class="product-title">ZTE Nubia RedMagic 9 Pro</div>
+                    <div class="product-rating">No ratings</div>
+                    <div class="product-sold">100+ sold</div>
+                    <div class="product-price">₱46,999</div>
+                    <div class="product-options">
+                        <label class="option-label">Color:</label>
+                        <select>
+                            <option>Silver</option>
+                        </select>
+                        <label class="option-label">RAM + Storage:</label>
+                        <select>
+                            <option>12GB + 256GB</option>
+                        </select>
+                        <label class="option-label">Quantity:</label>
+                        <div class="quantity-controls">
+                            <button class="decrease" onclick="changeQuantity(this, -1)">-</button>
+                            <input type="number" class="quantity-input" value="1" min="1" max="5" readonly>
+                            <button class="increase" onclick="changeQuantity(this, 1)">+</button>
+                        </div>
+                    </div>
+                    <button class="add-to-cart">Add to Cart</button>
+                </div>
+
+                <div class="product-item">
+                    <img src="{% static 'images/BlackShark5.webp' %}" alt="Black Shark 5 Pro">
+                    <div class="product-title">Black Shark 5 Pro</div>
+                    <div class="product-rating">★★★★★ (4.9)</div>
+                    <div class="product-sold">1,203 sold</div>
+                    <div class="product-price">₱25,799 - ₱28,799</div>
+                    <div class="product-options">
+                        <label class="option-label">Color:</label>
+                        <select>
+                            <option>Nebula White</option>
+                            <option>Stellar Black</option>
+                        </select>
+                        <label class="option-label">RAM + Storage:</label>
+                        <select>
+                            <option>8GB + 128GB</option>
+                            <option>12GB + 256GB</option>
+                            <option>16GB + 256GB</option>
+                        </select>
+                        <label class="option-label">Quantity:</label>
+                        <div class="quantity-controls">
+                            <button class="decrease" onclick="changeQuantity(this, -1)">-</button>
+                            <input type="number" class="quantity-input" value="1" min="1" max="5" readonly>
+                            <button class="increase" onclick="changeQuantity(this, 1)">+</button>
+                        </div>
+                    </div>
+                    <button class="add-to-cart">Add to Cart</button>
+                </div>
+
+            </div>
+
+        </div>
+    </div>    
+        
+    <div>
+        <h1 style = "margin-top: 20px;" class="gaming-phone-title"> Non-Gaming Phones</h1>
+        <div class="button-container">
+            <a href="{% url 'nongamingphone' %}" class="more-button">Click here for more</a>
+        </div>
+    </div>
+
+    <div class="top-sellers-container">
+        <h2 class="top-sellers-title">Top Sellers</h2>
+        <div class="product-section">
+
+        <div class="product-section">
+            <div class="product-item">
+                <img src="{% static 'images/AppleIPhone.webp' %}" alt="Apple iPhone 15 Pro Max">
+                <div class="product-title">Apple iPhone 15 Pro Max</div>
+                <div class="product-rating">★★★★★ (4.9)</div>
+                <div class="product-sold">5k+ sold</div>
+                <div class="product-price">₱68,890</div>
+                <div class="product-options">
+                    <label class="option-label">Color:</label>
+                    <select>
+                        <option>Black Titanium</option>
+                        <option>White Titanium</option>
+                        <option>Natural Titanium</option>
+                        <option>Blue Titanium</option>
+                    </select>
+                    <label class="option-label">Storage:</label>
+                    <select>
+                        <option>256GB</option>
+                        <option>512GB</option>
+                        <option>1TB</option>
+                    </select>
+                    <label class="option-label">Quantity:</label>
+                    <div class="quantity-controls">
+                        <button class="decrease" onclick="changeQuantity(this, -1)">-</button>
+                        <input type="number" class="quantity-input" value="1" min="1" max="5" readonly>
+                        <button class="increase" onclick="changeQuantity(this, 1)">+</button>
+                    </div>
+                </div>
+                <button class="add-to-cart">Add to Cart</button>
+            </div>
+
+            <div class="product-item">
+                <img src="{% static 'images/SamsungGalaxyUltra.webp' %}" alt="Samsung Galaxy S24 Ultra">
+                <div class="product-title">Samsung Galaxy S24 Ultra</div>
+                <div class="product-rating">★★★★★ (4.7)</div>
+                <div class="product-sold">3,789 sold</div>
+                <div class="product-price">₱77,768 - ₱106,990</div>
+                <div class="product-options">
+                    <label class="option-label">Color:</label>
+                    <select>
+                        <option>Titanium Black</option>
+                        <option>Titanium Gray</option>
+                        <option>Titanium Violet</option>
+                        <option>Titanium Yellow</option>
+                    </select>
+                    <label class="option-label">Storage:</label>
+                    <select>
+                        <option>256GB</option>
+                        <option>512GB</option>
+                        <option>1TB</option>
+                    </select>
+                    <label class="option-label">Quantity:</label>
+                    <div class="quantity-controls">
+                        <button class="decrease" onclick="changeQuantity(this, -1)">-</button>
+                        <input type="number" class="quantity-input" value="1" min="1" max="5" readonly>
+                        <button class="increase" onclick="changeQuantity(this, 1)">+</button>
+                    </div>
+                </div>
+                <button class="add-to-cart">Add to Cart</button>
+            </div>
+
+            <div class="product-item">
+                <img src="{% static 'images/GooglePixel.jpg' %}" alt="Google Pixel 8 PRO">
+                <div class="product-title">Google Pixel 8 PRO</div>
+                <div class="product-rating">★★★★☆ (3.9)</div>
+                <div class="product-sold">741 sold</div>
+                <div class="product-price">₱41,399</div>
+                <div class="product-options">
+                    <label class="option-label">Color:</label>
+                    <select>
+                        <option>Obsidian</option>
+                        <option>Bay</option>
+                        <option>Porcelain</option>
+                    </select>
+                    <label class="option-label">Storage:</label>
+                    <select>
+                        <option>128GB</option>
+                        <option>256GB</option>
+                    </select>
+                    <label class="option-label">Quantity:</label>
+                    <div class="quantity-controls">
+                        <button class="decrease" onclick="changeQuantity(this, -1)">-</button>
+                        <input type="number" class="quantity-input" value="1" min="1" max="5" readonly>
+                        <button class="increase" onclick="changeQuantity(this, 1)">+</button>
+                    </div>
+                </div>
+                <button class="add-to-cart">Add to Cart</button>
+            </div>
+
+
+        </div>
+    </div>
+
+
+
+    </body>
+
+</html>

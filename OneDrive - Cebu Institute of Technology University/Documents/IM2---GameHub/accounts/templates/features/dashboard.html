@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>E-commerce Admin Dashboard</title>
+    <link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+</head>
+<body>
+    <div class="dashboard-container">
+        <aside class="sidebar">
+            <h2>Admin Dashboard</h2>
+            <ul class="sidebar-menu">
+                <li><a href="#dashboard"><i class="fas fa-columns"></i> Dashboard</a></li>
+                <li><a href="#products"><i class="fas fa-box"></i> Products</a></li>
+                <li><a href="#orders"><i class="fas fa-shopping-cart"></i> Orders</a></li>
+                <li><a href="#customers"><i class="fas fa-users"></i> Customers</a></li>
+                <li><a href="#analytics"><i class="fas fa-chart-bar"></i> Analytics</a></li>
+                <li><a href="#settings"><i class="fas fa-cog"></i> Settings</a></li>
+            </ul>
+        </aside>
+        <main class="main-content">
+            <header class="header">
+                <h1>Dashboard</h1>
+                <div class="user-info">
+                    <img src="{% static 'images/user-avatar.png' %}" alt="User Avatar">
+                    <span>{{ user.username }}</span>
+                    <a href="{% url 'login' %}" class="logout-btn">Logout</a>
+                </div>
+            </header>
+
+            <section class="stats-grid">
+                <div class="stat-card">
+                    <h3>Total Sales</h3>
+                    <p>${{ total_sales|default:'0.00' }}</p>
+                </div>
+                <div class="stat-card">
+                    <h3>Orders</h3>
+                    <p>{{ total_orders|default:'0' }}</p>
+                </div>
+                <div class="stat-card">
+                    <h3>Products</h3>
+                    <p>{{ total_products|default:'0' }}</p>
+                </div>
+                <div class="stat-card">
+                    <h3>Customers</h3>
+                    <p>{{ total_customers|default:'0' }}</p>
+                </div>
+            </section>
+
+            <section class="orders-section">
+                <div class="orders-header">
+                    <h2>Recent Orders</h2>
+                    <button class="delivered-btn" id="mark-all-delivered">Mark All Delivered</button>
+                </div>
+                <div class="order-list" id="order-list">
+                    <!-- Orders will be dynamically inserted here -->
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script>
+       document.addEventListener('DOMContentLoaded', function () {
+    const orderList = document.getElementById('order-list');
+    const markAllDeliveredBtn = document.getElementById('mark-all-delivered');
+    
+    // Statistics elements
+    const totalSalesElement = document.querySelector('.stat-card:nth-child(1) p');
+    const totalOrdersElement = document.querySelector('.stat-card:nth-child(2) p');
+    
+    // Retrieve orders from localStorage
+    let orders = JSON.parse(localStorage.getItem('orderHistory')) || [];
+    let deliveredOrders = JSON.parse(localStorage.getItem('deliveredOrders')) || [];
+
+    // Calculate Dashboard Statistics
+    function calculateDashboardStatistics() {
+        // Total Sales (only from delivered orders)
+        const totalSales = deliveredOrders.reduce((total, order) => total + order.total, 0);
+        totalSalesElement.textContent = totalSales.toFixed(2);
+
+        // Total Orders
+        const totalOrders = orders.length;
+        totalOrdersElement.textContent = totalOrders;
+    }
+    
+    // Render Orders
+    function renderOrders() {
+        orderList.innerHTML = '';
+
+        if (orders.length === 0) {
+            orderList.innerHTML = '<div class="order-item">No recent orders</div>';
+            calculateDashboardStatistics();
+            return;
+        }
+
+        orders.forEach((order, index) => {
+            const orderItem = document.createElement('div');
+            orderItem.className = 'order-item';
+            orderItem.innerHTML = `
+                <div>
+                    <strong>Order ID: ${order.orderId}</strong>
+                    <p>${new Date(order.orderDate).toLocaleString()}</p>
+                    <p>${order.items.length} items</p>
+                </div>
+                <div>
+                    <p>$${order.total.toFixed(2)}</p>
+                    <button class="delivered-btn" data-index="${index}">Mark Delivered</button>
+                </div>
+            `;
+            orderList.appendChild(orderItem);
+        });
+
+        // Calculate statistics after rendering
+        calculateDashboardStatistics();
+    }
+
+    // Event Listener for Individual Delivered Buttons
+    orderList.addEventListener('click', function (e) {
+        if (e.target.classList.contains('delivered-btn')) {
+            const index = e.target.getAttribute('data-index');
+            // Remove the order from pending orders
+            const deliveredOrder = orders.splice(index, 1)[0];
+            
+            // Add to delivered orders
+            deliveredOrders.push(deliveredOrder);
+            
+            // Update localStorage
+            localStorage.setItem('orderHistory', JSON.stringify(orders));
+            localStorage.setItem('deliveredOrders', JSON.stringify(deliveredOrders));
+            
+            // Re-render the order list
+            renderOrders();
+        }
+    });
+
+    // Event Listener for "Mark All Delivered"
+    markAllDeliveredBtn.addEventListener('click', function () {
+        // Move all pending orders to delivered orders
+        deliveredOrders = [...deliveredOrders, ...orders];
+        
+        // Clear pending orders
+        orders.length = 0;
+        
+        // Update localStorage
+        localStorage.setItem('orderHistory', JSON.stringify(orders));
+        localStorage.setItem('deliveredOrders', JSON.stringify(deliveredOrders));
+        
+        // Re-render the order list
+        renderOrders();
+    });
+
+    // Initial Render
+    renderOrders();
+});
+    </script>
+</body>
+</html>
