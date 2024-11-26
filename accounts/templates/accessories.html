@@ -7,54 +7,103 @@
     <title>GameHub - Gaming Accessories</title>
     <style>
         /* Previous styles remain the same */
+
+        :root {
+            --primary-blue: #2B0B98;
+            --secondary-blue: #4527A0;
+            --primary-color: #ffffff;
+            --secondary-color: #e0e0e0;
+            --white: #ffffff;
+            --light-gray: #ffffff;
+            --text-dark: #333333;
+        }
+        
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            text-decoration: none;
         }
-
+        
         body {
-            background-color: #f5f7fa;
+            font-family: 'Roboto', Arial, sans-serif;
+            background-color: var(--light-gray);
+            padding-top: 60px;
+            color: var(--text-dark);
         }
 
-        .container {
-            max-width: 1600px;
-            margin: 0 auto;
-            padding: 20px;
-        }
 
         .header {
-            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
-            padding: 20px;
-            border-radius: 12px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            margin-bottom: 30px;
+            background-color: var(--primary-blue);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
         }
 
-        .header .page-title {
-            font-size: 28px;
-            color: white;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 10px;
-        }
 
-        .header .subtitle {
-            color: rgba(255, 255, 255, 0.8);
-            font-size: 16px;
-        }
-
-        .sort-section {
+        .header-content {
             display: flex;
             align-items: center;
-            gap: 15px;
-            background: rgba(255, 255, 255, 0.1);
+            justify-content: space-between;
             padding: 10px 20px;
-            border-radius: 8px;
-            margin-top: 15px;
+            max-width: 1200px;
+            margin: 0 auto;
         }
-
+        
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: var(--white);
+        }
+        
+        .search-bar {
+            flex-grow: 1;
+            margin: 0 20px;
+            position: relative;
+        }
+        
+        .search-input {
+            width: 100%;
+            padding: 10px 40px 10px 15px;
+            border: 2px solid var(--primary-blue);
+            border-radius: 4px;
+            font-size: 14px;
+            background-color: #ffffff;
+            color: var(--text-dark);
+        }
+        
+        .search-button {
+            position: absolute;
+            right: 5px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: var(--primary-blue);
+            cursor: pointer;
+        }
+        
+        .nav-links {
+            display: flex;
+            align-items: center;
+        }
+        
+        .nav-link {
+            margin-left: 20px;
+            color: var(--white);
+            font-size: 14px;
+        }
+        
+        .cart-icon {
+            font-size: 20px;
+            color: var(--white);
+        }
+        
+        
+        
         .sort-section span {
             color: white;
         }
@@ -267,20 +316,35 @@
     </style>
 </head>
 <body>
-    <div class="container">
+      <div class="container">
         <header class="header">
-            <h1 class="page-title">Gaming Accessories</h1>
-            <p class="subtitle">Level up your gaming setup with premium accessories</p>
-            <div class="sort-section">
-                <span>Sort By</span>
-                <select>
-                    <option value="featured">Featured</option>
-                    <option value="price-low">Price: Low to High</option>
-                    <option value="price-high">Price: High to Low</option>
-                    <option value="rating">Customer Rating</option>
-                </select>
+            <div class="header-content">
+                <div class="logo">New</div>
+                <div class="search-bar">
+                    <input type="text" class="search-input" placeholder="Search for games...">
+                    <button class="search-button">🔍</button>
+                </div>
+                <nav class="nav-links">
+                    <a href="{% url 'home' %}" class="nav-link">Home</a>
+                    <a href="{% url 'carts' %}" class="nav-link cart-icon">🛒</a>
+                </nav>
             </div>
         </header>
+
+        <!--  <header class="header">
+            <div class="header-content">
+                <div class="logo">Game Accessories</div>
+                <div class="search-bar">
+                    <input type="text" class="search-input" placeholder="Search for games...">
+                    <button class="search-button">🔍</button>
+                </div>
+                <nav class="nav-links">
+                    <a href="{% url 'home' %}" class="nav-link">Home</a>
+                    <a href="{% url 'carts' %}" class="nav-link cart-icon">🛒</a>
+                </nav>
+            </div>
+        </header>  -->
+
 
         <div class="shop-layout">
             <aside class="sidebar">
