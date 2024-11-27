@@ -164,7 +164,7 @@ See `LICENSE` for more information.
 <hr>
 
 ### Gantt Chart Contributions
-[Please Click here](path%20with%20spaces/Nov27_Gantt-Chart.xlsx)
+[Please Click here](/Nov27_Gantt-Chart.xlsx)
 
 ## 🚧 Future Roadmap
 - Implement advanced search and filtering
