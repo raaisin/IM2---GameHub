@@ -1,631 +1,469 @@
-<!DOCTYPE html>
-{% load static %}
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Your Shopping Cart</title>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Roboto', sans-serif;
-        }
+    <!DOCTYPE html>
+    {% load static %}
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Your Shopping Cart</title>
+        <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600;700&display=swap" rel="stylesheet">
+        <style>
+            * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+                font-family: 'Roboto', sans-serif;
+            }
 
-        body {
-            background-color: #f5f5f5;
-        }
+            body {
+                background-color: #f5f5f5;
+            }
 
-        .header {
-            background: white;
-            padding: 1rem;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            margin-bottom: 2rem;
-        }
+            .header {
+                background: white;
+                padding: 1rem;
+                box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+                margin-bottom: 2rem;
+            }
 
-        .back-to-home {
-            color: #666;
-            text-decoration: none;
-            display: inline-block;
-            margin-bottom: 0.5rem;
-        }
+            .back-to-home {
+                color: #666;
+                text-decoration: none;
+                display: inline-block;
+                margin-bottom: 0.5rem;
+            }
 
-        .header h1 {
-            color: #333;
-            font-size: 1.5rem;
-        }
+            .header h1 {
+                color: #333;
+                font-size: 1.5rem;
+            }
 
-        .cart-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 1rem;
-        }
+            .cart-container {
+                max-width: 800px;
+                margin: 0 auto;
+                padding: 0 1rem;
+            }
 
-        .cart-item {
-            display: flex;
-            align-items: center;
-            background: white;
-            padding: 1rem;
-            margin-bottom: 1rem;
-            border-radius: 8px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-            transition: all 0.3s ease;
-        }
+            .cart-item {
+                display: flex;
+                align-items: center;
+                background: white;
+                padding: 1rem;
+                margin-bottom: 1rem;
+                border-radius: 8px;
+                box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            }
 
-        .cart-item img {
-            width: 100px;
-            height: 100px;
-            object-fit: cover;
-            margin-right: 1rem;
-            border-radius: 4px;
-        }
+            .cart-item img {
+                width: 100px;
+                height: 100px;
+                object-fit: cover;
+                margin-right: 1rem;
+                border-radius: 4px;
+            }
 
-        .item-info {
-            flex: 1;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
+            .item-info {
+                flex: 1;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+            }
 
-        .item-name {
-            font-weight: 500;
-            margin-bottom: 0.5rem;
-        }
+            .quantity-control {
+                display: flex;
+                align-items: center;
+                gap: 0.5rem;
+            }
 
-        .item-specs {
-            color: #666;
-            font-size: 0.9rem;
-            margin-bottom: 0.25rem;
-        }
+            .quantity-control button {
+                width: 30px;
+                height: 30px;
+                border: 1px solid #ddd;
+                background: white;
+                cursor: pointer;
+            }
 
-        .item-price {
-            color: #f57224;
-            font-weight: 500;
-            font-size: 1.1rem;
-            margin-top: 0.5rem;
-        }
+            .checkout-btn {
+                width: 100%;
+                padding: 1rem;
+                background: #f57224;
+                color: white;
+                border: none;
+                margin-top: 1rem;
+                cursor: pointer;
+            }
 
-        .quantity-control {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
+            .empty-cart {
+                text-align: center;
+                background: white;
+                padding: 2rem;
+                border-radius: 8px;
+            }
 
-        .quantity-control button {
-            width: 30px;
-            height: 30px;
-            border: 1px solid #ddd;
-            background: white;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 1.2rem;
-        }
+            .success-message {
+                position: fixed;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                background: white;
+                padding: 2rem;
+                border-radius: 8px;
+                box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+                text-align: center;
+                z-index: 1000;
+            }
+        </style>
+    </head>
+    <body>
+        <header class="header">
+            <a href="{% url 'home' %}" class="back-to-home">← Back to Shop</a>
+            <h1>Your Shopping Cart</h1>
+        </header>
 
-        .quantity-display {
-            min-width: 30px;
-            text-align: center;
-        }
+        <div class="cart-container" id="cart-container">
+            <!-- Cart will be dynamically populated here -->
+        </div>
 
-        .remove-item {
-            padding: 0.5rem 1rem;
-            background: none;
-            border: none;
-            color: #dc3545;
-            cursor: pointer;
-            margin-left: 1rem;
-        }
+        <script>
+             document.addEventListener('DOMContentLoaded', function() {
+        const cartContainer = document.getElementById('cart-container');
+        const TAX_RATE = 0.08;
 
-        .payment-methods {
-            background: white;
-            padding: 1.5rem;
-            border-radius: 8px;
-            margin-bottom: 1rem;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-        }
-
-        .payment-methods h3 {
-            margin-bottom: 1rem;
-            color: #333;
-        }
-
-        .payment-option {
-            border: 2px solid #e1e1e1;
-            padding: 1rem;
-            margin-bottom: 0.5rem;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-
-        .payment-option:hover {
-            border-color: #f57224;
-        }
-
-        .payment-option.selected {
-            border-color: #f57224;
-            background-color: #fff5ef;
-        }
-
-        .payment-option label {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            cursor: pointer;
-        }
-
-        .card-details {
-            margin-top: 1rem;
-            display: none;
-            border-top: 1px solid #e1e1e1;
-            padding-top: 1rem;
-        }
-
-        .card-details.visible {
-            display: block;
-        }
-
-        .card-details input {
-            width: 100%;
-            padding: 0.75rem;
-            margin-bottom: 1rem;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            font-size: 0.9rem;
-        }
-
-        .card-row {
-            display: flex;
-            gap: 1rem;
-        }
-
-        .cart-summary {
-            background: white;
-            padding: 1.5rem;
-            border-radius: 8px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-        }
-
-        .summary-row {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 1rem;
-            color: #666;
-        }
-
-        .summary-total {
-            font-weight: 600;
-            color: #333;
-            font-size: 1.2rem;
-        }
-
-        .checkout-btn {
-            width: 100%;
-            padding: 1rem;
-            background: #f57224;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            font-weight: 500;
-            cursor: pointer;
-            margin-top: 1rem;
-            transition: background 0.2s ease;
-        }
-
-        .checkout-btn:hover {
-            background: #d65c1b;
-        }
-
-        .checkout-btn:disabled {
-            background: #ccc;
-            cursor: not-allowed;
-        }
-
-        .empty-cart {
-            text-align: center;
-            padding: 3rem;
-            background: white;
-            border-radius: 8px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-        }
-
-        .continue-shopping {
-            display: inline-block;
-            margin-top: 1rem;
-            padding: 0.75rem 1.5rem;
-            background: #f57224;
-            color: white;
-            text-decoration: none;
-            border-radius: 4px;
-            transition: background 0.2s ease;
-        }
-
-        .continue-shopping:hover {
-            background: #d65c1b;
-        }
-
-        .is-invalid {
-            border-color: #dc3545 !important;
-        }
-    </style>
-</head>
-<body>
-    <header class="header">
-        <a href="{% url 'home' %}" class="back-to-home">← Back to Shop</a>
-        <h1>Your Shopping Cart</h1>
-    </header>
-
-    <div class="cart-container">
-        <div id="cart-items"></div>
-    </div>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const cartContainer = document.querySelector('.cart-container');
-            const cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
-            const taxRate = 0.08;
+        function renderCart() {
+            const cartItems = StorageManager.getItem('cartItems') || [];
+            cartContainer.innerHTML = '';
 
             if (cartItems.length === 0) {
                 cartContainer.innerHTML = `
                     <div class="empty-cart">
                         <h2>Your cart is empty</h2>
-                        <a href="{% url 'home' %}" class="continue-shopping">Continue Shopping</a>
+                        <p>Looks like you haven't added any items to your cart yet.</p>
+                        <a href="{% url 'home' %}" style="display: inline-block; margin-top: 1rem; padding: 0.5rem 1rem; background: #f57224; color: white; text-decoration: none; border-radius: 4px;">
+                            Continue Shopping
+                        </a>
                     </div>
                 `;
                 return;
             }
 
-            cartContainer.innerHTML = '';
-
-            cartItems.forEach(item => {
-                const cartItemDiv = document.createElement('div');
-                cartItemDiv.className = 'cart-item';
-                cartItemDiv.innerHTML = `
+            cartItems.forEach((item, index) => {
+                const itemTotal = item.price * item.quantity;
+                const cartItemElement = document.createElement('div');
+                cartItemElement.className = 'cart-item';
+                cartItemElement.innerHTML = `
                     <img src="${item.image}" alt="${item.name}">
                     <div class="item-info">
                         <div>
-                            <p class="item-name">${item.name}</p>
-                            <p class="item-specs">Color: ${item.color}</p>
-                            <p class="item-specs">${item.specification.name}: ${item.specification.value}</p>
-                            <p class="item-price" data-price="${item.price}">$${(item.price * item.quantity).toFixed(2)}</p>
+                            <h3>${item.name}</h3>
+                            <p>Price: $${item.price.toFixed(2)}</p>
+                            <p>Color: ${item.color}</p>
                         </div>
                         <div class="quantity-control">
-                            <button class="decrease">−</button>
-                            <span class="quantity-display">${item.quantity}</span>
-                            <button class="increase">+</button>
+                            <button onclick="updateQuantity(${index}, 'decrease')">-</button>
+                            <span>${item.quantity}</span>
+                            <button onclick="updateQuantity(${index}, 'increase')">+</button>
+                        </div>
+                        <div>
+                            <p>Total: $${itemTotal.toFixed(2)}</p>
+                            <button onclick="removeItem(${index})" style="background:none; border:none; color:red; cursor:pointer;">Remove</button>
                         </div>
                     </div>
-                    <button class="remove-item">Remove</button>
                 `;
-                cartContainer.appendChild(cartItemDiv);
+                cartContainer.appendChild(cartItemElement);
             });
 
-            const paymentMethodsDiv = document.createElement('div');
-            paymentMethodsDiv.className = 'payment-methods';
-            paymentMethodsDiv.innerHTML = `
-                <h3>Select Payment Method</h3>
-                <div class="payment-option selected">
-                    <label>
-                        <input type="radio" name="payment" value="credit" checked>
-                        Credit Card
-                        <img src="/api/placeholder/40/25" alt="Credit Card" class="payment-icon">
-                    </label>
-                </div>
-                <div class="payment-option">
-                    <label>
-                        <input type="radio" name="payment" value="debit">
-                        Debit Card
-                        <img src="/api/placeholder/40/25" alt="Debit Card" class="payment-icon">
-                    </label>
-                </div>
-                <div class="payment-option">
-                    <label>
-                        <input type="radio" name="payment" value="paypal">
-                        PayPal
-                        <img src="/api/placeholder/40/25" alt="PayPal" class="payment-icon">
-                    </label>
-                </div>
-                
-                <div class="card-details visible">
-                    <input type="text" placeholder="Card Number" id="cardNumber" maxlength="19">
-                    <input type="text" placeholder="Cardholder Name" id="cardName">
-                    <div class="card-row">
-                        <div>
-                            <input type="text" placeholder="MM/YY" id="cardExpiry" maxlength="5">
-                        </div>
-                        <div>
-                            <input type="text" placeholder="CVV" id="cardCvv" maxlength="4">
-                        </div>
-                    </div>
-                </div>
-            `;
-            cartContainer.appendChild(paymentMethodsDiv);
+            renderCartSummary(cartItems);
+        }
 
+        function renderCartSummary(cartItems) {
             const subtotal = cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-            const tax = subtotal * taxRate;
+            const tax = subtotal * TAX_RATE;
             const total = subtotal + tax;
 
-            const summaryDiv = document.createElement('div');
-            summaryDiv.className = 'cart-summary';
-            summaryDiv.innerHTML = `
-                <div class="summary-row">
-                    <p>Subtotal:</p>
-                    <p>$${subtotal.toFixed(2)}</p>
+            const summaryElement = document.createElement('div');
+            summaryElement.innerHTML = `
+                <div style="background:white; padding:1rem; margin-top:1rem; border-radius:8px;">
+                    <h3>Order Summary</h3>
+                    <p>Subtotal: $${subtotal.toFixed(2)}</p>
+                    <p>Tax (8%): $${tax.toFixed(2)}</p>
+                    <p><strong>Total: $${total.toFixed(2)}</strong></p>
+                    <button class="checkout-btn" onclick="processCheckout()">
+                        Proceed to Checkout
+                    </button>
                 </div>
-                <div class="summary-row">
-                    <p>Tax (8%):</p>
-                    <p>$${tax.toFixed(2)}</p>
-                </div>
-                <div class="summary-row">
-                    <p class="summary-total">Total:</p>
-                    <p class="summary-total">$${total.toFixed(2)}</p>
-                </div>
-                <button class="checkout-btn">Place Order</button>
             `;
-            cartContainer.appendChild(summaryDiv);
+            cartContainer.appendChild(summaryElement);
+        }
 
-            // Event Handlers
-            document.querySelector('.checkout-btn').addEventListener('click', function() {
-                const cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
-                const orderDate = new Date().toISOString();
-                const orderId = Date.now();
-                const subtotal = cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-                const tax = subtotal * taxRate;
-                const total = subtotal + tax;
-                const paymentMethod = document.querySelector('input[name="payment"]:checked').value;
+        window.updateQuantity = function(index, action) {
+            const cartItems = StorageManager.getItem('cartItems') || [];
+            if (action === 'increase') {
+                cartItems[index].quantity++;
+            } else if (action === 'decrease' && cartItems[index].quantity > 1) {
+                cartItems[index].quantity--;
+            }
+            StorageManager.setItem('cartItems', cartItems);
+            renderCart();
+        };
 
-                const order = {
-                    orderId: orderId,
-                    orderDate: orderDate,
-                    items: cartItems,
-                    total: total,
-                    paymentMethod: paymentMethod,
-                    status: 'Processing'
-                };
+        window.removeItem = function(index) {
+            const cartItems = StorageManager.getItem('cartItems') || [];
+            cartItems.splice(index, 1);
+            StorageManager.setItem('cartItems', cartItems);
+            renderCart();
+        };
 
-                let orders = JSON.parse(localStorage.getItem('orderHistory')) || [];
-                orders.push(order);
-                localStorage.setItem('orderHistory', JSON.stringify(orders));
-                localStorage.removeItem('cartItems');
+        // Updated processCheckout
+        window.processCheckout = function() {
+            const cartItems = StorageManager.getItem('cartItems') || [];
+            if (cartItems.length === 0) {
+                alert('Your cart is empty');
+                return;
+            }
 
+            const subtotal = cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            const tax = subtotal * TAX_RATE;
+            const total = subtotal + tax;
+
+            const order = {
+                id: Date.now(),
+                items: cartItems,
+                subtotal: subtotal,
+                tax: tax,
+                total: total,
+                date: new Date().toISOString()
+            };
+
+            const orders = StorageManager.getItem('orders') || [];
+            orders.push(order);
+            StorageManager.setItem('orders', orders);
+
+            StorageManager.removeItem('cartItems');
+
+            const successMessage = document.createElement('div');
+            successMessage.className = 'success-message';
+            successMessage.innerHTML = `
+                <h2>Order Successful!</h2>
+                <p>Your order has been processed.</p>
+                <p>Total: $${total.toFixed(2)}</p>
+                <button onclick="window.location.href='{% url 'orders' %}'" style="margin-top: 1rem; padding: 0.5rem 1rem; background: #f57224; color: white; border: none; border-radius: 4px;">
+                    View Orders
+                </button>
+            `;
+            document.body.appendChild(successMessage);
+
+            setTimeout(() => {
                 window.location.href = "{% url 'orders' %}";
-            });
+            }, 3000);
+        };
 
-            // Payment method selection
-            const paymentOptions = document.querySelectorAll('.payment-option');
-            const cardDetails = document.querySelector('.card-details');
-            
-            paymentOptions.forEach(option => {
-                option.addEventListener('click', function() {
-                    const radio = this.querySelector('input[type="radio"]');
-                    radio.checked = true;
-                    paymentOptions.forEach(opt => opt.classList.remove('selected'));
-                    this.classList.add('selected');
+        renderCart();
+    });
+            // Robust Storage Mechanism
+            const StorageManager = {
+                // Primary storage method
+                _storage: {},
+
+                getItem: function(key) {
+                    try {
+                        // Try localStorage first
+                        const item = localStorage.getItem(key);
+                        return item ? JSON.parse(item) : null;
+                    } catch (e) {
+                        // Fallback to in-memory storage
+                        console.warn('localStorage access failed, using fallback');
+                        return this._storage[key] ? JSON.parse(this._storage[key]) : null;
+                    }
+                },
+
+                setItem: function(key, value) {
+                    try {
+                        // Try localStorage first
+                        localStorage.setItem(key, JSON.stringify(value));
+                    } catch (e) {
+                        // Fallback to in-memory storage
+                        console.warn('localStorage access failed, using fallback');
+                        this._storage[key] = JSON.stringify(value);
+                    }
+                },
+
+                removeItem: function(key) {
+                    try {
+                        localStorage.removeItem(key);
+                    } catch (e) {
+                        delete this._storage[key];
+                    }
+                }
+            };
+
+            document.addEventListener('DOMContentLoaded', function() {
+                const cartContainer = document.getElementById('cart-container');
+                const TAX_RATE = 0.08;
+
+                function renderCart() {
+                    // Retrieve cart items
+                    const cartItems = StorageManager.getItem('cartItems') || [];
                     
-                    if (radio.value === 'credit' || radio.value === 'debit') {
-                        cardDetails.classList.add('visible');
-                    } else {
-                        cardDetails.classList.remove('visible');
-                    }
-                });
-            });
+                    // Clear previous content
+                    cartContainer.innerHTML = '';
 
-            // Cart item controls
-            cartContainer.addEventListener('click', function(e) {
-                if (e.target.classList.contains('decrease') || 
-                    e.target.classList.contains('increase') || 
-                    e.target.classList.contains('remove-item')) {
+                    // Handle empty cart
+                    if (cartItems.length === 0) {
+                        cartContainer.innerHTML = `
+                            <div class="empty-cart">
+                                <h2>Your cart is empty</h2>
+                                <p>Looks like you haven't added any items to your cart yet.</p>
+                                <a href="{% url 'home' %}" style="display: inline-block; margin-top: 1rem; padding: 0.5rem 1rem; background: #f57224; color: white; text-decoration: none; border-radius: 4px;">
+                                    Continue Shopping
+                                </a>
+                            </div>
+                        `;
+                        return;
+                    }
+
+                    // Render cart items
+                    cartItems.forEach((item, index) => {
+                        const itemTotal = item.price * item.quantity;
+                        const cartItemElement = document.createElement('div');
+                        cartItemElement.className = 'cart-item';
+                        cartItemElement.innerHTML = `
+                            <img src="${item.image}" alt="${item.name}">
+                            <div class="item-info">
+                                <div>
+                                    <h3>${item.name}</h3>
+                                    <p>Price: $${item.price.toFixed(2)}</p>
+                                    <p>Color: ${item.color}</p>
+                                </div>
+                                <div class="quantity-control">
+                                    <button onclick="updateQuantity(${index}, 'decrease')">-</button>
+                                    <span>${item.quantity}</span>
+                                    <button onclick="updateQuantity(${index}, 'increase')">+</button>
+                                </div>
+                                <div>
+                                    <p>Total: $${itemTotal.toFixed(2)}</p>
+                                    <button onclick="removeItem(${index})" style="background:none; border:none; color:red; cursor:pointer;">Remove</button>
+                                </div>
+                            </div>
+                        `;
+                        cartContainer.appendChild(cartItemElement);
+                    });
+
+                    // Render cart summary
+                    renderCartSummary(cartItems);
+                }
+
+                function renderCartSummary(cartItems) {
+                    const subtotal = cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+                    const tax = subtotal * TAX_RATE;
+                    const total = subtotal + tax;
+
+                    const summaryElement = document.createElement('div');
+                    summaryElement.innerHTML = `
+                        <div style="background:white; padding:1rem; margin-top:1rem; border-radius:8px;">
+                            <h3>Order Summary</h3>
+                            <p>Subtotal: $${subtotal.toFixed(2)}</p>
+                            <p>Tax (8%): $${tax.toFixed(2)}</p>
+                            <p><strong>Total: $${total.toFixed(2)}</strong></p>
+                            <button class="checkout-btn" onclick="processCheckout()">
+                                Proceed to Checkout
+                            </button>
+                        </div>
+                    `;
+                    cartContainer.appendChild(summaryElement);
+                }
+
+                // Attach to window to make globally accessible
+                window.updateQuantity = function(index, action) {
+                    const cartItems = StorageManager.getItem('cartItems') || [];
                     
-                    const cartItem = e.target.closest('.cart-item');
-                    const itemName = cartItem.querySelector('.item-name').textContent;
-                    const cartItems = JSON.parse(localStorage.getItem('cartItems'));
-                    const itemIndex = cartItems.findIndex(item => item.name === itemName);
-
-                    if (e.target.classList.contains('remove-item')) {
-                        cartItems.splice(itemIndex, 1);
-                        cartItem.remove();
-                        if (cartItems.length === 0) {
-                            window.location.href = "{% url 'home' %}";
-                        }
-                    } else {
-                        const quantityDisplay = cartItem.querySelector('.quantity-display');
-                        let quantity = parseInt(quantityDisplay.textContent);
-
-                        if (e.target.classList.contains('decrease') && quantity > 1) {
-                            quantity--;
-                        } else if (e.target.classList.contains('increase')) {
-                            quantity++;
-                        }
-
-                        quantityDisplay.textContent = quantity;
-                        cartItems[itemIndex].quantity = quantity;
-                        
-                        const priceElement = cartItem.querySelector('.item-price');
-                        const unitPrice = parseFloat(priceElement.dataset.price);
-                        priceElement.textContent = `$${(unitPrice * quantity).toFixed(2)}`;
+                    if (action === 'increase') {
+                        cartItems[index].quantity++;
+                    } else if (action === 'decrease' && cartItems[index].quantity > 1) {
+                        cartItems[index].quantity--;
                     }
 
-                    localStorage.setItem('cartItems', JSON.stringify(cartItems));
-                    updateCartTotals();
+                    StorageManager.setItem('cartItems', cartItems);
+                    renderCart();
                 }
-            });
 
-            function updateCartTotals() {
-                const cartItems = JSON.parse(localStorage.getItem('cartItems'));
-                const subtotal = cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-                const tax = subtotal * taxRate;
-                const total = subtotal + tax;
-                const summary = document.querySelector('.cart-summary');
-                summary.querySelector('.summary-text:nth-child(2)').textContent = `$${subtotal.toFixed(2)}`;
-                summary.querySelector('.summary-text:nth-child(4)').textContent = `$${tax.toFixed(2)}`;
-                summary.querySelector('.summary-total:nth-child(2)').textContent = `$${total.toFixed(2)}`;
-            }
-
-            // Add input formatting and validation
-            const cardNumber = document.getElementById('cardNumber');
-            const cardExpiry = document.getElementById('cardExpiry');
-            const cardCvv = document.getElementById('cardCvv');
-
-            // Format card number
-            cardNumber.addEventListener('input', function(e) {
-                let value = e.target.value.replace(/\D/g, '');
-                if (value.length > 16) value = value.slice(0, 16);
-                let formattedValue = '';
-                for (let i = 0; i < value.length; i++) {
-                    if (i > 0 && i % 4 === 0) {
-                        formattedValue += ' ';
-                    }
-                    formattedValue += value[i];
+                window.removeItem = function(index) {
+                    const cartItems = StorageManager.getItem('cartItems') || [];
+                    cartItems.splice(index, 1);
+                    StorageManager.setItem('cartItems', cartItems);
+                    renderCart();
                 }
-                e.target.value = formattedValue;
-            });
 
-            // Format expiry date
-            cardExpiry.addEventListener('input', function(e) {
-                let value = e.target.value.replace(/\D/g, '');
-                if (value.length > 4) value = value.slice(0, 4);
-                if (value.length > 2) {
-                    value = value.slice(0, 2) + '/' + value.slice(2);
-                }
-                e.target.value = value;
-            });
-
-            // Format CVV
-            cardCvv.addEventListener('input', function(e) {
-                let value = e.target.value.replace(/\D/g, '');
-                if (value.length > 4) value = value.slice(0, 4);
-                e.target.value = value;
-            });
-
-            // Add real-time validation
-            function validateCardNumberLuhn(number) {
-                const digits = number.replace(/\D/g, '');
-                if (digits.length !== 16) return false;
-                
-                let sum = 0;
-                let isEven = false;
-                
-                // Loop through values starting from the rightmost digit
-                for (let i = digits.length - 1; i >= 0; i--) {
-                    let digit = parseInt(digits[i]);
-
-                    if (isEven) {
-                        digit *= 2;
-                        if (digit > 9) {
-                            digit -= 9;
-                        }
+                window.processCheckout = function() {
+                    const cartItems = StorageManager.getItem('cartItems') || [];
+                    
+                    if (cartItems.length === 0) {
+                        alert('Your cart is empty');
+                        return;
                     }
 
-                    sum += digit;
-                    isEven = !isEven;
-                }
+                    const subtotal = cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+                    const tax = subtotal * TAX_RATE;
+                    const total = subtotal + tax;
 
-                return (sum % 10) === 0;
-            }
+                    // Create order object
+                    const order = {
+                        id: Date.now(),
+                        items: cartItems,
+                        subtotal: subtotal,
+                        tax: tax,
+                        total: total,
+                        date: new Date().toISOString()
+                    };
 
-            function validateExpiryDate(expiry) {
-                const [month, year] = expiry.split('/').map(num => parseInt(num));
-                if (!month || !year) return false;
-                
-                const now = new Date();
-                const currentYear = now.getFullYear() % 100;
-                const currentMonth = now.getMonth() + 1;
+                    // Save order
+                    const orders = StorageManager.getItem('orders') || [];
+                    orders.push(order);
+                    StorageManager.setItem('orders', orders);
 
-                if (month < 1 || month > 12) return false;
-                if (year < currentYear) return false;
-                if (year === currentYear && month < currentMonth) return false;
-                
-                return true;
-            }
+                    // Clear cart
+                    StorageManager.removeItem('cartItems');
 
-            // Real-time card number validation
-            cardNumber.addEventListener('change', function() {
-                const isValid = validateCardNumberLuhn(this.value);
-                if (!isValid) {
-                    this.classList.add('is-invalid');
-                    this.nextElementSibling.style.display = 'block';
-                } else {
-                    this.classList.remove('is-invalid');
-                    this.nextElementSibling.style.display = 'none';
-                }
-            });
-
-            // Real-time expiry date validation
-            cardExpiry.addEventListener('change', function() {
-                const isValid = validateExpiryDate(this.value);
-                if (!isValid) {
-                    this.classList.add('is-invalid');
-                    this.nextElementSibling.style.display = 'block';
-                } else {
-                    this.classList.remove('is-invalid');
-                    this.nextElementSibling.style.display = 'none';
-                }
-            });
-
-            // Add loading state to checkout button
-            checkoutBtn.addEventListener('click', function(e) {
-                if (!validateCardDetails()) {
-                    return;
-                }
-
-                // Add loading state
-                const originalText = this.textContent;
-                this.disabled = true;
-                this.textContent = 'Processing...';
-
-                // Simulate payment processing
-                setTimeout(() => {
                     // Show success message
                     const successMessage = document.createElement('div');
                     successMessage.className = 'success-message';
-                    successMessage.style.cssText = `
-                        position: fixed;
-                        top: 50%;
-                        left: 50%;
-                        transform: translate(-50%, -50%);
-                        background: #fff;
-                        padding: 20px;
-                        border-radius: 8px;
-                        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-                        text-align: center;
-                        z-index: 1000;
-                    `;
                     successMessage.innerHTML = `
-                        <h3 style="color: #28a745; margin-bottom: 15px;">Payment Successful!</h3>
-                        <p>Your order has been processed successfully.</p>
-                        <p>Redirecting to your orders...</p>
+                        <h2>Order Successful!</h2>
+                        <p>Your order has been processed.</p>
+                        <p>Total: $${total.toFixed(2)}</p>
+                        <button onclick="window.location.href='{% url 'orders' %}'" style="margin-top: 1rem; padding: 0.5rem 1rem; background: #f57224; color: white; border: none; border-radius: 4px;">
+                            View Orders
+                        </button>
                     `;
                     document.body.appendChild(successMessage);
 
-                    // Process order and redirect
+                    // Optional: Redirect after a delay
                     setTimeout(() => {
-                        const cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
-                        const orderDate = new Date().toISOString();
-                        const orderId = Date.now();
-                        const subtotal = cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-                        const tax = subtotal * taxRate;
-                        const total = subtotal + tax;
-                        const paymentMethod = document.querySelector('input[name="payment"]:checked').value;
+                        window.location.href = "{% url 'orders' %}";
+                    }, 3000);
+                }
 
-                        const order = {
-                            orderId: orderId,
-                            orderDate: orderDate,
-                            items: cartItems,
-                            total: total,
-                            paymentMethod: paymentMethod
-                        };
-
-                        let orders = JSON.parse(localStorage.getItem('orderHistory')) || [];
-                        orders.push(order);
-                        localStorage.setItem('orderHistory', JSON.stringify(orders));
-                        localStorage.removeItem('cartItems');
-
-                        location.href = "{% url 'orders' %}";
-                    }, 2000);
-                }, 1500);
+                // Initial render
+                renderCart();
             });
-        });
-    </script>
-</body>
-</html>
+
+            // Add to cart function (to be used on product pages)
+            function addToCart(product) {
+                // Retrieve existing cart items
+                const cartItems = StorageManager.getItem('cartItems') || [];
+                
+                // Check if product already exists in cart
+                const existingItemIndex = cartItems.findIndex(item => item.name === product.name);
+                
+                if (existingItemIndex > -1) {
+                    // Increment quantity if item exists
+                    cartItems[existingItemIndex].quantity++;
+                } else {
+                    // Add new item with quantity 1
+                    cartItems.push({...product, quantity: 1});
+                }
+                
+                // Save updated cart
+                StorageManager.setItem('cartItems', cartItems);
+            }
+        </script>
+    </body>
+    </html>
