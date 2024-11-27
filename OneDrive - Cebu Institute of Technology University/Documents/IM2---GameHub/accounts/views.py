@@ -20,6 +20,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 import json
+import os
 
 def landing(request):
     print("Landing page view called") 
@@ -164,8 +165,16 @@ def profile_view(request):
     return render(request, 'user/profile.html', {'user': request.user})
 
 def laptop_view(request):
-   
-   return render(request, 'items/laptop.html')
+    products = Product.objects.all()
+    for product in products:
+        if product.image:
+            print(f"Product: {product.name}")
+            print(f"Image URL: {product.image.url}")
+            print(f"Image Path: {product.image.path}")
+            print(f"Image exists: {os.path.exists(product.image.path)}")
+        else:
+            print(f"Product {product.name} has no image")
+    return render(request, 'items/laptop.html', {'products': products})
 
 def phone_view(request):
    
@@ -321,3 +330,4 @@ def payment_view(request):
     return render(request, 'features/payment.html')
 def noitemsfound(request):
     return render(request, 'features/noitemsfound.html')
+

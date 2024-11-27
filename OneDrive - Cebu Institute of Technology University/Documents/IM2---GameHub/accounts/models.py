@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
-from django.db import models
+from django.utils.html import mark_safe
 
 class Product(models.Model):
     name = models.CharField(max_length=255)
@@ -8,14 +8,16 @@ class Product(models.Model):
     rating = models.DecimalField(max_digits=3, decimal_places=1)
     sold = models.IntegerField()
     colors = models.JSONField(default=list)
-    image = models.ImageField(upload_to='images/')
-    
-    # Additional fields to capture more details
-    specification_name = models.CharField(max_length=100, blank=True, null=True)
-    specification_options = models.JSONField(default=list)
+    image = models.ImageField(upload_to='images/', null=True, blank=True)
 
     def __str__(self):
         return self.name
+
+    def image_tag(self):
+        if self.image:
+            return mark_safe(f'<img src="{self.image.url}" width="150" height="150" />')
+        return 'No Image'
+    image_tag.short_description = 'Image'
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)

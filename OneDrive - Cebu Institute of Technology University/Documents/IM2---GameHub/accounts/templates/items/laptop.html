@@ -18,218 +18,112 @@
             <nav class="nav-links">
                 <a href="{% url 'home' %}" class="nav-link">Home</a>
                 <a href="{% url 'carts' %}" class="nav-link cart-icon">🛒</a>
+                <button class="checkout-button">Checkout</button>
             </nav>
         </div>
     </header>
 
     <div class="product-section">
+        {% for product in products %}
         <div class="product-item">
-            <img src="{% static 'images/msi.webp' %}" alt="MSI Laptop">
-            <div class="product-title">MSI Gaming Laptop</div>
-            <div class="product-rating">★★★★☆ (4.2)</div>
-            <div class="product-sold">2,345 sold</div>
-            <div class="product-price">$1,199.99</div>
+            {% if product.image %}
+                <img src="{{ product.image.url }}" alt="{{ product.name }}" style="max-width: 300px; max-height: 300px;">
+            {% else %}
+                <img src="{% static 'default-laptop-image.jpg' %}" alt="{{ product.name }}" style="max-width: 300px; max-height: 300px;">
+            {% endif %}
+            <div class="product-title">{{ product.name }}</div>
+            <div class="product-rating">
+                {% with rating=product.rating|floatformat:0 %}
+                    {% for i in "12345" %}
+                        {% if forloop.counter <= rating %}
+                            ★
+                        {% else %}
+                            ☆
+                        {% endif %}
+                    {% endfor %}
+                {% endwith %}
+            </div>
+            <div class="product-sold">{{ product.sold }} sold</div>
+            <div class="product-price">${{ product.price }}</div>
             <div class="product-options">
                 <label class="option-label">Color:</label>
-                <select>
-                    <option>Black</option>
-                    <option>Silver</option>
-                    <option>Red</option>
-                </select>
-                <label class="option-label">RAM:</label>
-                <select>
-                    <option>8GB</option>
-                    <option>16GB</option>
-                    <option>32GB</option>
+                <select class="product-color">
+                    {% for color in product.colors %}
+                        <option>{{ color }}</option>
+                    {% endfor %}
                 </select>
                 <label class="option-label">Quantity:</label>
-                <input type="number" value="1" min="1" max="5">
+                <input type="number" class="product-quantity" value="1" min="1" max="5">
             </div>
-            <button class="add-to-cart">Add to Cart</button>
+            <button class="add-to-cart" data-product-id="{{ product.id }}">Add to Cart</button>
         </div>
-
-        <div class="product-item">
-            <img src="{% static 'images/lenovo.webp' %}" alt="Lenovo Laptop">
-            <div class="product-title">Lenovo ThinkPad</div>
-            <div class="product-rating">★★★★★ (4.8)</div>
-            <div class="product-sold">3,789 sold</div>
-            <div class="product-price">$999.99</div>
-            <div class="product-options">
-                <label class="option-label">Color:</label>
-                <select>
-                    <option>Black</option>
-                    <option>Silver</option>
-                </select>
-                <label class="option-label">Storage:</label>
-                <select>
-                    <option>256GB SSD</option>
-                    <option>512GB SSD</option>
-                    <option>1TB SSD</option>
-                </select>
-                <label class="option-label">Quantity:</label>
-                <input type="number" value="1" min="1" max="5">
-            </div>
-            <button class="add-to-cart">Add to Cart</button>
-        </div>
-
-        <div class="product-item">
-            <img src="{% static 'images/huawei.jpg' %}" alt="Huawei Laptop">
-            <div class="product-title">Huawei MateBook</div>
-            <div class="product-rating">★★★★☆ (4.3)</div>
-            <div class="product-sold">1,567 sold</div>
-            <div class="product-price">$899.99</div>
-            <div class="product-options">
-                <label class="option-label">Color:</label>
-                <select>
-                    <option>Space Gray</option>
-                    <option>Mystic Silver</option>
-                </select>
-                <label class="option-label">Screen Size:</label>
-                <select>
-                    <option>13 inch</option>
-                    <option>14 inch</option>
-                    <option>15 inch</option>
-                </select>
-                <label class="option-label">Quantity:</label>
-                <input type="number" value="1" min="1" max="5">
-            </div>
-            <button class="add-to-cart">Add to Cart</button>
-        </div>
-
-        <div class="product-item">
-            <img src="{% static 'images/acer.jpg' %}" alt="Acer Laptop">
-            <div class="product-title">Acer Swift</div>
-            <div class="product-rating">★★★★☆ (4.0)</div>
-            <div class="product-sold">2,890 sold</div>
-            <div class="product-price">$799.99</div>
-            <div class="product-options">
-                <label class="option-label">Color:</label>
-                <select>
-                    <option>Silver</option>
-                    <option>Gold</option>
-                    <option>Black</option>
-                </select>
-                <label class="option-label">Processor:</label>
-                <select>
-                    <option>Intel Core i5</option>
-                    <option>Intel Core i7</option>
-                    <option>AMD Ryzen 5</option>
-                </select>
-                <label class="option-label">Quantity:</label>
-                <input type="number" value="1" min="1" max="5">
-            </div>
-            <button class="add-to-cart">Add to Cart</button>
-        </div>
-
-        <div class="product-item">
-            <img src="{% static 'images/rog.webp' %}" alt="ROG Laptop">
-            <div class="product-title">ASUS ROG Gaming Laptop</div>
-            <div class="product-rating">★★★★★ (4.7)</div>
-            <div class="product-sold">1,234 sold</div>
-            <div class="product-price">$1,499.99</div>
-            <div class="product-options">
-                <label class="option-label">Color:</label>
-                <select>
-                    <option>Black</option>
-                    <option>Gunmetal</option>
-                </select>
-                <label class="option-label">Graphics Card:</label>
-                <select>
-                    <option>NVIDIA RTX 3060</option>
-                    <option>NVIDIA RTX 3070</option>
-                    <option>NVIDIA RTX 3080</option>
-                </select>
-                <label class="option-label">Quantity:</label>
-                <input type="number" value="1" min="1" max="5">
-            </div>
-            <button class="add-to-cart">Add to Cart</button>
-        </div>
-
-        <div class="product-item">
-            <img src="{% static 'images/huawei.jpg' %}" alt="Huawei Laptop">
-            <div class="product-title">Huawei MateBook Pro</div>
-            <div class="product-rating">★★★★☆ (4.4)</div>
-            <div class="product-sold">1,890 sold</div>
-            <div class="product-price">$1,099.99</div>
-            <div class="product-options">
-                <label class="option-label">Color:</label>
-                <select>
-                    <option>Space Gray</option>
-                    <option>Mystic Silver</option>
-                </select>
-                <label class="option-label">Screen Size:</label>
-                <select>
-                    <option>13 inch</option>
-                    <option>14 inch</option>
-                    <option>15 inch</option>
-                </select>
-                <label class="option-label">Quantity:</label>
-                <input type="number" value="1" min="1" max="5">
-            </div>
-            <button class="add-to-cart">Add to Cart</button>
-        </div>
+        {% endfor %}
     </div>
 
-    <!-- JavaScript to manage cart -->
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Initialize cart in localStorage if it doesn't exist
-            if (!localStorage.getItem('cartItems')) {
-                localStorage.setItem('cartItems', JSON.stringify([]));
-            }
+    document.addEventListener('DOMContentLoaded', function() {
+        // Initialize cart in localStorage if it doesn't exist
+        if (!localStorage.getItem('cartItems')) {
+            localStorage.setItem('cartItems', JSON.stringify([]));
+        }
 
-            // Add click event listeners to all "Add to Cart" buttons
-            const addToCartButtons = document.querySelectorAll('.add-to-cart');
-            addToCartButtons.forEach(button => {
-                button.addEventListener('click', function() {
-                    const productItem = this.closest('.product-item');
+        // Cart Management
+        const addToCartButtons = document.querySelectorAll('.add-to-cart');
+        const checkoutButton = document.querySelector('.checkout-button');
 
-                    // Get product details
-                    const priceText = productItem.querySelector('.product-price').textContent;
-                    const price = parseFloat(priceText.replace('$', '').replace(',', ''));
+        addToCartButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                // Find the closest product item
+                const productItem = this.closest('.product-item');
+                
+                // Extract product details
+                const priceText = productItem.querySelector('.product-price').textContent;
+                const price = parseFloat(priceText.replace('$', '').replace(',', ''));
 
-                    const product = {
-                        name: productItem.querySelector('.product-title').textContent,
-                        price: price,
-                        image: productItem.querySelector('img').src,
-                        color: productItem.querySelector('select:nth-of-type(1)').value,
-                        quantity: parseInt(productItem.querySelector('input[type="number"]').value),
-                        specification: {
-                            name: productItem.querySelector('.option-label:nth-of-type(2)').textContent.trim().slice(0, -1),
-                            value: productItem.querySelector('select:nth-of-type(2)').value
-                        }
-                    };
+                const product = {
+                    id: this.getAttribute('data-product-id'),
+                    name: productItem.querySelector('.product-title').textContent,
+                    price: price,
+                    image: productItem.querySelector('img').src,
+                    color: productItem.querySelector('.product-color').value,
+                    quantity: parseInt(productItem.querySelector('.product-quantity').value)
+                };
 
-                    // Retrieve and update cart
-                    let cartItems = JSON.parse(localStorage.getItem('cartItems'));
+                // Retrieve existing cart items
+                let cartItems = JSON.parse(localStorage.getItem('cartItems') || '[]');
 
-                    const existingProductIndex = cartItems.findIndex(item =>
-                        item.name === product.name &&
-                        item.color === product.color &&
-                        item.specification.value === product.specification.value
-                    );
+                // Check if product already exists in cart
+                const existingProductIndex = cartItems.findIndex(item => 
+                    item.id === product.id && 
+                    item.color === product.color
+                );
 
-                    if (existingProductIndex !== -1) {
-                        cartItems[existingProductIndex].quantity += product.quantity;
-                    } else {
-                        cartItems.push(product);
-                    }
+                if (existingProductIndex !== -1) {
+                    // Update quantity if product exists
+                    cartItems[existingProductIndex].quantity += product.quantity;
+                } else {
+                    // Add new product to cart
+                    cartItems.push(product);
+                }
 
-                    localStorage.setItem('cartItems', JSON.stringify(cartItems));
+                // Save updated cart
+                localStorage.setItem('cartItems', JSON.stringify(cartItems));
 
-                    // Update button UI
-                    button.textContent = 'Added to Cart';
-                    button.style.backgroundColor = '#4CAF50'; // Change to green
-                    button.style.color = 'white';
-                    button.disabled = true; // Disable further clicks
-                });
+                // Update button UI
+                this.textContent = 'Added to Cart';
+                this.style.backgroundColor = '#4CAF50';
+                this.style.color = 'white';
+                this.disabled = true;
+
+                // Optional: Show cart count
+                updateCartCount();
             });
+        });
 
-          
-
-            // Checkout functionality
-            checkoutBtn.addEventListener('click', function() {
-                const cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
+        // Checkout functionality
+        if (checkoutButton) {
+            checkoutButton.addEventListener('click', function() {
+                const cartItems = JSON.parse(localStorage.getItem('cartItems') || '[]');
 
                 if (cartItems.length === 0) {
                     alert('Your cart is empty!');
@@ -254,31 +148,46 @@
                 .then(data => {
                     // Clear cart after successful order
                     localStorage.setItem('cartItems', JSON.stringify([]));
+                    updateCartCount();
                     alert('Order placed successfully! Order ID: ' + data.orderId);
-                    window.location.href = '/orders/';  // Redirect to orders page
+                    window.location.href = '/orders/';
                 })
                 .catch(error => {
                     console.error('Error:', error);
                     alert('Error placing order. Please try again.');
                 });
             });
+        }
 
-            // Function to get CSRF token from cookies
-            function getCookie(name) {
-                let cookieValue = null;
-                if (document.cookie && document.cookie !== '') {
-                    const cookies = document.cookie.split(';');
-                    for (let i = 0; i < cookies.length; i++) {
-                        const cookie = cookies[i].trim();
-                        if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                            break;
-                        }
+        // Function to update cart count
+        function updateCartCount() {
+            const cartItems = JSON.parse(localStorage.getItem('cartItems') || '[]');
+            const cartIcon = document.querySelector('.cart-icon');
+            if (cartIcon) {
+                const totalQuantity = cartItems.reduce((total, item) => total + item.quantity, 0);
+                cartIcon.textContent = `🛒 (${totalQuantity})`;
+            }
+        }
+
+        // Initialize cart count on page load
+        updateCartCount();
+
+        // Function to get CSRF token from cookies
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
                     }
                 }
-                return cookieValue;
             }
-        });
+            return cookieValue;
+        }
+    });
     </script>
 </body>
 </html>
