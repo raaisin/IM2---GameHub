@@ -1,52 +1,51 @@
 # GameHub 🎮🛒 : Your Ultimate Gaming & Tech Marketplace
 
-## Project Overview
+## 🖥️ Project Overview
 GameHub is an all-in-one e-commerce platform dedicated to providing a comprehensive digital marketplace for gamers, offering an extensive range of products including video games, PC hardware, gaming accessories, phones, and gaming peripherals.
 
 ## 🚀 Project Description
 GameHub aims to revolutionize the gaming retail experience by creating a centralized platform where gamers can find everything they need. Our mission is to provide a seamless, user-friendly shopping experience for gaming enthusiasts, tech lovers, and casual consumers alike.
 
 GameHub is a comprehensive e-commerce platform designed to serve gamers and tech enthusiasts by providing:
-- A centralized marketplace for physical videogame copies
-- PC and gaming hardware sales
-- Gaming accessories and peripherals
-- Seamless purchasing experience for tech products
-- All-in-one In-game currency store
+- 🎮 A centralized marketplace for physical videogame copies
+- 💻 PC and gaming hardware sales
+- 🖱️ Gaming accessories and peripherals
+- 🛒 Seamless purchasing experience for tech products
+- 💰 All-in-one In-game currency store
 
-### Motivation
+### 🎯 Motivation
 Para mapasar sa IM2 <3
 
-## Preview
+## 🖼️ Preview
 
 #to add latur with figma
 
 
-### Key Features
-- Comprehensive product catalog spanning video games, PC parts, gaming accessories, and electronics
-- Integrated e-commerce functionality
-- User-friendly interface
-- Secure transaction processing
-- Detailed product listings and descriptions
+### ✨ Key Features -- TBC --
+- 📂 Comprehensive product catalog spanning video games, PC parts, gaming accessories, and electronics
+- 🛍️ Integrated e-commerce functionality
+- 🧑‍💻 User-friendly interface
+- 🔒 Secure transaction processing
+- 📝Detailed product listings and descriptions
 
-### Functional Requirements
-- 
+## 📋Functional Requirements
+- TBA
 
 ## 🛠 Technologies Used
-- **Backend**: Python with Django Framework
-- **Frontend**: HTML, CSS, JavaScript
-- **Database**: SQLite
-- **Development Environment**: Python-based web development stack
+- **Backend**: 🐍 Python with Django Framework
+- **Frontend**: 🌐 HTML, CSS, JavaScript
+- **Database**: 🗄️ SQLite
+- **Development Environment**: 🖥️ Python-based web development stack
 
-## 📋 Table of Contents
-- [Installation](#installation)
-- [Installation](#installation)
-- [Usage](#usage)
-- [Contributing](#contributing)
-- [License](#license)
-- [Credits](#credits)
-- [Contact](#contact)
+## 📚 Table of Contents
+- 🔧 [Installation](#installation)
+- 🖥 [Usage](#usage)
+- 🤝 [Contributing](#contributing)
+- 🔒 [License](#license)
+- 👥 [Credits](#credits)
+- 📞 [Contact](#contact)
 
-## Project Structure
+## 🗂️ Project Structure
          IM2---GameHub/
                │
                ├── accounts/        # Main application logic
@@ -141,7 +140,7 @@ See `LICENSE` for more information.
 <img src="jeasprofile.png" alt="drawing" style="width:75px; border-radius: 75px;"/>
 <h3> Jeastel Mae Maratas </h3> 
 <ul>
-  <li> Project Manager </li>
+  <li> 🏗️ Project Manager </li>
 </ul>
 
 <hr>
@@ -149,8 +148,8 @@ See `LICENSE` for more information.
 <img src="hanzprofile.png" alt="drawing" style="width:75px; border-radius: 75px;"/>
 <h3> Hanz Chester Bacuz </h3>
 <ul>
-  <li> God of Coding </li>
-  <li>Technical Adviser</li>
+  <li> 👨‍💻 God of Coding </li>
+  <li> 🔧 Technical Adviser </li>
 </ul>
 
 <hr>
@@ -158,12 +157,12 @@ See `LICENSE` for more information.
 <img src="raisinprofile.jpg" alt="drawing" style="width:75px; border-radius: 75px;"/>
 <h3> Russell Joshua Palma </h3>
 <ul>
-  <li> Tig luto ug noodles </li>
+  <li> 🍜 Tig luto ug noodles </li>
 </ul>
 
 <hr>
 
-### Gantt Chart Contributions
+### 📊 Gantt Chart Contributions
 [Please Click here](/Nov27_Gantt-Chart.xlsx)
 
 ## 🚧 Future Roadmap
