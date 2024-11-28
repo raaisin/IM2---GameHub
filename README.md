@@ -29,7 +29,18 @@ Para mapasar sa IM2 <3
 - 📝Detailed product listings and descriptions
 
 ## 📋Functional Requirements
-- TBA
+- User Registration via Email 
+- User Login via Email, Google, and Facebook
+- User Profile Management
+- Product Search
+- Add to Cart
+- Payment Method Selection
+- Payment Confirmation and Receipt
+- Post-Purchase Email Receipt
+- View Order History
+- Order Cancellation
+- Product Details View
+- Update Cart Quantity
 
 ## 🛠 Technologies Used
 - **Backend**: 🐍 Python with Django Framework
@@ -127,7 +138,7 @@ Contributions are welcome! Please follow these steps:
 5. Open a Pull Request
 
 ## 🔒 License 
-<h4> THIS IS A OSP __ FEEL FREE TO STEAL </h4>
+<h4> THIS IS A Open-Source Project __ FEEL FREE TO STEAL </h4>
 Distributed under the GNU General Public License v3.0. 
 See `LICENSE` for more information.
 
