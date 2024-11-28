@@ -310,7 +310,7 @@ See `LICENSE` for more information.
 <hr>
 
 ### 📊 Gantt Chart Contributions
-[Click to preview](./path/to/Nov27_Gantt-Chart.xlsx)
+[Click to preview](./Nov27_Gantt-Chart.xlsx)
 
 ## 🚧 Future Roadmap
 - Implement advanced search and filtering
