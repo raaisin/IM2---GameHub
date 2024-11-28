@@ -293,7 +293,7 @@ See `LICENSE` for more information.
 <hr>
 
 <img src="hanzprofile.png" alt="drawing" style="width:75px; border-radius: 75px;"/>
-<h3> Hanz Chester Bacuz </h3>
+<h3> Hanz Chester Bacus </h3>
 <ul>
   <li> 👨‍💻 God of Coding </li>
   <li> 🔧 Technical Adviser </li>
@@ -330,7 +330,7 @@ python manage.py test
 Jeastel Mae Maratas  
 - temp@gmail.com
 
-Hanz Chester Bacuz   
+Hanz Chester Bacus   
 - temp@gmail.com
 
 Russell Joshua Palma
@@ -345,7 +345,7 @@ OLD README
 # IM2---GameHub
 para sa IM2 
 Leader:  Jeastel Maratas
-Members: Hanz Bacuz
+Members: Hanz Chester Bacus
          Russell Joshua Palma
 
 Functional Requirements:
