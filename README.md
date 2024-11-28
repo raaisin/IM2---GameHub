@@ -21,12 +21,6 @@ Para mapasar sa IM2 <3
 #to add latur with figma
 
 
-### ✨ Key Features -- TBC --
-- 📂 Comprehensive product catalog spanning video games, PC parts, gaming accessories, and electronics
-- 🛍️ Integrated e-commerce functionality
-- 🧑‍💻 User-friendly interface
-- 🔒 Secure transaction processing
-- 📝Detailed product listings and descriptions
 
 ## 📋Functional Requirements
 - User Registration via Email 
@@ -41,6 +35,14 @@ Para mapasar sa IM2 <3
 - Order Cancellation
 - Product Details View
 - Update Cart Quantity
+
+### ✨ Key Features -- TBC --
+- 📂 Comprehensive product catalog spanning video games, PC parts, gaming accessories, and electronics
+- 🛍️ Integrated e-commerce functionality
+- 🧑‍💻 User-friendly interface
+- 🔒 Secure transaction processing
+- 📝 Detailed product listings and descriptions
+
 
 ## 🛠 Technologies Used
 - **Backend**: 🐍 Python with Django Framework
