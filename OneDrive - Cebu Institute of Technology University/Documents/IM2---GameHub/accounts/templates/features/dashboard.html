@@ -64,7 +64,7 @@
     </div>
 
     <script>
-       document.addEventListener('DOMContentLoaded', function () {
+     document.addEventListener('DOMContentLoaded', function () {
     const orderList = document.getElementById('order-list');
     const markAllDeliveredBtn = document.getElementById('mark-all-delivered');
     
@@ -72,9 +72,29 @@
     const totalSalesElement = document.querySelector('.stat-card:nth-child(1) p');
     const totalOrdersElement = document.querySelector('.stat-card:nth-child(2) p');
     
+    // Use StorageManager for consistent storage access
+    const StorageManager = {
+        getItem: function(key) {
+            try {
+                const item = localStorage.getItem(key);
+                return item ? JSON.parse(item) : null;
+            } catch (e) {
+                console.warn('localStorage access failed');
+                return null;
+            }
+        },
+        setItem: function(key, value) {
+            try {
+                localStorage.setItem(key, JSON.stringify(value));
+            } catch (e) {
+                console.warn('localStorage access failed');
+            }
+        }
+    };
+
     // Retrieve orders from localStorage
-    let orders = JSON.parse(localStorage.getItem('orderHistory')) || [];
-    let deliveredOrders = JSON.parse(localStorage.getItem('deliveredOrders')) || [];
+    let orders = StorageManager.getItem('dashboardOrders') || [];
+    let deliveredOrders = StorageManager.getItem('deliveredOrders') || [];
 
     // Calculate Dashboard Statistics
     function calculateDashboardStatistics() {
@@ -102,8 +122,8 @@
             orderItem.className = 'order-item';
             orderItem.innerHTML = `
                 <div>
-                    <strong>Order ID: ${order.orderId}</strong>
-                    <p>${new Date(order.orderDate).toLocaleString()}</p>
+                    <strong>Order ID: ${order.id}</strong>
+                    <p>${new Date(order.date).toLocaleString()}</p>
                     <p>${order.items.length} items</p>
                 </div>
                 <div>
@@ -114,11 +134,9 @@
             orderList.appendChild(orderItem);
         });
 
-        // Calculate statistics after rendering
         calculateDashboardStatistics();
     }
 
-    // Event Listener for Individual Delivered Buttons
     orderList.addEventListener('click', function (e) {
         if (e.target.classList.contains('delivered-btn')) {
             const index = e.target.getAttribute('data-index');
@@ -129,27 +147,22 @@
             deliveredOrders.push(deliveredOrder);
             
             // Update localStorage
-            localStorage.setItem('orderHistory', JSON.stringify(orders));
-            localStorage.setItem('deliveredOrders', JSON.stringify(deliveredOrders));
+            StorageManager.setItem('dashboardOrders', orders);
+            StorageManager.setItem('deliveredOrders', deliveredOrders);
             
             // Re-render the order list
             renderOrders();
         }
     });
 
-    // Event Listener for "Mark All Delivered"
     markAllDeliveredBtn.addEventListener('click', function () {
-        // Move all pending orders to delivered orders
         deliveredOrders = [...deliveredOrders, ...orders];
         
-        // Clear pending orders
         orders.length = 0;
         
-        // Update localStorage
-        localStorage.setItem('orderHistory', JSON.stringify(orders));
-        localStorage.setItem('deliveredOrders', JSON.stringify(deliveredOrders));
+        StorageManager.setItem('dashboardOrders', orders);
+        StorageManager.setItem('deliveredOrders', deliveredOrders);
         
-        // Re-render the order list
         renderOrders();
     });
 

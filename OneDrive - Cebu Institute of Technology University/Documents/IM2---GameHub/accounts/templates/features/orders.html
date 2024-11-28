@@ -86,14 +86,26 @@
             margin-bottom: 1rem;
         }
 
-        .delete-order-btn {
+        .delete-order-btn, .checkout-dashboard-btn, .cancel-order-btn {
             width: 100%;
             padding: 0.75rem;
-            background: #f57224;
             color: white;
             border: none;
             border-radius: 4px;
             cursor: pointer;
+            margin-top: 1rem;
+        }
+
+        .delete-order-btn {
+            background: #f57224;
+        }
+
+        .checkout-dashboard-btn {
+            background: #4CAF50;
+        }
+
+        .cancel-order-btn {
+            background: #d9534f; /* Red background */
         }
 
         .empty-orders {
@@ -126,7 +138,6 @@
     </div>
 
     <script>
-        // Robust Storage Mechanism (same as in cart page)
         const StorageManager = {
             _storage: {},
 
@@ -161,14 +172,13 @@
         document.addEventListener('DOMContentLoaded', function() {
             const ordersContainer = document.getElementById('orders-container');
             
-            // Use StorageManager for consistent storage access
-            const orders = StorageManager.getItem('orders') || [];
+            let orders = StorageManager.getItem('orders') || [];
             
             function renderOrders() {
                 ordersContainer.innerHTML = '';
                 
                 if (orders.length === 0) {
-                    ordersContainer.innerHTML = `
+                    ordersContainer.innerHTML = ` 
                         <div class="empty-orders">
                             <h2>No orders found</h2>
                             <p>You haven't placed any orders yet.</p>
@@ -180,7 +190,6 @@
                     return;
                 }
                 
-                // Sort orders by date, most recent first
                 orders.sort((a, b) => new Date(b.date) - new Date(a.date));
                 
                 orders.forEach((order, index) => {
@@ -207,22 +216,46 @@
                             <p>Subtotal: $${order.subtotal.toFixed(2)}</p>
                             <p>Tax: $${order.tax.toFixed(2)}</p>
                         </div>
-                        <button class="delete-order-btn" data-index="${index}">Delete Order</button>
+                        <div class="order-actions">
+                            <button class="checkout-dashboard-btn" data-index="${index}">Checkout to Dashboard</button>
+                            <button class="cancel-order-btn" data-index="${index}">Cancel Order</button>
+                        </div>
                     `;
                     ordersContainer.appendChild(orderCard);
                 });
             }
             
             ordersContainer.addEventListener('click', function(e) {
-                if (e.target.classList.contains('delete-order-btn')) {
+                if (e.target.classList.contains('checkout-dashboard-btn')) {
                     const index = e.target.getAttribute('data-index');
+                    const selectedOrder = orders[index];
+                    const dashboardOrders = StorageManager.getItem('dashboardOrders') || [];
+                    
+                    dashboardOrders.push({
+                        ...selectedOrder,
+                        dashboardAddedDate: new Date().toISOString()
+                    });
+
                     orders.splice(index, 1);
+
+                    StorageManager.setItem('dashboardOrders', dashboardOrders);
                     StorageManager.setItem('orders', orders);
+
                     renderOrders();
+                }
+
+                if (e.target.classList.contains('cancel-order-btn')) {
+                    const index = e.target.getAttribute('data-index');
+                    
+                    const confirmation = confirm('Are you sure you want to cancel this order?');
+                    if (confirmation) {
+                        orders.splice(index, 1);
+                        StorageManager.setItem('orders', orders);
+                        renderOrders();
+                    }
                 }
             });
             
-            // Initial render of orders
             renderOrders();
         });
     </script>

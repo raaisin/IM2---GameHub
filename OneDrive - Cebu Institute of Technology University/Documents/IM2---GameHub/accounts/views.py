@@ -11,7 +11,7 @@ from django.http import JsonResponse
 from django.views.decorators.http import require_http_methods
 from .models import Profile
 from django.core.exceptions import ObjectDoesNotExist
-from .models import Order, OrderItem, Product
+from .models import Order, OrderItem, Product, Phone
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 import json
@@ -177,8 +177,20 @@ def laptop_view(request):
     return render(request, 'items/laptop.html', {'products': products})
 
 def phone_view(request):
-   
-   return render(request, 'items/phone.html')
+    phones = Phone.objects.all()
+    
+    for phone in phones:
+        if phone.image:
+            print(f"Product: {phone.name}")
+            print(f"Image URL: {phone.image.url}")
+            print(f"Image Path: {phone.image.path}")
+            print(f"Image exists: {os.path.exists(phone.image.path)}")
+        else:
+            print(f"Product {phone.name} has no image")
+    
+    # Pass the phones list to the template
+    return render(request, 'items/phone.html', {'phones': phones})
+
 
 def gamingphone_view(request):
    

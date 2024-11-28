@@ -445,7 +445,7 @@ select, input[type="number"] {
         <div class="header-content">
             <div class="logo">Phones</div>
             <div class="search-bar">
-                <input type="text" class="search-input" placeholder="Search for phones..." value="">
+                <input type="text" class="search-input" placeholder="Search for phones...">
                 <button class="search-button">🔍</button>
             </div>
             <nav class="nav-links">
@@ -457,38 +457,17 @@ select, input[type="number"] {
     </header>
 
     <div style="padding-top: 25px;" class="offer-container">
+        {% for phone in phones %}
         <div class="offer-banner">
-            <img src="{% static 'images/placeholder.jpg' %}" alt="Limited Time Offer" class="offer-image">
+            <img src="{% if phone.image %}{{ phone.image.url }}{% else %}{% static 'images/placeholder.jpg' %}{% endif %}" alt="{{ phone.name }}" class="offer-image">
             <div class="offer-details">
                 <h2>Limited Time Offer!</h2>
-                <p class="product-name">Asus ROG Phone 8 Pro</p>
-                <p class="discounted-price">₱49,995.00</p>
-                <p class="original-price">₱58,995.00</p>
+                <p class="product-name">{{ phone.name }}</p>
+                <p class="discounted-price">₱{{ phone.price|floatformat:2 }}</p>
                 <div id="countdown" class="countdown-timer"></div>
             </div>
         </div>
-    
-        <div class="offer-banner">
-            <img src="{% static 'images/placeholder.jpg' %}" alt="Limited Time Offer" class="offer-image">
-            <div class="offer-details">
-                <h2>Limited Time Offer!</h2>
-                <p class="product-name">Xiaomi Black Shark 5</p>
-                <p class="discounted-price">₱39,995.00</p>
-                <p class="original-price">₱45,995.00</p>
-                <div id="countdown" class="countdown-timer"></div>
-            </div>
-        </div>
-    
-        <div class="offer-banner">
-            <img src="{% static 'images/placeholder.jpg' %}" alt="Limited Time Offer" class="offer-image">
-            <div class="offer-details">
-                <h2>Limited Time Offer!</h2>
-                <p class="product-name">Lenovo Legion Phone Duel 2</p>
-                <p class="discounted-price">₱44,995.00</p>
-                <p class="original-price">₱52,995.00</p>
-                <div id="countdown" class="countdown-timer"></div>
-            </div>
-        </div>
+        {% endfor %}
     </div>
 
     <div>
@@ -498,99 +477,38 @@ select, input[type="number"] {
         </div>
     </div>
 
-
     <div class="top-sellers-container">
         <h2 class="top-sellers-title">Top Sellers</h2>
         <div class="product-section">
-
-            <div class="product-section">
-                <div class="product-item">
-                    <img src="{% static 'images/AsusROGPhone8Pro.jpg' %}" alt="Asus ROG Phone 8 Pro">
-                    <div class="product-title">Asus ROG Phone 8 Pro</div>
-                    <div class="product-rating">★★★★☆ (4.5)</div>
-                    <div class="product-sold">5k+ sold</div>
-                    <div class="product-price">₱58,995.00</div>
-                    <div class="product-options">
-                        <label class="option-label">Color:</label>
-                        <select>
-                            <option>Black</option>
-                            <option>White</option>
-                        </select>
-                        <label class="option-label">RAM + Storage:</label>
-                        <select>
-                            <option>16GB + 512GB</option>
-                            <option>32GB + 1TB</option>
-                        </select>
-                        <label class="option-label">Quantity:</label>
-                        <div class="quantity-controls">
-                            <button class="decrease" onclick="changeQuantity(this, -1)">-</button>
-                            <input type="number" class="quantity-input" value="1" min="1" max="5" readonly>
-                            <button class="increase" onclick="changeQuantity(this, 1)">+</button>
-                        </div>
+            {% for phone in phones %}
+            <div class="product-item">
+                <img src="{% if phone.image %}{{ phone.image.url }}{% else %}{% static 'images/placeholder.jpg' %}{% endif %}" alt="{{ phone.name }}">
+                <div class="product-title">{{ phone.name }}</div>
+                <div class="product-rating">★★★★☆ ({{ phone.rating }})</div>
+                <div class="product-sold">{{ phone.sold }} sold</div>
+                <div class="product-price">₱{{ phone.price|floatformat:2 }}</div>
+                <div class="product-options">
+                    <label class="option-label">Color:</label>
+                    <select>
+                        {% for color in phone.colors %}
+                        <option>{{ color }}</option>
+                        {% endfor %}
+                    </select>
+                    <label class="option-label">Quantity:</label>
+                    <div class="quantity-controls">
+                        <button class="decrease" onclick="changeQuantity(this, -1)">-</button>
+                        <input type="number" class="quantity-input" value="1" min="1" max="5" readonly>
+                        <button class="increase" onclick="changeQuantity(this, 1)">+</button>
                     </div>
-                    <button class="add-to-cart">Add to Cart</button>
                 </div>
-
-                <div class="product-item">
-                    <img src="{% static 'images/NubiaREDMAGIC.webp' %}" alt="ZTE Nubia RedMagic 9 Pro">
-                    <div class="product-title">ZTE Nubia RedMagic 9 Pro</div>
-                    <div class="product-rating">No ratings</div>
-                    <div class="product-sold">100+ sold</div>
-                    <div class="product-price">₱46,999</div>
-                    <div class="product-options">
-                        <label class="option-label">Color:</label>
-                        <select>
-                            <option>Silver</option>
-                        </select>
-                        <label class="option-label">RAM + Storage:</label>
-                        <select>
-                            <option>12GB + 256GB</option>
-                        </select>
-                        <label class="option-label">Quantity:</label>
-                        <div class="quantity-controls">
-                            <button class="decrease" onclick="changeQuantity(this, -1)">-</button>
-                            <input type="number" class="quantity-input" value="1" min="1" max="5" readonly>
-                            <button class="increase" onclick="changeQuantity(this, 1)">+</button>
-                        </div>
-                    </div>
-                    <button class="add-to-cart">Add to Cart</button>
-                </div>
-
-                <div class="product-item">
-                    <img src="{% static 'images/BlackShark5.webp' %}" alt="Black Shark 5 Pro">
-                    <div class="product-title">Black Shark 5 Pro</div>
-                    <div class="product-rating">★★★★★ (4.9)</div>
-                    <div class="product-sold">1,203 sold</div>
-                    <div class="product-price">₱25,799 - ₱28,799</div>
-                    <div class="product-options">
-                        <label class="option-label">Color:</label>
-                        <select>
-                            <option>Nebula White</option>
-                            <option>Stellar Black</option>
-                        </select>
-                        <label class="option-label">RAM + Storage:</label>
-                        <select>
-                            <option>8GB + 128GB</option>
-                            <option>12GB + 256GB</option>
-                            <option>16GB + 256GB</option>
-                        </select>
-                        <label class="option-label">Quantity:</label>
-                        <div class="quantity-controls">
-                            <button class="decrease" onclick="changeQuantity(this, -1)">-</button>
-                            <input type="number" class="quantity-input" value="1" min="1" max="5" readonly>
-                            <button class="increase" onclick="changeQuantity(this, 1)">+</button>
-                        </div>
-                    </div>
-                    <button class="add-to-cart">Add to Cart</button>
-                </div>
-
+                <button class="add-to-cart">Add to Cart</button>
             </div>
-
+            {% endfor %}
         </div>
-    </div>    
-        
+    </div>
+
     <div>
-        <h1 style = "margin-top: 20px;" class="gaming-phone-title"> Non-Gaming Phones</h1>
+        <h1 style="margin-top: 20px;" class="gaming-phone-title">Non-Gaming Phones</h1>
         <div class="button-container">
             <a href="{% url 'nongamingphone' %}" class="more-button">Click here for more</a>
         </div>
@@ -599,27 +517,19 @@ select, input[type="number"] {
     <div class="top-sellers-container">
         <h2 class="top-sellers-title">Top Sellers</h2>
         <div class="product-section">
-
-        <div class="product-section">
+            {% for phone in phones %}
             <div class="product-item">
-                <img src="{% static 'images/AppleIPhone.webp' %}" alt="Apple iPhone 15 Pro Max">
-                <div class="product-title">Apple iPhone 15 Pro Max</div>
-                <div class="product-rating">★★★★★ (4.9)</div>
-                <div class="product-sold">5k+ sold</div>
-                <div class="product-price">₱68,890</div>
+                <img src="{% if phone.image %}{{ phone.image.url }}{% else %}{% static 'images/placeholder.jpg' %}{% endif %}" alt="{{ phone.name }}">
+                <div class="product-title">{{ phone.name }}</div>
+                <div class="product-rating">★★★★★ ({{ phone.rating }})</div>
+                <div class="product-sold">{{ phone.sold }} sold</div>
+                <div class="product-price">₱{{ phone.price|floatformat:2 }}</div>
                 <div class="product-options">
                     <label class="option-label">Color:</label>
                     <select>
-                        <option>Black Titanium</option>
-                        <option>White Titanium</option>
-                        <option>Natural Titanium</option>
-                        <option>Blue Titanium</option>
-                    </select>
-                    <label class="option-label">Storage:</label>
-                    <select>
-                        <option>256GB</option>
-                        <option>512GB</option>
-                        <option>1TB</option>
+                        {% for color in phone.colors %}
+                        <option>{{ color }}</option>
+                        {% endfor %}
                     </select>
                     <label class="option-label">Quantity:</label>
                     <div class="quantity-controls">
@@ -630,71 +540,8 @@ select, input[type="number"] {
                 </div>
                 <button class="add-to-cart">Add to Cart</button>
             </div>
-
-            <div class="product-item">
-                <img src="{% static 'images/SamsungGalaxyUltra.webp' %}" alt="Samsung Galaxy S24 Ultra">
-                <div class="product-title">Samsung Galaxy S24 Ultra</div>
-                <div class="product-rating">★★★★★ (4.7)</div>
-                <div class="product-sold">3,789 sold</div>
-                <div class="product-price">₱77,768 - ₱106,990</div>
-                <div class="product-options">
-                    <label class="option-label">Color:</label>
-                    <select>
-                        <option>Titanium Black</option>
-                        <option>Titanium Gray</option>
-                        <option>Titanium Violet</option>
-                        <option>Titanium Yellow</option>
-                    </select>
-                    <label class="option-label">Storage:</label>
-                    <select>
-                        <option>256GB</option>
-                        <option>512GB</option>
-                        <option>1TB</option>
-                    </select>
-                    <label class="option-label">Quantity:</label>
-                    <div class="quantity-controls">
-                        <button class="decrease" onclick="changeQuantity(this, -1)">-</button>
-                        <input type="number" class="quantity-input" value="1" min="1" max="5" readonly>
-                        <button class="increase" onclick="changeQuantity(this, 1)">+</button>
-                    </div>
-                </div>
-                <button class="add-to-cart">Add to Cart</button>
-            </div>
-
-            <div class="product-item">
-                <img src="{% static 'images/GooglePixel.jpg' %}" alt="Google Pixel 8 PRO">
-                <div class="product-title">Google Pixel 8 PRO</div>
-                <div class="product-rating">★★★★☆ (3.9)</div>
-                <div class="product-sold">741 sold</div>
-                <div class="product-price">₱41,399</div>
-                <div class="product-options">
-                    <label class="option-label">Color:</label>
-                    <select>
-                        <option>Obsidian</option>
-                        <option>Bay</option>
-                        <option>Porcelain</option>
-                    </select>
-                    <label class="option-label">Storage:</label>
-                    <select>
-                        <option>128GB</option>
-                        <option>256GB</option>
-                    </select>
-                    <label class="option-label">Quantity:</label>
-                    <div class="quantity-controls">
-                        <button class="decrease" onclick="changeQuantity(this, -1)">-</button>
-                        <input type="number" class="quantity-input" value="1" min="1" max="5" readonly>
-                        <button class="increase" onclick="changeQuantity(this, 1)">+</button>
-                    </div>
-                </div>
-                <button class="add-to-cart">Add to Cart</button>
-            </div>
-
-
+            {% endfor %}
         </div>
     </div>
-
-
-
-    </body>
-
+</body>
 </html>

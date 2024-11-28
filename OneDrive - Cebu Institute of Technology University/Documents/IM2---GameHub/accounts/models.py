@@ -19,6 +19,30 @@ class Product(models.Model):
         return 'No Image'
     image_tag.short_description = 'Image'
 
+
+class Phone(models.Model):
+    name = models.CharField(max_length=255)  # Phone name
+    price = models.DecimalField(max_digits=10, decimal_places=2)  # Phone price
+    rating = models.DecimalField(max_digits=3, decimal_places=1)  # Phone rating
+    sold = models.IntegerField()  # Number of phones sold
+    colors = models.JSONField(default=list)  # List of available colors for the phone
+    image = models.ImageField(upload_to='phones/', null=True, blank=True)  # Image of the phone
+
+    def __str__(self):
+        return self.name
+
+    def image_tag(self):
+        """Generate an HTML image tag for the phone image"""
+        if self.image:
+            return mark_safe(f'<img src="{self.image.url}" width="150" height="150" />')
+        return 'No Image'
+    image_tag.short_description = 'Image'
+
+    def save(self, *args, **kwargs):
+        # You can add any pre-save or post-save operations if needed
+        super().save(*args, **kwargs)
+
+
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     bio = models.TextField(blank=True, default="")
@@ -26,9 +50,6 @@ class Profile(models.Model):
     def __str__(self):
         return self.user.username
 class CartItem(models.Model):
-    """
-    Cart item model that ensures user-specific cart functionality
-    """
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='cart_items')
     product_name = models.CharField(max_length=255)
     quantity = models.PositiveIntegerField(default=1)
