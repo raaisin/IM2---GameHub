@@ -20,7 +20,141 @@ Para mapasar sa IM2 <3
 
 #to add latur with figma
 
+## Entity Relational Diagram
+```mermaid
 
+erDiagram
+    USER ||--o{ USER_PROFILE : "has"
+    USER ||--o{ CART : "creates"
+    USER ||--o{ ORDER : "places"
+    USER ||--o{ PAYMENT : "makes"
+    USER {
+        int user_id PK
+        string email
+        string password_hash
+        string login_type
+        datetime created_at
+    }
+
+    USER_PROFILE {
+        int profile_id PK
+        int user_id FK
+        string first_name
+        string last_name
+        string shipping_address
+        string billing_address
+        string phone_number
+    }
+
+    CART ||--o{ CART_ITEM : "contains"
+    CART {
+        int cart_id PK
+        int user_id FK
+        datetime created_at
+        decimal total_price
+    }
+
+    CART_ITEM ||--|| PRODUCT : "references"
+    CART_ITEM {
+        int cart_item_id PK
+        int cart_id FK
+        int product_id FK
+        int quantity
+        decimal unit_price
+    }
+
+    PRODUCT ||--o{ PHYSICAL_PRODUCT : "is_type"
+    PRODUCT ||--o{ VIRTUAL_PRODUCT : "is_type"
+    PRODUCT {
+        int product_id PK
+        string name
+        decimal price
+        string description
+        string category
+        int stock_quantity
+        string manufacturer
+    }
+
+    PHYSICAL_PRODUCT ||--|| SUBCATEGORY : "belongs_to"
+    PHYSICAL_PRODUCT {
+        int physical_product_id PK
+        int product_id FK
+        int subcategory_id FK
+        string product_type
+        string model_number
+        decimal weight
+        string dimensions
+    }
+
+    SUBCATEGORY {
+        int subcategory_id PK
+        string name
+        string parent_category
+    }
+
+    VIRTUAL_PRODUCT ||--o{ GAME_PRODUCT : "is_type"
+    VIRTUAL_PRODUCT ||--o{ IN_GAME_CURRENCY : "is_type"
+    VIRTUAL_PRODUCT {
+        int virtual_product_id PK
+        int product_id FK
+        string digital_delivery_method
+    }
+
+    GAME_PRODUCT {
+        int game_product_id PK
+        int virtual_product_id FK
+        string game_platform
+        string genre
+        date release_date
+    }
+
+    IN_GAME_CURRENCY {
+        int currency_id PK
+        int virtual_product_id FK
+        string game_name
+        string currency_type
+    }
+
+    ORDER ||--o{ ORDER_ITEM : "includes"
+    ORDER ||--|| PAYMENT : "processed_by"
+    ORDER ||--|| EMAIL_RECEIPT : "generates"
+    ORDER {
+        int order_id PK
+        int user_id FK
+        datetime order_date
+        string order_status
+        decimal total_amount
+        string shipping_method
+    }
+
+    ORDER_ITEM {
+        int order_item_id PK
+        int order_id FK
+        int product_id FK
+        int quantity
+        decimal unit_price
+    }
+
+    PAYMENT {
+        int payment_id PK
+        int order_id FK
+        int user_id FK
+        string payment_method
+        string transaction_id
+        datetime payment_date
+        string payment_status
+        decimal amount
+    }
+
+    EMAIL_RECEIPT {
+        int receipt_id PK
+        int order_id FK
+        string email_content
+        datetime sent_at
+        string recipient_email
+    }
+
+```
 
 ## 📋Functional Requirements
 - User Registration via Email 
@@ -176,7 +310,7 @@ See `LICENSE` for more information.
 <hr>
 
 ### 📊 Gantt Chart Contributions
-[Please Click here](/Nov27_Gantt-Chart.xlsx)
+[Click to preview](./path/to/readmefiles/Nov27_Gantt-Chart.xlsx)
 
 ## 🚧 Future Roadmap
 - Implement advanced search and filtering
