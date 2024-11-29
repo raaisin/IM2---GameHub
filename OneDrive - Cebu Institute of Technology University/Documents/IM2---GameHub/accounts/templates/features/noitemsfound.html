@@ -1,58 +1,209 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>No Items Found - GameHub</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
-    <style>
 
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Roboto', Arial, sans-serif;
+            background-color: #f5f5f5;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header {
+            background-color: #0f146d;
+            color: white;
+            padding: 10px 0;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .logo a {
+            font-size: 24px;
+            font-weight: 600;
+            color: white;
+            text-decoration: none;
+        }
+
+        .not-found-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px;
+            text-align: center;
+        }
+
+        .not-found-icon {
+            font-size: 80px;
+            margin-bottom: 20px;
+            color: #0f146d;
+        }
+
+        .not-found-heading {
+            font-size: 32px;
+            color: #0f146d;
+            margin-bottom: 16px;
+        }
+
+        .not-found-text {
+            font-size: 18px;
+            color: #666;
+            margin-bottom: 32px;
+            max-width: 600px;
+        }
+
+        .search-query {
+            font-weight: bold;
+            color: #f57224;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 16px;
+            margin-top: 24px;
+        }
+
+        .button {
+            padding: 12px 24px;
+            border-radius: 25px;
+            font-size: 16px;
+            font-weight: 500;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .primary-button {
+            background-color: #0f146d;
+            color: white;
+            border: 2px solid #0f146d;
+        }
+
+        .primary-button:hover {
+            background-color: #1a237e;
+            border-color: #1a237e;
+        }
+
+        .secondary-button {
+            background-color: white;
+            color: #0f146d;
+            border: 2px solid #0f146d;
+        }
+
+        .secondary-button:hover {
+            background-color: #f5f5f5;
+        }
+
+        .suggestions {
+            margin-top: 40px;
+            text-align: center;
+        }
+
+        .suggestions h3 {
+            color: #0f146d;
+            margin-bottom: 16px;
+        }
+
+        .suggestion-links {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .suggestion-links a {
+            color: #f57224;
+            text-decoration: none;
+            padding: 8px 16px;
+            border-radius: 20px;
+            background-color: #fff;
+            border: 1px solid #f57224;
+            transition: all 0.3s ease;
+        }
+
+        .suggestion-links a:hover {
+            background-color: #f57224;
+            color: white;
+        }
+
+        /* Add some responsive adjustments */
+        @media (max-width: 768px) {
+            .action-buttons {
+                flex-direction: column;
+            }
+
+            .suggestion-links {
+                flex-direction: column;
+                gap: 8px;
+            }
+
+            .not-found-heading {
+                font-size: 24px;
+            }
+
+            .not-found-text {
+                font-size: 16px;
+            }
+        }
     </style>
 </head>
+
 <body>
     <header class="header">
-        <div class="container header-content">
+        <div class="header-content">
             <div class="logo">
-                <a href="#"><i class="fas fa-gamepad"></i> GameHub</a>
+                <a href="{% url 'home' %}">GameHub 💻</a>
             </div>
         </div>
     </header>
 
-    <main class="not-found-section container">
-        <div class="not-found-content">
-            <div class="not-found-icon">
-                <i class="fas fa-search"></i>
-            </div>
-            <h1 class="not-found-heading">No Results Found</h1>
-            <p class="not-found-text">
-                Sorry, we couldn't find any items matching "<span id="searchQuery" class="search-query"></span>"
-            </p>
-            
-            <div class="action-buttons">
-                <a href="#" class="btn btn-primary">
-                    <i class="fas fa-home"></i> Back to Home
-                </a>
-                <a href="javascript:history.back()" class="btn btn-secondary">
-                    <i class="fas fa-arrow-left"></i> Go Back
-                </a>
-            </div>
+    <main class="not-found-container">
+        <div class="not-found-icon">🔍</div>
+        <h1 class="not-found-heading">No Items Found</h1>
+        <p class="not-found-text">
+            Sorry, we couldn't find any items matching "<span id="searchQuery" class="search-query"></span>"
+        </p>
+        <div class="action-buttons">
+            <a href="{% url 'home' %}" class="button primary-button">Back to Home</a>
+            <a href="javascript:history.back()" class="button secondary-button">Go Back</a>
+        </div>
 
-            <div class="suggestions">
-                <h3>Explore Popular Categories</h3>
-                <div class="suggestion-links">
-                    <a href="#">Gaming Laptops</a>
-                    <a href="#">Gaming Phones</a>
-                    <a href="#">Gaming PCs</a>
-                    <a href="#">Accessories</a>
-                </div>
+        <div class="suggestions">
+            <h3>Popular Categories</h3>
+            <div class="suggestion-links">
+                <a href="{% url 'laptop' %}">Gaming Laptops</a>
+                <a href="{% url 'phone' %}">Gaming Phones</a>
+                <a href="{% url 'pc' %}">Gaming PCs</a>
+                <a href="{% url 'accessories' %}">Accessories</a>
             </div>
         </div>
     </main>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            // Get the search query from URL parameters
             const urlParams = new URLSearchParams(window.location.search);
             const searchQuery = urlParams.get('q') || 'Unknown search term';
+            
             document.getElementById('searchQuery').textContent = searchQuery;
         });
     </script>

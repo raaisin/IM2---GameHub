@@ -259,54 +259,64 @@
                     renderCart();
                 }
 
-                window.processCheckout = function() {
-                    const cartItems = StorageManager.getItem('cartItems') || [];
-                    
-                    if (cartItems.length === 0) {
-                        alert('Your cart is empty');
-                        return;
-                    }
+// In carts.html: Enhanced processCheckout function
+window.processCheckout = function() {
+    const cartItems = StorageManager.getItem('cartItems') || [];
+    
+    if (cartItems.length === 0) {
+        alert('Your cart is empty');
+        return;
+    }
 
-                    const subtotal = cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-                    const tax = subtotal * TAX_RATE;
-                    const total = subtotal + tax;
+    const subtotal = cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+    const TAX_RATE = 0.08;
+    const tax = subtotal * TAX_RATE;
+    const total = subtotal + tax;
 
-                    // Create order object
-                    const order = {
-                        id: Date.now(),
-                        items: cartItems,
-                        subtotal: subtotal,
-                        tax: tax,
-                        total: total,
-                        date: new Date().toISOString()
-                    };
+    // Create a comprehensive order object
+    const order = {
+        id: Date.now(),
+        items: cartItems,
+        subtotal: subtotal,
+        tax: tax,
+        total: total,
+        date: new Date().toISOString(),
+        status: 'pending',
+        trackingNumber: `ORD-${Math.random().toString(36).substr(2, 9).toUpperCase()}`
+    };
 
-                    // Save order
-                    const orders = StorageManager.getItem('orders') || [];
-                    orders.push(order);
-                    StorageManager.setItem('orders', orders);
+    // Save order to orders list
+    const orders = StorageManager.getItem('orders') || [];
+    orders.push(order);
+    StorageManager.setItem('orders', orders);
 
-                    // Clear cart
-                    StorageManager.removeItem('cartItems');
+    // Also save to dashboard orders
+    const dashboardOrders = StorageManager.getItem('dashboardOrders') || [];
+    dashboardOrders.push({...order, dashboardAddedDate: new Date().toISOString()});
+    StorageManager.setItem('dashboardOrders', dashboardOrders);
 
-                    // Show success message
-                    const successMessage = document.createElement('div');
-                    successMessage.className = 'success-message';
-                    successMessage.innerHTML = `
-                        <h2>Order Successful!</h2>
-                        <p>Your order has been processed.</p>
-                        <p>Total: $${total.toFixed(2)}</p>
-                        <button onclick="window.location.href='{% url 'orders' %}'" style="margin-top: 1rem; padding: 0.5rem 1rem; background: #f57224; color: white; border: none; border-radius: 4px;">
-                            View Orders
-                        </button>
-                    `;
-                    document.body.appendChild(successMessage);
+    // Clear cart
+    StorageManager.removeItem('cartItems');
 
-                    // Optional: Redirect after a delay
-                    setTimeout(() => {
-                        window.location.href = "{% url 'orders' %}";
-                    }, 3000);
-                }
+    // Show success message
+    const successMessage = document.createElement('div');
+    successMessage.className = 'success-message';
+    successMessage.innerHTML = `
+        <h2>Order Successful!</h2>
+        <p>Your order has been processed.</p>
+        <p>Tracking Number: ${order.trackingNumber}</p>
+        <p>Total: $${total.toFixed(2)}</p>
+        <button onclick="window.location.href='{% url 'orders' %}'" style="margin-top: 1rem; padding: 0.5rem 1rem; background: #f57224; color: white; border: none; border-radius: 4px;">
+            View Orders
+        </button>
+    `;
+    document.body.appendChild(successMessage);
+
+    // Redirect after a delay
+    setTimeout(() => {
+        window.location.href = "{% url 'orders' %}";
+    }, 3000);
+}
 
                 // Initial render
                 renderCart();

@@ -5,9 +5,230 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>E-commerce Admin Dashboard</title>
-    <link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
 
+        .dashboard-container {
+            display: flex;
+        }
+
+        .sidebar {
+            width: 250px;
+            background: #2c3e50;
+            color: white;
+            padding: 1rem;
+            height: 100vh;
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .sidebar h2 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .sidebar-menu {
+            list-style: none;
+            padding: 0;
+        }
+
+        .sidebar-menu li {
+            margin-bottom: 1rem;
+        }
+
+        .sidebar-menu a {
+            color: white;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+        }
+
+        .sidebar-menu a i {
+            margin-right: 10px;
+        }
+
+        .main-content {
+            flex: 1;
+            padding: 2rem;
+            background: #ecf0f1;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .header h1 {
+            margin: 0;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+        }
+
+        .user-info img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+
+        .user-info .logout-btn {
+            margin-left: 1rem;
+            color: white;
+            background: #e74c3c;
+            padding: 5px 10px;
+            border-radius: 5px;
+            text-decoration: none;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 1rem;
+            border-radius: 5px;
+            text-align: center;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .orders-section {
+            margin-top: 2rem;
+        }
+
+        .orders-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .order-list {
+            background: white;
+            padding: 1rem;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            max-height: 300px;  /* Added max height */
+            overflow-y: auto;  /* Added scrollbar */
+        }
+
+        .order-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #eee;
+        }
+
+        .order-item:last-child {
+            border-bottom: none;
+        }
+
+        .notification-icon {
+            position: relative;
+            cursor: pointer;
+            margin-right: 15px;
+        }
+
+        .notification-icon i {
+            font-size: 1.5rem;
+            color: #666;
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: red;
+            color: white;
+            border-radius: 50%;
+            padding: 2px 6px;
+            font-size: 0.75rem;
+        }
+
+        .notification-dropdown {
+            position: absolute;
+            top: 100%;
+            right: -50px;
+            width: 400px;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+            display: none;
+            z-index: 10;
+        }
+
+        .notification-dropdown.active {
+            display: block;
+        }
+
+        .notification-dropdown h4 {
+            padding: 1rem;
+            margin: 0;
+            background: #f5f5f5;
+            border-bottom: 1px solid #ddd;
+            font-size: 1rem;
+        }
+
+        .notification-dropdown ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            max-height: 300px;  /* Added max height */
+            overflow-y: auto;  /* Added scrollbar */
+        }
+
+        .notification-dropdown ul li {
+            padding: 1rem;
+            border-bottom: 1px solid #f0f0f0;
+            font-size: 0.9rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .notification-dropdown ul li:last-child {
+            border-bottom: none;
+        }
+
+        .notification-dropdown ul li p {
+            margin: 0;
+            color: #555;
+        }
+
+        .notification-dropdown ul li span {
+            font-size: 0.8rem;
+            color: #888;
+        }
+
+        .mark-read-btn, .mark-delivered-btn {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 0.8rem;
+        }
+
+        .mark-read-btn:hover, .mark-delivered-btn:hover {
+            background: #2980b9;
+        }
+    </style>
 </head>
 <body>
     <div class="dashboard-container">
@@ -26,149 +247,238 @@
             <header class="header">
                 <h1>Dashboard</h1>
                 <div class="user-info">
-                    <img src="{% static 'images/user-avatar.png' %}" alt="User Avatar">
-                    <span>{{ user.username }}</span>
-                    <a href="{% url 'login' %}" class="logout-btn">Logout</a>
+                    <div class="notification-icon" id="notification-icon">
+                        <i class="fas fa-bell"></i>
+                        <span class="notification-badge" id="notification-badge">0</span>
+                        <div class="notification-dropdown" id="notification-dropdown">
+                            <h4>Notifications</h4>
+                            <ul id="notification-list">
+                                <li>No new notifications</li>
+                            </ul>
+                            <div style="text-align: center; padding: 10px;">
+                                <button id="clear-all-notifications" class="mark-read-btn">Clear All</button>
+                            </div>
+                        </div>
+                    </div>
+                    <img src="https://via.placeholder.com/40" alt="User Avatar">
+                    <span>Admin</span>
+                    <a href="#" class="logout-btn">Logout</a>
                 </div>
             </header>
 
             <section class="stats-grid">
                 <div class="stat-card">
                     <h3>Total Sales</h3>
-                    <p>${{ total_sales|default:'0.00' }}</p>
+                    <p id="total-sales">$0.00</p>
                 </div>
                 <div class="stat-card">
-                    <h3>Orders</h3>
-                    <p>{{ total_orders|default:'0' }}</p>
+                    <h3>Total Orders</h3>
+                    <p id="total-orders">0</p>
                 </div>
                 <div class="stat-card">
-                    <h3>Products</h3>
-                    <p>{{ total_products|default:'0' }}</p>
-                </div>
-                <div class="stat-card">
-                    <h3>Customers</h3>
-                    <p>{{ total_customers|default:'0' }}</p>
+                    <h3>Pending Orders</h3>
+                    <p id="pending-orders">0</p>
                 </div>
             </section>
 
             <section class="orders-section">
                 <div class="orders-header">
                     <h2>Recent Orders</h2>
-                    <button class="delivered-btn" id="mark-all-delivered">Mark All Delivered</button>
+                    <button id="generate-order" class="mark-delivered-btn">Generate Sample Order</button>
                 </div>
                 <div class="order-list" id="order-list">
-                    <!-- Orders will be dynamically inserted here -->
+                    <div class="order-item">No recent orders</div>
                 </div>
             </section>
         </main>
     </div>
-
-    <script>
-     document.addEventListener('DOMContentLoaded', function () {
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+    // DOM Element References
+    const notificationIcon = document.getElementById('notification-icon');
+    const notificationDropdown = document.getElementById('notification-dropdown');
+    const notificationList = document.getElementById('notification-list');
+    const notificationBadge = document.getElementById('notification-badge');
     const orderList = document.getElementById('order-list');
-    const markAllDeliveredBtn = document.getElementById('mark-all-delivered');
-    
-    // Statistics elements
-    const totalSalesElement = document.querySelector('.stat-card:nth-child(1) p');
-    const totalOrdersElement = document.querySelector('.stat-card:nth-child(2) p');
-    
-    // Use StorageManager for consistent storage access
+    const totalSalesElement = document.getElementById('total-sales');
+    const totalOrdersElement = document.getElementById('total-orders');
+    const pendingOrdersElement = document.getElementById('pending-orders');
+    const generateOrderButton = document.getElementById('generate-order');
+    const clearNotificationsButton = document.getElementById('clear-all-notifications');
+
+    // Storage Manager
     const StorageManager = {
-        getItem: function(key) {
+        getItem: function (key) {
             try {
                 const item = localStorage.getItem(key);
-                return item ? JSON.parse(item) : null;
+                return item ? JSON.parse(item) : [];
             } catch (e) {
                 console.warn('localStorage access failed');
-                return null;
+                return [];
             }
         },
-        setItem: function(key, value) {
+        setItem: function (key, value) {
             try {
                 localStorage.setItem(key, JSON.stringify(value));
             } catch (e) {
-                console.warn('localStorage access failed');
+                console.warn('localStorage write failed');
             }
         }
     };
 
-    // Retrieve orders from localStorage
-    let orders = StorageManager.getItem('dashboardOrders') || [];
-    let deliveredOrders = StorageManager.getItem('deliveredOrders') || [];
-
-    // Calculate Dashboard Statistics
-    function calculateDashboardStatistics() {
-        // Total Sales (only from delivered orders)
-        const totalSales = deliveredOrders.reduce((total, order) => total + order.total, 0);
-        totalSalesElement.textContent = totalSales.toFixed(2);
-
-        // Total Orders
-        const totalOrders = orders.length;
-        totalOrdersElement.textContent = totalOrders;
+    // Utilities
+    function generateTrackingNumber() {
+        return 'ORD' + Math.random().toString(36).substr(2, 9).toUpperCase();
     }
-    
-    // Render Orders
-    function renderOrders() {
-        orderList.innerHTML = '';
 
-        if (orders.length === 0) {
+    function generateRandomPrice() {
+        return Math.floor(Math.random() * 500) + 50;
+    }
+
+    // Load initial data
+    let dashboardNotifications = StorageManager.getItem('dashboardNotifications') || [];
+    let dashboardOrders = StorageManager.getItem('dashboardOrders') || [];
+
+    // Notification Rendering
+    function updateNotificationBadge() {
+        const unreadNotifications = dashboardNotifications.filter(n => !n.read).length;
+        notificationBadge.textContent = unreadNotifications;
+    }
+
+    function renderNotifications() {
+        notificationList.innerHTML = ''; 
+        
+        if (dashboardNotifications.length === 0) {
+            notificationList.innerHTML = '<li>No new notifications</li>';
+        } else {
+            dashboardNotifications.forEach((notification, index) => {
+                const notificationItem = document.createElement('li');
+                notificationItem.innerHTML = `
+                    <div>
+                        <p>${notification.message}</p>
+                        <span>${new Date(notification.date).toLocaleString()}</span>
+                    </div>
+                    ${!notification.read ? `<button class="mark-read-btn" data-index="${index}">Mark Read</button>` : ''}
+                `;
+                notificationList.appendChild(notificationItem);
+            });
+
+            // Mark Read Event Listeners
+            document.querySelectorAll('.mark-read-btn').forEach(button => {
+                button.addEventListener('click', function() {
+                    const index = this.getAttribute('data-index');
+                    dashboardNotifications[index].read = true;
+                    StorageManager.setItem('dashboardNotifications', dashboardNotifications);
+                    renderNotifications();
+                    updateNotificationBadge();
+                });
+            });
+        }
+        
+        updateNotificationBadge();
+    }
+
+    // Order Rendering
+    function renderOrders() {
+        orderList.innerHTML = ''; 
+        
+        if (dashboardOrders.length === 0) {
             orderList.innerHTML = '<div class="order-item">No recent orders</div>';
-            calculateDashboardStatistics();
+            totalOrdersElement.textContent = '0';
+            pendingOrdersElement.textContent = '0';
+            totalSalesElement.textContent = '$0.00';
             return;
         }
 
-        orders.forEach((order, index) => {
+        // Calculate statistics
+        const totalSales = dashboardOrders.reduce((total, order) => total + order.total, 0);
+        const pendingOrders = dashboardOrders.filter(order => !order.delivered).length;
+
+        // Update stats
+        totalOrdersElement.textContent = dashboardOrders.length;
+        pendingOrdersElement.textContent = pendingOrders;
+        totalSalesElement.textContent = `$${totalSales.toFixed(2)}`;
+
+        // Render orders
+        dashboardOrders.forEach((order, index) => {
             const orderItem = document.createElement('div');
-            orderItem.className = 'order-item';
+            orderItem.classList.add('order-item');
             orderItem.innerHTML = `
-                <div>
-                    <strong>Order ID: ${order.id}</strong>
-                    <p>${new Date(order.date).toLocaleString()}</p>
-                    <p>${order.items.length} items</p>
-                </div>
-                <div>
-                    <p>$${order.total.toFixed(2)}</p>
-                    <button class="delivered-btn" data-index="${index}">Mark Delivered</button>
-                </div>
+                <span>Order #${order.trackingNumber}</span>
+                <span>$${order.total.toFixed(2)}</span>
+                <span>${new Date(order.date).toLocaleDateString()}</span>
+                ${!order.delivered ? `<button class="mark-delivered-btn" data-index="${index}">Mark Delivered</button>` : '<span>Delivered</span>'}
             `;
             orderList.appendChild(orderItem);
         });
 
-        calculateDashboardStatistics();
+        // Mark Delivered Event Listeners
+        document.querySelectorAll('.mark-delivered-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                const index = this.getAttribute('data-index');
+                dashboardOrders[index].delivered = true;
+                
+                // Add notification for delivered order
+                dashboardNotifications.push({
+                    message: `Order #${dashboardOrders[index].trackingNumber} has been delivered`,
+                    date: new Date().toISOString(),
+                    read: false
+                });
+
+                StorageManager.setItem('dashboardOrders', dashboardOrders);
+                StorageManager.setItem('dashboardNotifications', dashboardNotifications);
+                renderOrders();
+                renderNotifications();
+            });
+        });
     }
 
-    orderList.addEventListener('click', function (e) {
-        if (e.target.classList.contains('delivered-btn')) {
-            const index = e.target.getAttribute('data-index');
-            // Remove the order from pending orders
-            const deliveredOrder = orders.splice(index, 1)[0];
-            
-            // Add to delivered orders
-            deliveredOrders.push(deliveredOrder);
-            
-            // Update localStorage
-            StorageManager.setItem('dashboardOrders', orders);
-            StorageManager.setItem('deliveredOrders', deliveredOrders);
-            
-            // Re-render the order list
-            renderOrders();
+    // Event Listeners
+    notificationIcon.addEventListener('click', function () {
+        notificationDropdown.classList.toggle('active');
+    });
+
+    // Close dropdown when clicking outside
+    document.addEventListener('click', function(event) {
+        if (!notificationIcon.contains(event.target) && !notificationDropdown.contains(event.target)) {
+            notificationDropdown.classList.remove('active');
         }
     });
 
-    markAllDeliveredBtn.addEventListener('click', function () {
-        deliveredOrders = [...deliveredOrders, ...orders];
-        
-        orders.length = 0;
-        
-        StorageManager.setItem('dashboardOrders', orders);
-        StorageManager.setItem('deliveredOrders', deliveredOrders);
+    // Generate Sample Order
+    generateOrderButton.addEventListener('click', function() {
+        const newOrder = {
+            trackingNumber: generateTrackingNumber(),
+            total: generateRandomPrice(),
+            date: new Date().toISOString(),
+            delivered: false
+        };
+
+        dashboardOrders.push(newOrder);
+        dashboardNotifications.push({
+            message: `New order #${newOrder.trackingNumber} received for $${newOrder.total.toFixed(2)}`,
+            date: new Date().toISOString(),
+            read: false
+        });
+
+        StorageManager.setItem('dashboardOrders', dashboardOrders);
+        StorageManager.setItem('dashboardNotifications', dashboardNotifications);
         
         renderOrders();
+        renderNotifications();
     });
 
-    // Initial Render
+    // Clear All Notifications
+    clearNotificationsButton.addEventListener('click', function() {
+        dashboardNotifications = [];
+        StorageManager.setItem('dashboardNotifications', dashboardNotifications);
+        renderNotifications();
+    });
+
+    // Initial render
+    renderNotifications();
     renderOrders();
 });
-    </script>
+</script>
 </body>
 </html>

@@ -1,3 +1,4 @@
+from django.views.decorators.http import require_POST
 
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate
@@ -147,21 +148,30 @@ def profile_view(request):
     if request.method == "POST":
         try:
             data = json.loads(request.body)
+
+            # Validate username and email
+            if User.objects.filter(username=data.get('username')).exclude(id=request.user.id).exists():
+                return JsonResponse({"success": False, "error": "Username already exists."})
+            
+            if User.objects.filter(email=data.get('email')).exclude(id=request.user.id).exists():
+                return JsonResponse({"success": False, "error": "Email already exists."})
+
             # Update user fields
             request.user.username = data.get('username', request.user.username)
             request.user.email = data.get('email', request.user.email)
             request.user.save()
 
-            # Update profile fields if you have a Profile model
-            profile, created = Profile.objects.get_or_create(user=request.user)
-            profile.bio = data. get('bio', profile.bio)  
-            profile.save()
+            # Update or create profile
+            Profile.objects.update_or_create(
+                user=request.user,
+                defaults={'bio': data.get('bio', '')}
+            )
 
             return JsonResponse({"success": True})
         except Exception as e:
             return JsonResponse({"success": False, "error": str(e)})
 
-    # If the request is a GET, render the profile page
+    # Render profile page on GET request
     return render(request, 'user/profile.html', {'user': request.user})
 
 def laptop_view(request):
@@ -271,13 +281,64 @@ from django.http import HttpResponseForbidden
 def orders(request):
     user_orders = Order.objects.filter(user=request.user).order_by('-date_ordered')
     return render(request, 'features/orders.html', {'orders': user_orders})
-
 @login_required
-def mark_as_delivered(request, order_id):
-    order = get_object_or_404(Order, id=order_id, user=request.user)
-    order.status = 'DELIVERED'
-    order.save()
-    return redirect('orders')
+def dashboard(request):
+    # Get total statistics
+    total_sales = Order.objects.filter(status='DELIVERED').aggregate(total=models.Sum('total_amount'))['total'] or 0
+    total_orders = Order.objects.count()
+    total_products = Product.objects.count()
+    total_customers = User.objects.count()
+    
+    # Get recent pending orders
+    recent_orders = Order.objects.filter(status__in=['PENDING', 'PROCESSING']).order_by('-date_ordered')[:10]
+    
+    context = {
+        'total_sales': total_sales,
+        'total_orders': total_orders,
+        'total_products': total_products,
+        'total_customers': total_customers,
+        'orders': recent_orders
+    }
+    return render(request, 'admin_dashboard.html', context)
+
+@require_POST
+@login_required
+def update_order_status(request, order_id):
+    order = get_object_or_404(Order, id=order_id)
+    
+    # Get the new status from the POST data
+    new_status = request.POST.get('status')
+    
+    # Validate the new status
+    if new_status in dict(Order.STATUS_CHOICES):
+        order.status = new_status
+        order.save()
+        
+        # Recalculate total sales for dashboard stats
+        total_sales = Order.objects.filter(status='DELIVERED').aggregate(total=models.Sum('total_amount'))['total'] or 0
+        
+        return JsonResponse({
+            'status': 'success', 
+            'message': f'Order {order_id} status updated to {new_status}',
+            'total_sales': float(total_sales)
+        })
+    
+    return JsonResponse({'status': 'error', 'message': 'Invalid status'}, status=400)
+
+@require_POST
+@login_required
+def mark_all_orders_delivered(request):
+    # Update all pending and processing orders to delivered
+    Order.objects.filter(status__in=['PENDING', 'PROCESSING']).update(status='DELIVERED')
+    
+    # Recalculate total sales
+    total_sales = Order.objects.filter(status='DELIVERED').aggregate(total=models.Sum('total_amount'))['total'] or 0
+    
+    return JsonResponse({
+        'status': 'success', 
+        'message': 'All orders marked as delivered',
+        'total_sales': float(total_sales)
+    })
 
 from django.http import JsonResponse
 from django.views.decorators.http import require_http_methods
