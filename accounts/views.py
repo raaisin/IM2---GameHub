@@ -113,7 +113,7 @@ def home_view(request):
 def cart_view(request):
     if request.method == 'GET':
         cart_items = CartItem.objects.filter(user=request.user)
-        return render(request, 'items/carts.html', {'cart_items': cart_items})
+        return render(request, 'features/carts.html', {'cart_items': cart_items})
     
     elif request.method == 'POST':
         try:
@@ -261,7 +261,7 @@ def carts(request):
     total_price = sum(item.total_price for item in cart_items)
     tax = total_price * 0.08  # 8% tax
     grand_total = total_price + tax
-    return render(request, 'items/carts.html', {
+    return render(request, 'features/carts.html', {
         'cart_items': cart_items,
         'total_price': total_price,
         'tax': tax,
