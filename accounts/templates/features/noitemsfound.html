@@ -1,0 +1,53 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/features/noitemsfound.css' %}">
+
+    <title>No Items Found - GameHub</title>
+</head>
+
+<body>
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">
+                <a href="{% url 'home' %}">GameHub 💻</a>
+            </div>
+        </div>
+    </header>
+
+    <main class="not-found-container">
+        <div class="not-found-icon">🔍</div>
+        <h1 class="not-found-heading">No Items Found</h1>
+        <p class="not-found-text">
+            Sorry, we couldn't find any items matching "<span id="searchQuery" class="search-query"></span>"
+        </p>
+        <div class="action-buttons">
+            <a href="{% url 'home' %}" class="button primary-button">Back to Home</a>
+            <a href="javascript:history.back()" class="button secondary-button">Go Back</a>
+        </div>
+
+        <div class="suggestions">
+            <h3>Popular Categories</h3>
+            <div class="suggestion-links">
+                <a href="{% url 'laptop' %}">Gaming Laptops</a>
+                <a href="{% url 'phone' %}">Gaming Phones</a>
+                <a href="{% url 'pc' %}">Gaming PCs</a>
+                <a href="{% url 'accessories' %}">Accessories</a>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Get the search query from URL parameters
+            const urlParams = new URLSearchParams(window.location.search);
+            const searchQuery = urlParams.get('q') || 'Unknown search term';
+            
+            document.getElementById('searchQuery').textContent = searchQuery;
+        });
+    </script>
+</body>
+</html>
