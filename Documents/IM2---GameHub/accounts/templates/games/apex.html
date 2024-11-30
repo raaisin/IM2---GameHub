@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/games/apex.css' %}">
+
+    <title>Apex Legends Store</title>
+
+</head>
+<body>
+    <div class="header">
+        <div class="logo">APEX LEGENDS STORE</div>
+        <div class="search-bar">
+            <input type="text" placeholder="Search skins...">
+        </div>
+    </div>
+
+    <div class="skins-grid">
+        <!-- Skin Card 1 -->
+        <div class="skin-card">
+            <!-- <img src="/api/placeholder/300/200" alt="Void Prowler" class="skin-image"> -->
+            <img src="{% static 'images/apex1.jpg' %}" alt="Void Prowler" class="skin-image">
+            <div class="skin-info">
+                <div class="skin-name">Void Prowler</div>
+                <div class="skin-legend">Wraith</div>
+                <div class="skin-description">Sleek tactical suit with purple energy effects</div>
+                <div class="skin-price">1,800 Apex Coins</div>
+                <button class="purchase-btn">Purchase</button>
+            </div>
+        </div>
+
+        <!-- Skin Card 2 -->
+        <div class="skin-card">
+            <img src="{% static 'images/apex2.jpg' %}" alt="Northern Lights" class="skin-image">
+            <div class="skin-info">
+                <div class="skin-name">Northern Lights</div>
+                <div class="skin-legend">R-99</div>
+                <div class="skin-description">Animated aurora pattern with custom reload animation</div>
+                <div class="skin-price">1,200 Apex Coins</div>
+                <button class="purchase-btn">Purchase</button>
+            </div>
+        </div>
+
+        <!-- Skin Card 3 -->
+        <div class="skin-card">
+            <img src="{% static 'images/apex3.jpg' %}" alt="Cyber Ninja" class="skin-image">
+            <div class="skin-info">
+                <div class="skin-name">Cyber Ninja</div>
+                <div class="skin-legend">Crypto</div>
+                <div class="skin-description">High-tech assassin theme with LED highlights</div>
+                <div class="skin-price">1,800 Apex Coins</div>
+                <button class="purchase-btn">Purchase</button>
+            </div>
+        </div>
+
+        <!-- Skin Card 4 -->
+        <div class="skin-card">
+            <img src="{% static 'images/apex4.jpg' %}" alt="Dragon's Breath" class="skin-image">
+            <div class="skin-info">
+                <div class="skin-name">Dragon's Breath</div>
+                <div class="skin-legend">Peacekeeper</div>
+                <div class="skin-description">Fire-breathing dragon themed shotgun skin</div>
+                <div class="skin-price">1,200 Apex Coins</div>
+                <button class="purchase-btn">Purchase</button>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
