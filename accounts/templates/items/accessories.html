@@ -1,58 +1,105 @@
 <!DOCTYPE html>
-{% load static %}
 <html lang="en">
+    {% load static %}
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GameHub - Gaming Accessories</title>
     <style>
+        /* Previous styles remain the same */
+
+        :root {
+            --primary-blue: #2B0B98;
+            --secondary-blue: #4527A0;
+            --primary-color: #ffffff;
+            --secondary-color: #e0e0e0;
+            --white: #ffffff;
+            --light-gray: #ffffff;
+            --text-dark: #333333;
+        }
+        
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            text-decoration: none;
         }
-
+        
         body {
-            background-color: #f5f7fa;
+            font-family: 'Roboto', Arial, sans-serif;
+            background-color: var(--light-gray);
+            padding-top: 60px;
+            color: var(--text-dark);
         }
 
-        .container {
+
+        .header {
+            background-color: var(--primary-blue);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+        }
+
+
+        .header-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 20px;
             max-width: 1200px;
             margin: 0 auto;
-            padding: 20px;
         }
-
-        /* Header Section */
-        .header {
-            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
-            padding: 20px;
-            border-radius: 12px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            margin-bottom: 30px;
+        
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: var(--white);
         }
-
-        .header .page-title {
-            font-size: 28px;
-            color: white;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 10px;
+        
+        .search-bar {
+            flex-grow: 1;
+            margin: 0 20px;
+            position: relative;
         }
-
-        .header .subtitle {
-            color: rgba(255, 255, 255, 0.8);
-            font-size: 16px;
+        
+        .search-input {
+            width: 100%;
+            padding: 10px 40px 10px 15px;
+            border: 2px solid var(--primary-blue);
+            border-radius: 4px;
+            font-size: 14px;
+            background-color: #ffffff;
+            color: var(--text-dark);
+        }
+        
+        .search-button {
+            position: absolute;
+            right: 5px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: var(--primary-blue);
+            cursor: pointer;
         }
 
         .sort-section, .search-section {
             display: flex;
             align-items: center;
-            gap: 15px;
-            background: rgba(255, 255, 255, 0.1);
-            padding: 10px 20px;
-            border-radius: 8px;
-            margin-top: 15px;
+        }
+        
+        .nav-link {
+            margin-left: 20px;
+            color: var(--white);
+            font-size: 14px;
+        }
+        
+        .cart-icon {
+            font-size: 20px;
+            color: var(--white);
         }
 
         .sort-section span, .search-section span {
@@ -76,14 +123,12 @@
             max-width: 300px;
         }
 
-        /* Shop Layout */
         .shop-layout {
             display: grid;
             grid-template-columns: 280px 1fr;
             gap: 30px;
         }
 
-        /* Sidebar */
         .sidebar {
             background: white;
             padding: 25px;
@@ -124,6 +169,12 @@
             padding-left: 5px;
         }
 
+        .filter-section ul li.active {
+            color: #1e3c72;
+            font-weight: 600;
+            padding-left: 5px;
+        }
+
         .price-range {
             padding: 10px 0;
         }
@@ -137,16 +188,6 @@
             cursor: pointer;
         }
 
-        .price-slider::-webkit-slider-thumb {
-            appearance: none;
-            width: 16px;
-            height: 16px;
-            background: #1e3c72;
-            border-radius: 50%;
-            cursor: pointer;
-        }
-
-        /* Product Grid */
         .product-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
@@ -289,7 +330,7 @@
     </style>
 </head>
 <body>
-    <div class="container">
+      <div class="container">
         <header class="header">
             <h1 class="page-title">Gaming Accessories</h1>
             <p class="subtitle">Level up your gaming setup with premium accessories</p>
@@ -309,18 +350,34 @@
         
         </header>
 
+        <!--  <header class="header">
+            <div class="header-content">
+                <div class="logo">Game Accessories</div>
+                <div class="search-bar">
+                    <input type="text" class="search-input" placeholder="Search for games...">
+                    <button class="search-button">🔍</button>
+                </div>
+                <nav class="nav-links">
+                    <a href="{% url 'home' %}" class="nav-link">Home</a>
+                    <a href="{% url 'carts' %}" class="nav-link cart-icon">🛒</a>
+                </nav>
+            </div>
+        </header>  -->
+
+
         <div class="shop-layout">
             <aside class="sidebar">
                 <div class="filter-section">
                     <h3 class="filter-title">Categories</h3>
-                    <ul>
-                        <li>🎮 Gaming Controllers</li>
-                        <li>🖱️ Gaming Mouse</li>
-                        <li>⌨️ Gaming Keyboards</li>
-                        <li>🎧 Gaming Headsets</li>
-                        <li>🔊 Speakers</li>
-                        <li>🎥 Webcams</li>
-                        <li>🖥️ Monitors</li>
+                    <ul class="category-list">
+                        <li data-category="all" class="active">📱 All Products</li>
+                        <li data-category="controllers">🎮 Gaming Controllers</li>
+                        <li data-category="mouse">🖱️ Gaming Mouse</li>
+                        <li data-category="keyboards">⌨️ Gaming Keyboards</li>
+                        <li data-category="headsets">🎧 Gaming Headsets</li>
+                        <li data-category="speakers">🔊 Speakers</li>
+                        <li data-category="webcams">🎥 Webcams</li>
+                        <li data-category="monitors">🖥️ Monitors</li>
                     </ul>
                 </div>
 
@@ -333,15 +390,7 @@
                 </div>
 
                 <div class="filter-section">
-                    <h3 class="filter-title">Brands</h3>
-                    <ul>
-                        <li>Razer</li>
-                        <li>Logitech</li>
-                        <li>SteelSeries</li>
-                        <li>Corsair</li>
-                        <li>HyperX</li>
-                        <li>ASUS ROG</li>
-                    </ul>
+                
                 </div>
             </aside>
 
@@ -349,7 +398,7 @@
                 <!-- Keyboard -->
                 <div class="product-card" data-brand="Razer" data-category="Keyboard">
                     <div class="sale-badge">-20% Off</div>
-                    <img src="{% static 'images/acce1.jpg' %}" alt="Gaming Keyboard" class="product-image">
+                    <img src="{% static 'images/razerr.webp' %}" alt="Gaming Keyboard" class="product-image">
                     <div class="product-brand">Razer</div>
                     <h2 class="product-title">BlackWidow V3 Pro Mechanical Gaming Keyboard</h2>
                     <div class="rating">★★★★★ <span class="review-count">(128 reviews)</span></div>
@@ -377,7 +426,7 @@
                 <!-- Headset -->
                 <div class="product-card" data-brand="SteelSeries" data-category="Headset">
                     <div class="sale-badge">-15% Off</div>
-                    <img src="{% static 'images/acce3.jpg' %}" alt="Gaming Headset" class="product-image">
+                    <img src="{% static 'images/headset.webp' %}" alt="Gaming Headset" class="product-image">
                     <div class="product-brand">SteelSeries</div>
                     <h2 class="product-title">Arctis Pro Wireless Gaming Headset</h2>
                     <div class="rating">★★★★½ <span class="review-count">(89 reviews)</span></div>

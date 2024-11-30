@@ -14,58 +14,20 @@
 <body>
     <header class="header">
         <div class="header-content">
-            <div class="logo">
-                <span class="logo-icon">🎮</span>
-                GameHub
-            </div>
+            <div class="logo">New</div>
             <div class="search-bar">
-                <input type="text" class="search-input" placeholder="Search gaming PCs, parts, or brands..." value="">
-                <button class="search-button">🔍 Search</button>
+                <input type="text" class="search-input" placeholder="Search for games...">
+                <button class="search-button">🔍</button>
             </div>
             <nav class="nav-links">
-                <a href="{% url 'home' %}" class="nav-link">
-                    <span>🏠</span> Home
-                </a>
-                <a href="#" class="nav-link">
-                    <span>🔧</span> Builds
-                </a>
-                <a href="{% url 'carts' %}" class="nav-link cart-icon">
-                    🛒
-                    <span class="cart-count">0</span>
-                </a>
+                <a href="{% url 'home' %}" class="nav-link">Home</a>
+                <a href="{% url 'carts' %}" class="nav-link cart-icon">🛒</a>
             </nav>
         </div>
     </header>
 
     <div class="filters">
-        <select class="filter-select">
-            <option>Sort by: Featured</option>
-            <option>Price: Low to High</option>
-            <option>Price: High to Low</option>
-            <option>Best Selling</option>
-            <option>Highest Rated</option>
-        </select>
-        <select class="filter-select">
-            <option>Price Range</option>
-            <option>Under $1,000</option>
-            <option>$1,000 - $2,000</option>
-            <option>$2,000 - $3,000</option>
-            <option>Over $3,000</option>
-        </select>
-        <select class="filter-select">
-            <option>GPU Type</option>
-            <option>NVIDIA RTX 40 Series</option>
-            <option>NVIDIA RTX 30 Series</option>
-            <option>AMD RX 7000 Series</option>
-            <option>AMD RX 6000 Series</option>
-        </select>
-        <select class="filter-select">
-            <option>CPU Type</option>
-            <option>Intel 13th Gen</option>
-            <option>Intel 12th Gen</option>
-            <option>AMD Ryzen 7000</option>
-            <option>AMD Ryzen 5000</option>
-        </select>
+        
     </div>
 
     <div class="product-section">

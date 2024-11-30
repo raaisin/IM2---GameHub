@@ -17,19 +17,38 @@
         }
 
         .container {
-            max-width: 1200px;
-            margin: 0 auto;
+            max-width: 1600px;
+            margin: 0;
             padding: 20px;
+            position: relative;
         }
 
-        /* Header Section */
-        .header {
-            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
-            padding: 20px;
-            border-radius: 12px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            margin-bottom: 30px;
+        .nav-links {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            z-index: 1;
         }
+        
+        .nav-link {
+            margin-left: 15px;
+            text-decoration: none;
+            color: white;  /* To match your color scheme */
+            font-weight: 500;
+        }
+        
+        .nav-link:hover {
+            color: #f0f0f0;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+        }
+        
+
+        
+
 
         .header .deals-title {
             font-size: 28px;
@@ -45,6 +64,7 @@
             background: rgba(255, 255, 255, 0.1);
             padding: 10px 20px;
             border-radius: 8px;
+            margin-top: 15px;
         }
 
         .sort-section span {
@@ -79,6 +99,7 @@
             padding: 25px;
             border-radius: 12px;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            height: fit-content;
         }
 
         .filter-section {
@@ -89,6 +110,8 @@
 
         .filter-section:last-child {
             border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
         }
 
         .filter-title {
@@ -112,6 +135,15 @@
         .filter-section ul li:hover {
             color: #1e3c72;
             padding-left: 5px;
+        }
+
+        .category-active {
+            color: #1e3c72 !important;
+            font-weight: bold;
+            padding-left: 5px;
+            background: #f0f4ff;
+            border-radius: 4px;
+            padding: 8px 12px;
         }
 
         .price-range {
@@ -243,6 +275,9 @@
             color: #2ed573;
         }
 
+    
+    
+
         .stock-status.out-of-stock {
             background: #ffe0e3;
             color: #ff4757;
@@ -318,36 +353,41 @@
     </style>
 </head>
 <body>
-    <div class="container">
-        <header class="header">
-            <h1 class="deals-title">Flash Deals</h1>
-            <div class="sort-section">
-                <span>Sort By</span>
-                <select>
-                    <option value="price">Price</option>
-                    <option value="popularity">Popularity</option>
-                    <option value="rating">Rating</option>
-                </select>
-                <select>
-                    <option value="12">12 Items</option>
-                    <option value="24">24 Items</option>
-                    <option value="36">36 Items</option>
-                </select>
+
+    <header class="header1">
+        <div class="header-content">
+            <div class="logo">
+                <a href="{% url 'home' %}">Deals 💻</a>
             </div>
-        </header>
+            <div class="search-bar">
+                <input type="text" class="search-input" placeholder="Search for games...">
+                <button class="search-button">🔍</button>
+            </div>
+            <div class="user-actions">
+                <a href="{% url 'home' %}" class="nav-link">Home</a>
+                <a href="{% url 'carts' %}" class="nav-link cart-icon">🛒</a>
+        
+            
+            </div>
+        </div>
+    </header>
+    
+
+    
 
         <div class="shop-layout">
             <aside class="sidebar">
                 <div class="filter-section">
                     <h3 class="filter-title">Categories</h3>
-                    <ul>
-                        <li>🎮 2K Sale</li>
-                        <li>🔊 JBL</li>
-                        <li>🖱️ Logitech</li>
-                        <li>🐍 Razer</li>
-                        <li>🎧 Sony</li>
-                        <li>⌨️ Steelseries</li>
-                        <li>🎃 Halloween Sale</li>
+                    <ul id="category-list">
+                        <li data-category="all" class="category-active">🛒 All Products</li>
+                        <li data-category="2K Sale">🎮 2K Sale</li>
+                        <li data-category="JBL">🔊 JBL</li>
+                        <li data-category="Logitech">🖱️ Logitech</li>
+                        <li data-category="Razer">🐍 Razer</li>
+                        <li data-category="Sony">🎧 Sony</li>
+                        <li data-category="Steelseries">⌨️ Steelseries</li>
+                        <li data-category="Halloween Sale">🎃 Halloween Sale</li>
                     </ul>
                 </div>
 
@@ -360,37 +400,39 @@
                 </div>
 
                 <div class="filter-section">
-                    <h3 class="filter-title">Color</h3>
-                    <div class="color-options">
-                        <span class="color-option">Beige</span>
-                        <span class="color-option">Black</span>
-                        <span class="color-option">Blue</span>
-                        <span class="color-option">Gray</span>
-                        <span class="color-option">Green</span>
-                        <span class="color-option">Orange</span>
-                        <span class="color-option">Pink</span>
-                        <span class="color-option">Purple</span>
-                        <span class="color-option">Red</span>
-                        <span class="color-option">White</span>
-                    </div>
                 </div>
             </aside>
 
             <main class="product-grid">
-                <div class="product-card">
-                    <img src="{% static 'images/product1.jpg' %}" alt="Party Speaker" class="product-image">
-                    <h2 class="product-title">JBL PartyBox Ultimate Splash-Proof Portable Party Speaker</h2>
+                <!-- JBL Products -->
+                <div class="product-card" data-category="JBL" data-price="69995">
+                    <img src="{% static 'images/jbl-partybox.webp' %}" alt="Party Speaker" class="product-image">
+                    <h2 class="product-title">JBL PartyBox Ultimate Splash-Proof Party Speaker</h2>
                     <div class="rating">★★★★★</div>
                     <div class="product-price">
                         <span class="discounted-price">₱69,995.00</span>
                     </div>
-                    <div class="stock-status out-of-stock">Out of Stock</div>
-                    <button class="add-to-cart" disabled>Out of Stock</button>
+                    <div class="stock-status in-stock">In Stock</div>
+                    <button class="add-to-cart">Add to Cart</button>
                 </div>
 
-                <div class="product-card">
+                <div class="product-card" data-category="JBL" data-price="12995">
+                    <div class="sale-badge">-20% Off</div>
+                    <img src="{% static 'images/jbl.webp' %}" alt="Portable Speaker" class="product-image">
+                    <h2 class="product-title">JBL Flip 6 Portable Waterproof Speaker</h2>
+                    <div class="rating">★★★★☆</div>
+                    <div class="product-price">
+                        <span class="original-price">₱12,995.00</span>
+                        <span class="discounted-price">₱10,396.00</span>
+                    </div>
+                    <div class="stock-status in-stock">In Stock</div>
+                    <button class="add-to-cart">Add to Cart</button>
+                </div>
+
+                <!-- Sony Products -->
+                <div class="product-card" data-category="Sony" data-price="14996">
                     <div class="sale-badge">-25% Off</div>
-                    <img src="{% static 'images/product2.jpg' %}" alt="Wireless Headphones" class="product-image">
+                    <img src="{% static 'images/sony.jpg' %}" alt="Wireless Headphones" class="product-image">
                     <h2 class="product-title">Sony WH-1000XM4 Wireless Noise Cancelling Headphones</h2>
                     <div class="rating">★★★★★</div>
                     <div class="product-price">
@@ -400,6 +442,77 @@
                     <div class="stock-status in-stock">In Stock</div>
                     <button class="add-to-cart">Add to Cart</button>
                 </div>
+
+                <!-- Logitech Products -->
+                <div class="product-card" data-category="Logitech" data-price="8995">
+                    <img src="{% static 'images/logitech.webp' %}" alt="Gaming Mouse" class="product-image">
+                    <h2 class="product-title">Logitech G502 HERO Gaming Mouse</h2>
+                    <div class="rating">★★★★★</div>
+                    <div class="product-price">
+                        <span class="discounted-price">₱8,995.00</span>
+                    </div>
+                    <div class="stock-status in-stock">In Stock</div>
+                    <button class="add-to-cart">Add to Cart</button>
+                </div>
+
+                <!-- Razer Products -->
+                <div class="product-card" data-category="Razer" data-price="9995">
+                    <img src="{% static 'images/razer.webp' %}" alt="Gaming Keyboard" class="product-image">
+                    <h2 class="product-title">Razer BlackWidow V3 Pro Mechanical Gaming Keyboard</h2>
+                    <div class="rating">★★★★☆</div>
+                    <div class="product-price">
+                        <span class="discounted-price">₱9,995.00</span>
+                    </div>
+                    <div class="stock-status in-stock">In Stock</div>
+                    <button class="add-to-cart">Add to Cart</button>
+                </div>
+
+                <!-- 2K Sale Products -->
+                <div class="product-card" data-category="2K Sale" data-price="1995">
+                    <div class="sale-badge">-50% Off</div>
+                    <img src="{% static 'images/deals11.png' %}" alt="NBA 2K24" class="product-image">
+                    <h2 class="product-title">NBA 2K24 Standard Edition</h2>
+                    <div class="rating">★★★★☆</div>
+                    <div class="product-price">
+                        <span class="original-price">₱3,990.00</span>
+                        <span class="discounted-price">₱1,995.00</span>
+                    </div>
+                    <div class="stock-status in-stock">In Stock</div>
+                    <button class="add-to-cart">Add to Cart</button>
+                </div>
+
+                <!-- Steelseries Products -->
+                <div class="product-card" data-category="Steelseries" data-price="7995">
+                    <div class="sale-badge">-15% Off</div>
+                    <img src="{% static 'images/steel.webp' %}" alt="Gaming Headset" class="product-image">
+                    <h2 class="product-title">SteelSeries Arctis 7P+ Wireless Gaming Headset</h2>
+                    <div class="rating">★★★★★</div>
+                    <div class="product-price">
+                        <span class="original-price">₱9,995.00</span>
+                        <span class="discounted-price">₱7,995.00</span>
+                    </div>
+                    <div class="stock-status in-stock">In Stock</div>
+                    <button class="add-to-cart">Add to Cart</button>
+                </div>
+
+                <!-- Halloween Sale Products -->
+                <div class="product-card" data-category="Halloween Sale" data-price="2995">
+                    <div class="sale-badge">-40% Off</div>
+                    <img src="{% static 'images/deadspace.jpg' %}" alt="Horror Game" class="product-image">
+                    <h2 class="product-title">Dead Space Remake - Halloween Special</h2>
+                    <div class="rating">★★★★☆</div>
+                    <div class="product-price">
+                        <span class="original-price">₱4,995.00</span>
+                        <span class="discounted-price">₱2,995.00</span>
+                    </div>
+                    <div class="stock-status in-stock">In Stock</div>
+                    <button class="add-to-cart">Add to Cart</button>
+                </div>
+
+                <!-- No Results Message -->
+                <div class="no-results">
+                    No products match your current filters.
+                </div>
             </main>
         </div>
     </div>
@@ -408,15 +521,18 @@
         // Get DOM elements
         const priceSlider = document.querySelector('.price-slider');
         const products = document.querySelectorAll('.product-card');
+        const categoryItems = document.querySelectorAll('#category-list li');
+        const sortSelect = document.getElementById('sort-select');
+        const noResults = document.querySelector('.no-results');
+        
+        let currentCategory = 'all';
+        let currentMaxPrice = parseFloat(priceSlider.value);
 
-        // Function to extract price from product card
         function getProductPrice(product) {
             const discountedPrice = product.querySelector('.discounted-price');
-            // Remove the ₱ symbol and comma, then convert to number
             return parseFloat(discountedPrice.textContent.replace('₱', '').replace(',', ''));
         }
 
-        // Function to format price with comma separator
         function formatPrice(price) {
             return new Intl.NumberFormat('en-PH', {
                 style: 'currency',
@@ -425,32 +541,90 @@
             }).format(price).replace('PHP', '₱');
         }
 
-        // Function to update price range display
         function updatePriceDisplay(value) {
             const priceDisplay = document.querySelector('.price-display');
             priceDisplay.textContent = `${formatPrice(395)} - ${formatPrice(value)}`;
         }
 
-        // Function to filter products based on price
-        function filterProducts(maxPrice) {
+        function sortProducts(sortType) {
+            const productArray = Array.from(products);
+            
+            productArray.sort((a, b) => {
+                const priceA = getProductPrice(a);
+                const priceB = getProductPrice(b);
+                const titleA = a.querySelector('.product-title').textContent;
+                const titleB = b.querySelector('.product-title').textContent;
+
+                switch(sortType) {
+                    case 'price-low':
+                        return priceA - priceB;
+                    case 'price-high':
+                        return priceB - priceA;
+                    case 'name':
+                        return titleA.localeCompare(titleB);
+                    default:
+                        return 0;
+                }
+            });
+
+            const productGrid = document.querySelector('.product-grid');
+            productArray.forEach(product => productGrid.appendChild(product));
+        }
+
+        function filterProducts() {
+            let visibleProducts = 0;
+
             products.forEach(product => {
                 const price = getProductPrice(product);
-                if (price <= maxPrice) {
+                const category = product.dataset.category;
+                const matchesCategory = currentCategory === 'all' || category === currentCategory;
+                const matchesPrice = price <= currentMaxPrice;
+                
+                if (matchesCategory && matchesPrice) {
                     product.style.display = 'block';
+                    visibleProducts++;
                 } else {
                     product.style.display = 'none';
                 }
             });
+
+            // Show/hide no results message
+            noResults.style.display = visibleProducts === 0 ? 'block' : 'none';
         }
 
-        // Add event listener to price slider
-        priceSlider.addEventListener('input', (e) => {
-            const maxPrice = parseFloat(e.target.value);
-            updatePriceDisplay(maxPrice);
-            filterProducts(maxPrice);
+        // Category click handler
+        categoryItems.forEach(item => {
+            item.addEventListener('click', () => {
+                categoryItems.forEach(i => i.classList.remove('category-active'));
+                item.classList.add('category-active');
+                currentCategory = item.dataset.category;
+                filterProducts();
+            });
         });
 
-        // Initialize with default value
+        // Price slider handler
+        priceSlider.addEventListener('input', (e) => {
+            currentMaxPrice = parseFloat(e.target.value);
+            updatePriceDisplay(currentMaxPrice);
+            filterProducts();
+        });
+
+        // Sort handler
+        sortSelect.addEventListener('change', (e) => {
+            sortProducts(e.target.value);
+        });
+
+        // Add to cart functionality
+        const addToCartButtons = document.querySelectorAll('.add-to-cart');
+        addToCartButtons.forEach(button => {
+            button.addEventListener('click', (e) => {
+                const product = e.target.closest('.product-card');
+                const productTitle = product.querySelector('.product-title').textContent;
+                alert(`Added ${productTitle} to cart!`);
+            });
+        });
+
+        // Initialize with default values
         updatePriceDisplay(priceSlider.value);
         filterProducts(priceSlider.value);
         const cart = [];
