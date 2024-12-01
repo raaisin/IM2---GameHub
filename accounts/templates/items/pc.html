@@ -27,86 +27,87 @@
     </div>
 
     <div class="product-section">
+        {% for product in products %}
         <div class="product-item">
-            <div class="product-badge">Best Seller</div>
+            <div class="product-badge">{{ product.badge }}</div>
             <div class="product-images">
-                <img src="{% static 'images/pc1.jpg' %}" alt="MSI Gaming PC" class="product-image">
+                <img src="{{ product.image_main.url }}" alt="{{ product.name }}" class="product-image">
                 <div class="image-gallery">
                 </div>
             </div>
-            <div class="product-title">MSI Aegis RS Gaming Desktop</div>
+            <div class="product-title">{{ product.name }}</div>
             <div class="product-specs">
                 <div class="spec-item">
                     <span class="spec-icon">🎮</span>
-                    NVIDIA GeForce RTX 4080 16GB GDDR6X
+                    {{ product.gpu }}
                 </div>
                 <div class="spec-item">
                     <span class="spec-icon">⚡</span>
-                    Intel Core i9-13900K (24 Cores, 5.8GHz Turbo)
+                    {{ product.cpu }}
                 </div>
                 <div class="spec-item">
                     <span class="spec-icon">💾</span>
-                    32GB DDR5-6000 RAM (2x16GB)
+                    {{ product.ram }}
                 </div>
                 <div class="spec-item">
                     <span class="spec-icon">💿</span>
-                    2TB NVMe Gen4 SSD
+                    {{ product.storage }}
                 </div>
                 <div class="spec-item">
                     <span class="spec-icon">❄️</span>
-                    360mm AIO Liquid Cooling
+                    {{ product.cooling }}
                 </div>
             </div>
             <div class="performance-metrics">
                 <div class="metric">
-                    <div class="metric-value">240+ FPS</div>
+                    <div class="metric-value">{{ product.fps_1440p }} FPS</div>
                     <div class="metric-label">1440p Gaming</div>
                 </div>
                 <div class="metric">
-                    <div class="metric-value">120+ FPS</div>
+                    <div class="metric-value">{{ product.fps_4k }} FPS</div>
                     <div class="metric-label">4K Gaming</div>
                 </div>
                 <div class="metric">
-                    <div class="metric-value">Ray Tracing</div>
+                    <div class="metric-value">{{ product.ray_tracing|yesno:"Ray Tracing,No Ray Tracing" }}</div>
                     <div class="metric-label">DLSS 3.0</div>
                 </div>
                 <div class="metric">
-                    <div class="metric-value">1000W</div>
-                    <div class="metric-label">80+ Gold PSU</div>
+                    <div class="metric-value">{{ product.psu }}</div>
+                    <div class="metric-label">PSU</div>
                 </div>
             </div>
             <div class="product-rating">
                 <div class="stars">★★★★★</div>
-                <div class="review-count">(4.8 • 1,245 reviews)</div>
+                <div class="review-count">({{ product.rating }} • {{ product.review_count }} reviews)</div>
             </div>
             <div class="product-price">
-                $2,499.99
-                <span class="original-price">$2,799.99</span>
-                <span class="savings">Save $300</span>
+                ${{ product.price }}
+                <span class="original-price">${{ product.original_price }}</span>
+                <span class="savings">Save ${{ product.savings }}</span>
             </div>
             <div class="product-options">
                 <div>
                     <label class="option-label">Case Lighting:</label>
                     <select>
-                        <option>RGB (MSI Mystic Light)</option>
-                        <option>White LED</option>
-                        <option>No Lighting</option>
+                        {% for option in product.case_lighting_choices %}
+                            <option>{{ option }}</option>
+                        {% endfor %}
                     </select>
                 </div>
                 <div>
                     <label class="option-label">RAM Configuration:</label>
                     <select>
-                        <option>32GB DDR5-6000 (2x16GB)</option>
-                        <option>64GB DDR5-6000 (4x16GB) (+$299)</option>
-                        <option>128GB DDR5-6000 (4x32GB) (+$599)</option>
+                        {% for option in product.ram_configuration_choices %}
+                            <option>{{ option }}</option>
+                        {% endfor %}
                     </select>
                 </div>
                 <div>
                     <label class="option-label">Warranty:</label>
                     <select>
-                        <option>2 Year Standard Warranty</option>
-                        <option>3 Year Extended Warranty (+$199)</option>
-                        <option>4 Year Premium Warranty (+$299)</option>
+                        {% for option in product.warranty_choices %}
+                            <option>{{ option }}</option>
+                        {% endfor %}
                     </select>
                 </div>
                 <div>
@@ -118,200 +119,10 @@
                 <span>🛒</span> Add to Cart
             </button>
             <div class="financing-info">
-                Starting at $208/mo with GameHub Financing
+                Starting at ${{ product.price|floatformat:0 }} /mo with GameHub Financing
             </div>
         </div>
-
-        <div class="product-item">
-            <div class="product-badge">New Arrival</div>
-            <div class="product-images">
-                <img src="{% static 'images/pc2.jpg' %}" alt="NZXT Gaming PC" class="product-image">
-                <div class="image-gallery">
-
-                </div>
-            </div>
-            <div class="product-title">NZXT H5 Flow Gaming Build</div>
-            <div class="product-specs">
-                <div class="spec-item">
-                    <span class="spec-icon">🎮</span>
-                    NVIDIA GeForce RTX 4070 Ti 12GB GDDR6X
-                </div>
-                <div class="spec-item">
-                    <span class="spec-icon">⚡</span>
-                    AMD Ryzen 9 7900X (12 Cores, 5.6GHz Boost)
-                </div>
-                <div class="spec-item">
-                    <span class="spec-icon">💾</span>
-                    32GB DDR5-5600 RAM (2x16GB)
-                </div>
-                <div class="spec-item">
-                    <span class="spec-icon">💿</span>
-                    1TB NVMe Gen4 SSD
-                </div>
-                <div class="spec-item">
-                    <span class="spec-icon">🌡️</span>
-                    NZXT Kraken Z73 LCD Display AIO
-                </div>
-            </div>
-            <div class="performance-metrics">
-                <div class="metric">
-                    <div class="metric-value">200+ FPS</div>
-                    <div class="metric-label">1440p Gaming</div>
-                </div>
-                <div class="metric">
-                    <div class="metric-value">100+ FPS</div>
-                    <div class="metric-label">4K Gaming</div>
-                </div>
-                <div class="metric">
-                    <div class="metric-value">VR Ready</div>
-                    <div class="metric-label">Premium</div>
-                </div>
-                <div class="metric">
-                    <div class="metric-value">850W</div>
-                    <div class="metric-label">80+ Platinum</div>
-                </div>
-            </div>
-            <div class="product-rating">
-                <div class="stars">★★★★☆</div>
-                <div class="review-count">(4.5 • 892 reviews)</div>
-            </div>
-            <div class="product-price">
-                $1,999.99
-                <span class="original-price">$2,199.99</span>
-                <span class="savings">Save $200</span>
-            </div>
-            <div class="product-options">
-                <div>
-                    <label class="option-label">Case Color:</label>
-                    <select>
-                        <option>White</option>
-                        <option>Black</option>
-                        <option>Black/Red (+$29)</option>
-                    </select>
-                </div>
-                <div>
-                    <label class="option-label">Cooling Solution:</label>
-                    <select>
-                        <option>NZXT Kraken Z73 360mm LCD</option>
-                        <option>NZXT Kraken X53 240mm RGB</option>
-                        <option>Air Cooling (Noctua NH-D15) (-$100)</option>
-                    </select>
-                </div>
-                <div>
-                    <label class="option-label">Extra Case Fans:</label>
-                    <select>
-                        <option>Standard Configuration</option>
-                        <option>RGB Performance Pack (+$89)</option>
-                        <option>Maximum Airflow Pack (+$129)</option>
-                    </select>
-                </div>
-                <div>
-                    <label class="option-label">Quantity:</label>
-                    <input type="number" value="1" min="1" max="5">
-                </div>
-            </div>
-            <button class="add-to-cart">
-                <span>🛒</span> Add to Cart
-            </button>
-            <div class="financing-info">
-                Starting at $167/mo with GameHub Financing
-            </div>
-        </div>
-
-        <div class="product-item">
-            <div class="product-badge">Best Value</div>
-            <div class="product-images">
-                <img src="{% static 'images/pc3.jpg' %}" alt="Corsair Gaming PC" class="product-image">
-                <div class="image-gallery">
-                </div>
-            </div>
-            <div class="product-title">Corsair Vengeance i7400</div>
-            <div class="product-specs">
-                <div class="spec-item">
-                    <span class="spec-icon">🎮</span>
-                    NVIDIA GeForce RTX 4070 12GB GDDR6X
-                </div>
-                <div class="spec-item">
-                    <span class="spec-icon">⚡</span>
-                    Intel Core i7-13700K (16 Cores, 5.4GHz Turbo)
-                </div>
-                <div class="spec-item">
-                    <span class="spec-icon">💾</span>
-                    32GB DDR5-5200 RAM (2x16GB)
-                </div>
-                <div class="spec-item">
-                    <span class="spec-icon">💿</span>
-                    1TB NVMe Gen4 + 2TB HDD
-                </div>
-                <div class="spec-item">
-                    <span class="spec-icon">💡</span>
-                    Corsair iCUE RGB Ecosystem
-                </div>
-            </div>
-            <div class="performance-metrics">
-                <div class="metric">
-                    <div class="metric-value">180+ FPS</div>
-                    <div class="metric-label">1440p Gaming</div>
-                </div>
-                <div class="metric">
-                    <div class="metric-value">90+ FPS</div>
-                    <div class="metric-label">4K Gaming</div>
-                </div>
-                <div class="metric">
-                    <div class="metric-value">Streaming</div>
-                    <div class="metric-label">Ready</div>
-                </div>
-                <div class="metric">
-                    <div class="metric-value">750W</div>
-                    <div class="metric-label">80+ Gold</div>
-                </div>
-            </div>
-            <div class="product-rating">
-                <div class="stars">★★★★☆</div>
-                <div class="review-count">(4.3 • 567 reviews)</div>
-            </div>
-            <div class="product-price">
-                $1,799.99
-                <span class="original-price">$1,999.99</span>
-                <span class="savings">Save $200</span>
-            </div>
-            <div class="product-options">
-                <div>
-                    <label class="option-label">Storage Configuration:</label>
-                    <select>
-                        <option>1TB NVMe + 2TB HDD</option>
-                        <option>2TB NVMe + 2TB HDD (+$129)</option>
-                        <option>2TB NVMe + 4TB HDD (+$199)</option>
-                    </select>
-                </div>
-                <div>
-                    <label class="option-label">Memory Speed:</label>
-                    <select>
-                        <option>DDR5-5200 (Standard)</option>
-                        <option>DDR5-6000 (+$79)</option>
-                        <option>DDR5-6400 (+$149)</option>
-                    </select>
-                </div>
-                <div>
-                    <label class="option-label">Operating System:</label>
-                    <select>
-                        <option>Windows 11 Home</option>
-                        <option>Windows 11 Pro (+$99)</option>
-                        <option>Windows 11 Pro + Office (+$198)</option>
-                    </select>
-                </div>
-                <div>
-                    <label class="option-label">Quantity:</label>
-                    <input type="number" value="1" min="1" max="5">
-                </div>
-            </div>
-            <button class="add-to-cart">
-                <span>🛒</span> Add to Cart
-            </button>
-            <div class="financing-info">
-                Starting at $150/mo with GameHub Financing
-            </div>
-        </div>
+        {% endfor %}
     </div>
 
     <script>
@@ -368,7 +179,5 @@
             });
         });
     </script>
-    
-    
 </body>
 </html>

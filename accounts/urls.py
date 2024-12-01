@@ -15,7 +15,6 @@ urlpatterns = [
     path('laptop/', views.laptop_view, name='laptop'),
     path('phone/', views.phone_view, name='phone'),
     path('gamingphone/', views.gamingphone_view, name='gamingphone'),
-    path('nongamingphone/', views.nongamingphone_view, name='nongamingphone'),
     path('new/', views.new_view, name='new'),
     path('deals/', views.deals_view, name='deals'),
     path('lol_game/', views.lol_game, name='lol_game'),

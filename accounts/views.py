@@ -1,10 +1,10 @@
 from django.views.decorators.http import require_POST
-
-from django.shortcuts import render, redirect
+from django.views.decorators.csrf import csrf_protect
+from django.shortcuts import get_object_or_404, render, redirect
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm
-from .models import CartItem 
+from .models import CartItem, Deal, New 
 from django.contrib.auth.models import User
 from django.contrib import messages
 from .models import Product
@@ -23,6 +23,8 @@ from django.views.decorators.csrf import csrf_exempt
 import json
 import os
 
+from accounts import models
+
 def landing(request):
     print("Landing page view called") 
     return render(request, 'features/landing.html')
@@ -36,15 +38,13 @@ def login_view(request):
         user = authenticate(request, username=username, password=password)
         
         if user is not None:
-            # Check login type for routing
             if login_type == 'admin' and user.is_staff:
                 login(request, user)
-                return redirect('dashboard')  # Redirect to admin dashboard
+                return redirect('dashboard')  
             elif login_type == 'user' and not user.is_staff:
                 login(request, user)
-                return redirect('home')  # Redirect to user home
+                return redirect('home') 
             else:
-                # Unauthorized access attempt
                 return render(request, 'user/login.html', {'error': 'Unauthorized access'})
         
         return render(request, 'user/login.html', {'error': 'Invalid credentials'})
@@ -55,24 +55,19 @@ def dashboard_view(request):
     return render(request, 'features/dashboard.html')
 
 def dashboard(request):
-    # Fetch recent orders
     recent_orders = Order.objects.all().order_by('-order_date')[:10]  
     
     context = {
         'recent_orders': recent_orders,
-        'total_sales': calculate_total_sales(),
+        'total_sales': calculate_total_sales(), # type: ignore
         'total_orders': Order.objects.count(),
         'total_products': Product.objects.count(),
-        'total_customers': Customer.objects.count()
+        'total_customers': Customer.objects.count() # type: ignore
     }
     
     return render(request, 'features/dashboard.html', context)
 
 
-from django.shortcuts import render, redirect
-from django.contrib.auth.models import User
-from django.contrib.auth import login
-from django.contrib import messages
 
 def signup_view(request):
     if request.method == 'POST':
@@ -82,7 +77,6 @@ def signup_view(request):
         email = request.POST.get('email')
         password = request.POST.get('password')
 
-        # Check if the username already exists
         if User.objects.filter(username=username).exists():
             messages.error(request, "Username is already taken.")
             return redirect('signup')
@@ -118,12 +112,10 @@ def cart_view(request):
     elif request.method == 'POST':
         try:
             data = json.loads(request.body)
-            # Extract product details
             product_name = data.get('product_name')
             quantity = data.get('quantity', 1)
             price = data.get('price', 0.0)
 
-            # Check if the product already exists in the cart
             cart_item, created = CartItem.objects.get_or_create(
                 user=request.user,
                 product_name=product_name,
@@ -131,7 +123,6 @@ def cart_view(request):
             )
             
             if not created:
-                # Update quantity if the item already exists
                 cart_item.quantity += quantity
                 cart_item.save()
 
@@ -139,29 +130,22 @@ def cart_view(request):
         except Exception as e:
             return JsonResponse({'success': False, 'message': str(e)})
 
-        
-
-
-
 @login_required
 def profile_view(request):
     if request.method == "POST":
         try:
             data = json.loads(request.body)
 
-            # Validate username and email
             if User.objects.filter(username=data.get('username')).exclude(id=request.user.id).exists():
                 return JsonResponse({"success": False, "error": "Username already exists."})
             
             if User.objects.filter(email=data.get('email')).exclude(id=request.user.id).exists():
                 return JsonResponse({"success": False, "error": "Email already exists."})
 
-            # Update user fields
             request.user.username = data.get('username', request.user.username)
             request.user.email = data.get('email', request.user.email)
             request.user.save()
 
-            # Update or create profile
             Profile.objects.update_or_create(
                 user=request.user,
                 defaults={'bio': data.get('bio', '')}
@@ -171,7 +155,6 @@ def profile_view(request):
         except Exception as e:
             return JsonResponse({"success": False, "error": str(e)})
 
-    # Render profile page on GET request
     return render(request, 'user/profile.html', {'user': request.user})
 
 def laptop_view(request):
@@ -198,7 +181,6 @@ def phone_view(request):
         else:
             print(f"Product {phone.name} has no image")
     
-    # Pass the phones list to the template
     return render(request, 'items/phone.html', {'phones': phones})
 
 
@@ -206,18 +188,22 @@ def gamingphone_view(request):
    
    return render(request, 'items/gamingphone.html')
 
-def nongamingphone_view(request):
-   
-   return render(request, 'items/nongamingphone.html')
-
 def new_view(request):
-    return render(request, 'items/new.html')
+    items = New.objects.all()
+    return render(request, 'items/new.html', {'items': items})
 
 def deals_view(request):
-    return render(request, 'items/deals.html')
+    deals = Deal.objects.all()
+    return render(request, 'items/deals.html', {'deals': deals})
+
+
+from django.shortcuts import render
+from .models import PC
 
 def pc_view(request):
-    return render(request, 'items/pc.html')
+    products = PC.objects.all()  # Query all the PC products from the database
+    return render(request, 'items/pc.html', {'products': products})
+
 
 def active_view(request):
     return render(request, 'items/active.html')
@@ -271,25 +257,18 @@ def laptops(request):
     products = Product.objects.all()
     return render(request, 'laptops.html', {'products': products})
 
-# views.py
-from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib.auth.decorators import login_required
-from .models import Order
-from django.http import HttpResponseForbidden
-
 @login_required
 def orders(request):
     user_orders = Order.objects.filter(user=request.user).order_by('-date_ordered')
     return render(request, 'features/orders.html', {'orders': user_orders})
+
 @login_required
 def dashboard(request):
-    # Get total statistics
     total_sales = Order.objects.filter(status='DELIVERED').aggregate(total=models.Sum('total_amount'))['total'] or 0
     total_orders = Order.objects.count()
     total_products = Product.objects.count()
     total_customers = User.objects.count()
     
-    # Get recent pending orders
     recent_orders = Order.objects.filter(status__in=['PENDING', 'PROCESSING']).order_by('-date_ordered')[:10]
     
     context = {
@@ -306,15 +285,12 @@ def dashboard(request):
 def update_order_status(request, order_id):
     order = get_object_or_404(Order, id=order_id)
     
-    # Get the new status from the POST data
     new_status = request.POST.get('status')
     
-    # Validate the new status
     if new_status in dict(Order.STATUS_CHOICES):
         order.status = new_status
         order.save()
         
-        # Recalculate total sales for dashboard stats
         total_sales = Order.objects.filter(status='DELIVERED').aggregate(total=models.Sum('total_amount'))['total'] or 0
         
         return JsonResponse({
@@ -324,14 +300,22 @@ def update_order_status(request, order_id):
         })
     
     return JsonResponse({'status': 'error', 'message': 'Invalid status'}, status=400)
-
 @require_POST
 @login_required
 def mark_all_orders_delivered(request):
-    # Update all pending and processing orders to delivered
     Order.objects.filter(status__in=['PENDING', 'PROCESSING']).update(status='DELIVERED')
-    
-    # Recalculate total sales
+    total_sales = Order.objects.filter(status='DELIVERED').aggregate(total=models.Sum('total_amount'))['total'] or 0
+
+    return JsonResponse({
+        'status': 'success',
+        'message': 'All orders are delivered',
+        'total_sales': float(total_sales)
+     
+    })
+@require_POST
+@login_required
+def mark_all_orders_delivered(request):
+    Order.objects.filter(status__in=['PENDING', 'PROCESSING']).update(status='DELIVERED')
     total_sales = Order.objects.filter(status='DELIVERED').aggregate(total=models.Sum('total_amount'))['total'] or 0
     
     return JsonResponse({
@@ -339,13 +323,6 @@ def mark_all_orders_delivered(request):
         'message': 'All orders marked as delivered',
         'total_sales': float(total_sales)
     })
-
-from django.http import JsonResponse
-from django.views.decorators.http import require_http_methods
-from django.views.decorators.csrf import csrf_protect
-from decimal import Decimal
-import json
-from .models import Order, OrderItem, Product
 
 @csrf_protect
 @require_http_methods(["POST"])
@@ -361,20 +338,17 @@ def create_order(request):
         if not cart_items:
             return JsonResponse({'error': 'Cart is empty'}, status=400)
         
-        # Calculate total amount
         total_amount = sum(
             Decimal(str(item['price'])) * int(item['quantity'])
             for item in cart_items
         )
         
-        # Create the order
         order = Order.objects.create(
             user=request.user,
             total_amount=total_amount,
             status='PENDING'
         )
         
-        # Create order items
         for item in cart_items:
             try:
                 product = Product.objects.get(name=item['name'])
@@ -385,7 +359,6 @@ def create_order(request):
                     price=Decimal(str(item['price']))
                 )
             except Product.DoesNotExist:
-                # If product doesn't exist, delete the order and return error
                 order.delete()
                 return JsonResponse({
                     'error': f'Product not found: {item["name"]}'
@@ -401,6 +374,7 @@ def create_order(request):
     
 def payment_view(request):
     return render(request, 'features/payment.html')
+
 def noitemsfound(request):
     return render(request, 'features/noitemsfound.html')
 

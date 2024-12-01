@@ -6,16 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     {% load static %}
     <link rel="stylesheet" href="{% static 'css/features/home.css' %}">
-
-    <style>
-
-    </style>
-
     <title>GameHub</title>
 
 </head>
-
-
 <body>
     <header class="header">
         <div class="header-content">
@@ -52,10 +45,6 @@
             <!-- Dropdown Menu for Phones -->
             <div class="dropdown">
                 <a href="{% url 'phone' %}">Phones 📞</a>
-                <div class="dropdown-content">
-                    <a href="{% url 'gamingphone' %}">Gaming Phones</a>
-                    <a href="{% url 'nongamingphone' %}">Non-Gaming Phones</a>
-                </div>
             </div>
             <a href="{% url 'pc' %}">PC 👨</a>
             <a href="{% url 'accessories' %}">Accessories ✨</a>
@@ -302,6 +291,9 @@
     const laptopKeywords = ['laptop', 'laptops', 'notebook', 'gaming laptop', 'gaming'];
     const phoneKeywords = ['phones', 'cp', 'cellphone', 'CELLPHONE', 'phone', 'gaming'];
     const pcKeywords = ['pc', 'gaming pc', 'cpu', 'gaming set up', 'set up', 'setup'];
+    const newKeywords = ['ps5 games', 'games', 'Games', 'PS5 GAMES', 'Ps5 Games'];
+    const dealsKeywords = ['jbl', 'speaker', 'sale', 'Sale', 'headphones', 'Headphones', 'nba', 'NBA', 'Logitech', 'logitech', 'razer', 'Razer', 'Sony', 'sony', 'razer', 'Razer'];
+
     
     if (laptopKeywords.includes(searchTerm)) {
         window.location.href = "{% url 'laptop' %}";
@@ -309,7 +301,11 @@
         window.location.href = "{% url 'phone' %}";
     } else if (pcKeywords.includes(searchTerm)) {
         window.location.href = "{% url 'pc' %}";
-    } else {
+    }else if(newKeywords.includes(searchTerm)){
+        window.location.href = "{% url 'new' %}" 
+    }else if(dealsKeywords.includes(searchTerm)){
+        window.location.href = "{% url 'deals' %}"
+    }else {
         // Redirect to the no-found-items page with the search query as a parameter
         window.location.href = `{% url 'noitemsfound' %}?q=${encodeURIComponent(searchTerm)}`;
     }
