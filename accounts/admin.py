@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Product, Order, OrderItem, CartItem, Profile, PaymentMethod, Phone, New, Deal, PC
+from .models import Product, Order, OrderItem, CartItem, Profile, PaymentMethod, Phone, New, Deal, PC, Accessory
 admin.site.register(Product)
 admin.site.register(Order)
 admin.site.register(OrderItem)
@@ -10,6 +10,27 @@ admin.site.register(Phone)
 admin.site.register(New)
 admin.site.register(Deal)
 admin.site.register(PC)
+admin.site.register(Accessory)
+
+class AccessoryAdmin(admin.ModelAdmin):
+    # Specify which fields to display in the list view
+    list_display = ('name', 'brand', 'price', 'discounted_price', 'image_url')
+
+    # Allow filtering by brand and price
+    list_filter = ('brand', 'price')
+
+    # Add search functionality for name and brand
+    search_fields = ('name', 'brand')
+
+    # Specify the fields to display in the detail view
+    fieldsets = (
+        (None, {
+            'fields': ('name', 'brand', 'description', 'price', 'discounted_price', 'image_url')
+        }),
+    )
+
+    # Add ordering functionality, defaulting by name
+    ordering = ('name',)
 
 class PCAdmin(admin.ModelAdmin):
     list_display = ('title', 'price', 'rating', 'product_type', 'category', 'created_at')

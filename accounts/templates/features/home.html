@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     {% load static %}
     <link rel="stylesheet" href="{% static 'css/features/home.css' %}">
+    <script src="{% static 'myproject/js/features/home.js' %}"></script>
     <title>GameHub</title>
 
 </head>
@@ -42,7 +43,6 @@
             <a href="{% url 'deals' %}">Deals 🔥</a>
             <a href="{% url 'active' %}">Active 📢</a>
             <a href="{% url 'laptop' %}">Laptops 💻</a>
-            <!-- Dropdown Menu for Phones -->
             <div class="dropdown">
                 <a href="{% url 'phone' %}">Phones 📞</a>
             </div>
@@ -208,108 +208,33 @@
             </div>
         </div>
     </footer>
-    
-
     <script>
-        // Carousel functionality
-        let carouselIndex = 0;
-        const carouselImages = [
-            "{% static 'images/wildsale.jpg' %}",
-            "{% static 'images/hugesale.jpg' %}"
-        ];
+         function handleSearch(event) {
+        event.preventDefault();
+        const searchTerm = document.getElementById('searchInput').value.toLowerCase().trim();
 
-        function updateCarousel() {
-            document.querySelector('.carousel img').src = carouselImages[carouselIndex];
-        }
+        // hardcode nalang pang search ahahha
+        const laptopKeywords = ['laptop', 'laptops', 'notebook', 'gaming laptop', 'gaming'];
+        const phoneKeywords = ['phones', 'cp', 'cellphone', 'CELLPHONE', 'phone', 'gaming'];
+        const pcKeywords = ['pc', 'gaming pc', 'cpu', 'gaming set up', 'set up', 'setup'];
+        const newKeywords = ['ps5 games', 'games', 'Games', 'PS5 GAMES', 'Ps5 Games'];
+        const dealsKeywords = ['jbl', 'speaker', 'sale', 'Sale', 'headphones', 'Headphones', 'nba', 'NBA', 'Logitech', 'logitech', 'razer', 'Razer', 'Sony', 'sony', 'razer', 'Razer'];
 
-        document.addEventListener('DOMContentLoaded', function () {
-            updateCarousel();
-            setInterval(() => {
-                carouselIndex = (carouselIndex + 1) % carouselImages.length;
-                updateCarousel();
-            }, 3000);
-        });
 
-        function moveCarousel(n) {
-            carouselIndex += n;
-            if (carouselIndex >= carouselImages.length) {
-                carouselIndex = 0;
-            } else if (carouselIndex < 0) {
-                carouselIndex = carouselImages.length - 1;
-            }
-            updateCarousel();
-        }
-
-        // Category scroll functionality
-        function scrollCategories(direction) {
-            const container = document.querySelector('.category-grid');
-            const scrollAmount = 400; // Adjust this value to control scroll distance
-            
-            if (direction === 'left') {
-                container.scrollBy({
-                    left: -scrollAmount,
-                    behavior: 'smooth'
-                });
-            } else {
-                container.scrollBy({
-                    left: scrollAmount,
-                    behavior: 'smooth'
-                });
-            }
-        }
-
-        // Update scroll buttons visibility
-        function updateScrollButtons() {
-            const container = document.querySelector('.category-grid');
-            const leftBtn = document.querySelector('.scroll-left');
-            const rightBtn = document.querySelector('.scroll-right');
-            
-            if (container.scrollLeft >= container.scrollWidth - container.clientWidth) {
-                rightBtn.style.opacity = '0.5';
-            } else {
-                rightBtn.style.opacity = '1';
-            }
-        }
-
-        // Add scroll event listener for category section
-        document.querySelector('.category-grid').addEventListener('scroll', updateScrollButtons);
-        
-        // Initialize button states when page loads
-        document.addEventListener('DOMContentLoaded', function() {
-            updateScrollButtons();
-            updateCarousel();
-            setInterval(() => {
-                carouselIndex = (carouselIndex + 1) % carouselImages.length;
-                updateCarousel();
-            }, 3000);
-        });
-        function handleSearch(event) {
-    event.preventDefault();
-    const searchTerm = document.getElementById('searchInput').value.toLowerCase().trim();
-    
-    // Define search terms that should redirect to specific pages
-    const laptopKeywords = ['laptop', 'laptops', 'notebook', 'gaming laptop', 'gaming'];
-    const phoneKeywords = ['phones', 'cp', 'cellphone', 'CELLPHONE', 'phone', 'gaming'];
-    const pcKeywords = ['pc', 'gaming pc', 'cpu', 'gaming set up', 'set up', 'setup'];
-    const newKeywords = ['ps5 games', 'games', 'Games', 'PS5 GAMES', 'Ps5 Games'];
-    const dealsKeywords = ['jbl', 'speaker', 'sale', 'Sale', 'headphones', 'Headphones', 'nba', 'NBA', 'Logitech', 'logitech', 'razer', 'Razer', 'Sony', 'sony', 'razer', 'Razer'];
-
-    
-    if (laptopKeywords.includes(searchTerm)) {
+        if (laptopKeywords.includes(searchTerm)) {
         window.location.href = "{% url 'laptop' %}";
-    } else if (phoneKeywords.includes(searchTerm)) {
+        } else if (phoneKeywords.includes(searchTerm)) {
         window.location.href = "{% url 'phone' %}";
-    } else if (pcKeywords.includes(searchTerm)) {
+        } else if (pcKeywords.includes(searchTerm)) {
         window.location.href = "{% url 'pc' %}";
-    }else if(newKeywords.includes(searchTerm)){
+        }else if(newKeywords.includes(searchTerm)){
         window.location.href = "{% url 'new' %}" 
-    }else if(dealsKeywords.includes(searchTerm)){
+        }else if(dealsKeywords.includes(searchTerm)){
         window.location.href = "{% url 'deals' %}"
-    }else {
-        // Redirect to the no-found-items page with the search query as a parameter
+        }else {
         window.location.href = `{% url 'noitemsfound' %}?q=${encodeURIComponent(searchTerm)}`;
+        }
     }
-}
     </script>
 </body>
 </html>

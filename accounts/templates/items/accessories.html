@@ -1,574 +1,267 @@
 <!DOCTYPE html>
 <html lang="en">
-    {% load static %}
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GameHub - Gaming Accessories</title>
+    <title>GameHub's Gaming Accessories Shop</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
-        /* Previous styles remain the same */
-
         :root {
-            --primary-blue: #2B0B98;
-            --secondary-blue: #4527A0;
-            --primary-color: #ffffff;
-            --secondary-color: #e0e0e0;
-            --white: #ffffff;
-            --light-gray: #ffffff;
-            --text-dark: #333333;
+            --primary-color: #1a1a2e;
+            --secondary-color: #4a4e69;
+            --background-color: #f8f9fa;
+            --white-color: #ffffff;
+            --text-color: #2c3e50;
+            --accent-color: #6a4c93;
+            --border-color: #e9ecef;
+            --transition-speed: 0.3s;
         }
-        
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Nunito', 'Segoe UI', Roboto, sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            line-height: 1.7;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* Navigation Styles */
+        .navbar {
+            background-color: var(--white-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            margin-bottom: 2rem;
+            border-radius: 12px;
+        }
+
+        .navbar-brand {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
             text-decoration: none;
         }
-        
-        body {
-            font-family: 'Roboto', Arial, sans-serif;
-            background-color: var(--light-gray);
-            padding-top: 60px;
-            color: var(--text-dark);
+
+        .nav-buttons {
+            display: flex;
+            gap: 1rem;
         }
 
+        .nav-button {
+            text-decoration: none;
+            color: var(--white-color);
+            background-color: var(--accent-color);
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            transition: background-color var(--transition-speed) ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .nav-button:hover {
+            background-color: var(--primary-color);
+        }
 
         .header {
-            background-color: var(--primary-blue);
-            box-shadow: 0 2px 5px rgba(0,0,0,0.3);
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            z-index: 1000;
+            background-color: var(--white-color);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            text-align: center;
         }
 
-
-        .header-content {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 10px 20px;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-        
-        .logo {
-            font-size: 24px;
-            font-weight: bold;
-            color: var(--white);
-        }
-        
-        .search-bar {
-            flex-grow: 1;
-            margin: 0 20px;
-            position: relative;
-        }
-        
-        .search-input {
-            width: 100%;
-            padding: 10px 40px 10px 15px;
-            border: 2px solid var(--primary-blue);
-            border-radius: 4px;
-            font-size: 14px;
-            background-color: #ffffff;
-            color: var(--text-dark);
-        }
-        
-        .search-button {
-            position: absolute;
-            right: 5px;
-            top: 50%;
-            transform: translateY(-50%);
-            background: none;
-            border: none;
-            color: var(--primary-blue);
-            cursor: pointer;
+        .page-title {
+            color: var(--primary-color);
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
         }
 
-        .sort-section, .search-section {
-            display: flex;
-            align-items: center;
-        }
-        
-        .nav-link {
-            margin-left: 20px;
-            color: var(--white);
-            font-size: 14px;
-        }
-        
-        .cart-icon {
-            font-size: 20px;
-            color: var(--white);
-        }
-
-        .sort-section span, .search-section span {
-            color: white;
-            min-width: 80px;
-        }
-
-        .sort-section select, .search-input {
-            padding: 8px 15px;
-            border: none;
-            border-radius: 6px;
-            background: white;
-            color: #1e3c72;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            width: 100%;
-        }
-
-        .search-input {
-            max-width: 300px;
+        .subtitle {
+            color: var(--secondary-color);
+            font-size: 1.1rem;
+            max-width: 600px;
+            margin: 0 auto 1.5rem;
         }
 
         .shop-layout {
             display: grid;
-            grid-template-columns: 280px 1fr;
-            gap: 30px;
-        }
-
-        .sidebar {
-            background: white;
-            padding: 25px;
-            border-radius: 12px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-            height: fit-content;
-        }
-
-        .filter-section {
-            margin-bottom: 30px;
-            padding-bottom: 20px;
-            border-bottom: 1px solid #eee;
-        }
-
-        .filter-title {
-            font-size: 18px;
-            color: #1e3c72;
-            margin-bottom: 15px;
-            font-weight: 600;
-        }
-
-        .filter-section ul {
-            list-style: none;
-        }
-
-        .filter-section ul li {
-            padding: 8px 0;
-            color: #555;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .filter-section ul li:hover {
-            color: #1e3c72;
-            padding-left: 5px;
-        }
-
-        .filter-section ul li.active {
-            color: #1e3c72;
-            font-weight: 600;
-            padding-left: 5px;
-        }
-
-        .price-range {
-            padding: 10px 0;
-        }
-
-        .price-slider {
-            width: 100%;
-            height: 4px;
-            background: #ddd;
-            border-radius: 2px;
-            appearance: none;
-            cursor: pointer;
+            grid-template-columns: 1fr;
+            gap: 2rem;
         }
 
         .product-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-            gap: 25px;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
         }
 
         .product-card {
-            background: white;
+            background-color: var(--white-color);
             border-radius: 12px;
-            padding: 20px;
-            transition: all 0.3s ease;
+            padding: 1.5rem;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            transition: all var(--transition-speed) ease;
+            border: 1px solid transparent;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
             position: relative;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
         }
 
         .product-card:hover {
+            border-color: var(--accent-color);
             transform: translateY(-5px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-        }
-
-        .sale-badge {
-            position: absolute;
-            top: 15px;
-            right: 15px;
-            background: #ff4757;
-            color: white;
-            padding: 5px 10px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: bold;
         }
 
         .product-image {
-            width: 100%;
+            max-width: 200px;
             height: 200px;
             object-fit: contain;
-            margin-bottom: 15px;
+            margin: 0 auto 1rem;
+            transition: transform var(--transition-speed) ease;
+        }
+
+        .product-card:hover .product-image {
+            transform: scale(1.05);
         }
 
         .product-brand {
-            color: #666;
-            font-size: 14px;
-            margin-bottom: 5px;
+            color: var(--secondary-color);
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
         .product-title {
-            font-size: 16px;
-            color: #2d3436;
-            margin-bottom: 10px;
-            line-height: 1.4;
-            height: 45px;
-            overflow: hidden;
-        }
-
-        .rating {
-            color: #ffd700;
-            margin-bottom: 10px;
-            font-size: 14px;
-        }
-
-        .review-count {
-            color: #666;
-            font-size: 12px;
-            margin-left: 5px;
+            font-size: 1.1rem;
+            margin-bottom: 0.75rem;
+            font-weight: 600;
+            min-height: 3rem;
         }
 
         .product-price {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-bottom: 15px;
-        }
-
-        .original-price {
-            color: #a4b0be;
-            text-decoration: line-through;
-            font-size: 14px;
+            margin-bottom: 0.75rem;
         }
 
         .discounted-price {
-            color: #2d3436;
-            font-size: 18px;
-            font-weight: bold;
-        }
-
-        .stock-status {
-            padding: 6px;
-            border-radius: 6px;
-            font-size: 12px;
-            text-align: center;
-            margin-bottom: 15px;
-        }
-
-        .stock-status.in-stock {
-            background: #dffde0;
-            color: #2ed573;
-        }
-
-        .stock-status.low-stock {
-            background: #fff3cd;
-            color: #856404;
-        }
-
-        .stock-status.out-of-stock {
-            background: #ffe0e3;
-            color: #ff4757;
+            color: var(--accent-color);
+            font-weight: 700;
+            font-size: 1.2rem;
         }
 
         .add-to-cart {
-            width: 100%;
-            padding: 10px;
-            background: #1e3c72;
-            color: white;
+            background-color: var(--accent-color);
+            color: var(--white-color);
             border: none;
+            padding: 0.75rem 1.5rem;
             border-radius: 8px;
-            font-weight: 500;
             cursor: pointer;
-            transition: all 0.3s ease;
-            font-size: 14px;
+            transition: background-color var(--transition-speed) ease;
+            font-weight: 600;
+            margin-top: auto;
         }
 
         .add-to-cart:hover {
-            background: #2a5298;
+            background-color: var(--primary-color);
         }
 
-        .add-to-cart:disabled {
-            background: #a4b0be;
-            cursor: not-allowed;
+        /* Responsive Design */
+        @media (max-width: 1200px) {
+            .product-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
         }
 
-        /* No results message */
-        .no-results {
-            grid-column: 1 / -1;
-            text-align: center;
-            color: #666;
-            padding: 50px;
-            background: white;
-            border-radius: 12px;
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+
+            .product-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .navbar {
+                flex-direction: column;
+                gap: 1rem;
+                padding: 1rem;
+            }
+
+            .nav-buttons {
+                width: 100%;
+                justify-content: center;
+            }
         }
     </style>
 </head>
 <body>
-      <div class="container">
+    <nav class="navbar">
+        <a href="{% url 'home' %}" class="navbar-brand">GameHub</a>
+        <div class="nav-buttons">
+            <a href="{% url 'home' %}" class="nav-button">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                    <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                </svg>
+                Home
+            </a>
+            <a href="{% url 'carts' %}" class="nav-button">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="9" cy="21" r="1"></circle>
+                    <circle cx="20" cy="21" r="1"></circle>
+                    <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                </svg>
+                Cart
+            </a>
+        </div>
+    </nav>
+
+    <div class="container">
         <header class="header">
-            <h1 class="page-title">Gaming Accessories</h1>
-            <p class="subtitle">Level up your gaming setup with premium accessories</p>
-            <div class="search-section">
-                <span>Search</span>
-                <input type="text" class="search-input" placeholder="Search for gaming accessories...">
-            </div>
-            <div class="sort-section">
-                <span>Sort By</span>
-                <select id="sort-select">
-                    <option value="featured">Featured</option>
-                    <option value="price-low">Price: Low to High</option>
-                    <option value="price-high">Price: High to Low</option>
-                    <option value="rating">Customer Rating</option>
-                </select>
-            </div>
-        
+            <h1 class="page-title">GameHub's Gaming Accessories Shop</h1>
         </header>
 
-        <!--  <header class="header">
-            <div class="header-content">
-                <div class="logo">Game Accessories</div>
-                <div class="search-bar">
-                    <input type="text" class="search-input" placeholder="Search for games...">
-                    <button class="search-button">🔍</button>
-                </div>
-                <nav class="nav-links">
-                    <a href="{% url 'home' %}" class="nav-link">Home</a>
-                    <a href="{% url 'carts' %}" class="nav-link cart-icon">🛒</a>
-                </nav>
-            </div>
-        </header>  -->
-
-
         <div class="shop-layout">
-            <aside class="sidebar">
-                <div class="filter-section">
-                    <h3 class="filter-title">Categories</h3>
-                    <ul class="category-list">
-                        <li data-category="all" class="active">📱 All Products</li>
-                        <li data-category="controllers">🎮 Gaming Controllers</li>
-                        <li data-category="mouse">🖱️ Gaming Mouse</li>
-                        <li data-category="keyboards">⌨️ Gaming Keyboards</li>
-                        <li data-category="headsets">🎧 Gaming Headsets</li>
-                        <li data-category="speakers">🔊 Speakers</li>
-                        <li data-category="webcams">🎥 Webcams</li>
-                        <li data-category="monitors">🖥️ Monitors</li>
-                    </ul>
-                </div>
-
-                <div class="filter-section">
-                    <h3 class="filter-title">Price Range</h3>
-                    <div class="price-range">
-                        <input type="range" class="price-slider" min="500" max="15000" value="15000">
-                        <div class="price-display" style="margin-top: 10px; color: #666;">₱500 - ₱15,000</div>
+            <main>
+                <div id="product-grid" class="product-grid">
+                    {% for accessory in accessories %}
+                    <div class="product-card">
+                        <img src="{{ accessory.image.url|default:'/static/default-image.png' }}" 
+                             alt="{{ accessory.name }}" 
+                             class="product-image">
+                        <p class="product-brand">{{ accessory.brand }}</p>
+                        <h3 class="product-title">{{ accessory.name }}</h3>
+                        <div class="product-price">
+                            {% if accessory.discounted_price %}
+                                <span class="discounted-price">${{ accessory.discounted_price|floatformat:2 }}</span>
+                            {% else %}
+                                <span class="discounted-price">${{ accessory.price|floatformat:2 }}</span>
+                            {% endif %}
+                        </div>
+                        <button class="add-to-cart">Add to Cart</button>
                     </div>
-                </div>
-
-                <div class="filter-section">
-                
-                </div>
-            </aside>
-
-            <main class="product-grid">
-                <!-- Keyboard -->
-                <div class="product-card" data-brand="Razer" data-category="Keyboard">
-                    <div class="sale-badge">-20% Off</div>
-                    <img src="{% static 'images/razerr.webp' %}" alt="Gaming Keyboard" class="product-image">
-                    <div class="product-brand">Razer</div>
-                    <h2 class="product-title">BlackWidow V3 Pro Mechanical Gaming Keyboard</h2>
-                    <div class="rating">★★★★★ <span class="review-count">(128 reviews)</span></div>
-                    <div class="product-price">
-                        <span class="original-price">₱11,995.00</span>
-                        <span class="discounted-price">₱9,596.00</span>
-                    </div>
-                    <div class="stock-status in-stock">In Stock</div>
-                    <button class="add-to-cart">Add to Cart</button>
-                </div>
-
-                <!-- Mouse -->
-                <div class="product-card" data-brand="Logitech" data-category="Mouse">
-                    <img src="{% static 'images/acce2.jpg' %}" alt="Gaming Mouse" class="product-image">
-                    <div class="product-brand">Logitech</div>
-                    <h2 class="product-title">G Pro X Superlight Wireless Gaming Mouse</h2>
-                    <div class="rating">★★★★★ <span class="review-count">(256 reviews)</span></div>
-                    <div class="product-price">
-                        <span class="discounted-price">₱7,995.00</span>
-                    </div>
-                    <div class="stock-status low-stock">Low Stock</div>
-                    <button class="add-to-cart">Add to Cart</button>
-                </div>
-
-                <!-- Headset -->
-                <div class="product-card" data-brand="SteelSeries" data-category="Headset">
-                    <div class="sale-badge">-15% Off</div>
-                    <img src="{% static 'images/headset.webp' %}" alt="Gaming Headset" class="product-image">
-                    <div class="product-brand">SteelSeries</div>
-                    <h2 class="product-title">Arctis Pro Wireless Gaming Headset</h2>
-                    <div class="rating">★★★★½ <span class="review-count">(89 reviews)</span></div>
-                    <div class="product-price">
-                        <span class="original-price">₱14,995.00</span>
-                        <span class="discounted-price">₱12,745.75</span>
-                    </div>
-                    <div class="stock-status in-stock">In Stock</div>
-                    <button class="add-to-cart">Add to Cart</button>
-                </div>
-
-                <!-- Controller -->
-                <div class="product-card" data-brand="ASUS ROG" data-category="Controller">
-                    <img src="{% static 'images/controller.jpg' %}" alt="Gaming Controller" class="product-image">
-                    <div class="product-brand">ASUS ROG</div>
-                    <h2 class="product-title">Raikiri Pro Gaming Controller</h2>
-                    <div class="rating">★★★★ <span class="review-count">(45 reviews)</span></div>
-                    <div class="product-price">
-                        <span class="discounted-price">₱8,995.00</span>
-                    </div>
-                    <div class="stock-status out-of-stock">Out of Stock</div>
-                    <button class="add-to-cart" disabled>Out of Stock</button>
+                    {% endfor %}
                 </div>
             </main>
         </div>
     </div>
-
-    <script>
-        // Get DOM elements
-        const priceSlider = document.querySelector('.price-slider');
-        const products = document.querySelectorAll('.product-card');
-        const searchInput = document.querySelector('.search-input');
-        const sortSelect = document.querySelector('#sort-select');
-        const productGrid = document.querySelector('.product-grid');
-    
-        // Function to extract price from product card
-        function getProductPrice(product) {
-            const discountedPrice = product.querySelector('.discounted-price');
-            return parseFloat(discountedPrice.textContent.replace('₱', '').replace(',', ''));
-        }
-    
-        // Function to format price with comma separator
-        function formatPrice(price) {
-            return new Intl.NumberFormat('en-PH', {
-                style: 'currency',
-                currency: 'PHP',
-                minimumFractionDigits: 2
-            }).format(price).replace('PHP', '₱');
-        }
-    
-        // Function to update price range display
-        function updatePriceDisplay(value) {
-            const priceDisplay = document.querySelector('.price-display');
-            priceDisplay.textContent = `₱500 - ${formatPrice(value)}`;
-        }
-    
-        // Function to filter products
-        function filterProducts() {
-            const searchTerm = searchInput.value.toLowerCase();
-            const maxPrice = parseFloat(priceSlider.value);
-            let visibleProductCount = 0;
-    
-            products.forEach(product => {
-                const price = getProductPrice(product);
-                const title = product.querySelector('.product-title').textContent.toLowerCase();
-                const brand = product.querySelector('.product-brand').textContent.toLowerCase();
-                
-                const matchesPrice = price <= maxPrice;
-                const matchesSearch = searchTerm === '' || 
-                    title.includes(searchTerm) || 
-                    brand.includes(searchTerm);
-                
-                if (matchesPrice && matchesSearch) {
-                    product.style.display = 'block';
-                    visibleProductCount++;
-                } else {
-                    product.style.display = 'none';
-                }
-            });
-    
-            // Add/remove no results message
-            const existingNoResults = productGrid.querySelector('.no-results');
-            if (visibleProductCount === 0) {
-                if (!existingNoResults) {
-                    const noResultsDiv = document.createElement('div');
-                    noResultsDiv.classList.add('no-results');
-                    noResultsDiv.textContent = 'No products found matching your search and price range.';
-                    productGrid.appendChild(noResultsDiv);
-                }
-            } else if (existingNoResults) {
-                existingNoResults.remove();
-            }
-        }
-    
-        // Function to sort products
-        function sortProducts(sortType) {
-            const productsArray = Array.from(products);
-            
-            switch(sortType) {
-                case 'price-low':
-                    productsArray.sort((a, b) => 
-                        getProductPrice(a) - getProductPrice(b)
-                    );
-                    break;
-                case 'price-high':
-                    productsArray.sort((a, b) => 
-                        getProductPrice(b) - getProductPrice(a)
-                    );
-                    break;
-                case 'rating':
-                    productsArray.sort((a, b) => {
-                        const getRating = (product) => {
-                            const ratingText = product.querySelector('.rating').textContent;
-                            return (ratingText.match(/★/g) || []).length;
-                        };
-                        return getRating(b) - getRating(a);
-                    });
-                    break;
-                default: // featured or any other case
-                    return; // Keep original order
-            }
-    
-            // Reappend sorted products
-            productsArray.forEach(product => productGrid.appendChild(product));
-        }
-    
-        // Event Listeners
-        priceSlider.addEventListener('input', (e) => {
-            const maxPrice = parseFloat(e.target.value);
-            updatePriceDisplay(maxPrice);
-            filterProducts();
-        });
-    
-        searchInput.addEventListener('input', filterProducts);
-    
-        sortSelect.addEventListener('change', (e) => {
-            sortProducts(e.target.value);
-        });
-    
-        // Initialize
-        updatePriceDisplay(priceSlider.value);
-        filterProducts();
-    </script>
 </body>
 </html>

@@ -5,6 +5,8 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{% static 'css/features/noitemsfound.css' %}">
+    <script src="{% static 'myproject/js/noitemsfound.js' %}"></script>
+
 
     <title>No Items Found - GameHub</title>
 </head>
@@ -39,15 +41,5 @@
             </div>
         </div>
     </main>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Get the search query from URL parameters
-            const urlParams = new URLSearchParams(window.location.search);
-            const searchQuery = urlParams.get('q') || 'Unknown search term';
-            
-            document.getElementById('searchQuery').textContent = searchQuery;
-        });
-    </script>
 </body>
 </html>

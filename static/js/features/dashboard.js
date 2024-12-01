@@ -1,79 +1,4 @@
-<!DOCTYPE html>
-{% load static %}
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>E-commerce Admin Dashboard</title>
-    <link rel="stylesheet" href="{% static 'css/features/dashboard.css' %}"> 
-
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-</head>
-<body>
-    <div class="dashboard-container">
-        <aside class="sidebar">
-            <h2>Admin Dashboard</h2>
-            <ul class="sidebar-menu">
-                <li><a href="#dashboard"><i class="fas fa-columns"></i> Dashboard</a></li>
-                <li><a href="#products"><i class="fas fa-box"></i> Products</a></li>
-                <li><a href="#orders"><i class="fas fa-shopping-cart"></i> Orders</a></li>
-                <li><a href="#customers"><i class="fas fa-users"></i> Customers</a></li>
-                <li><a href="#analytics"><i class="fas fa-chart-bar"></i> Analytics</a></li>
-                <li><a href="#settings"><i class="fas fa-cog"></i> Settings</a></li>
-            </ul>
-        </aside>
-        <main class="main-content">
-            <header class="header">
-                <h1>Dashboard</h1>
-                <div class="user-info">
-                    <div class="notification-icon" id="notification-icon">
-                        <i class="fas fa-bell"></i>
-                        <span class="notification-badge" id="notification-badge">0</span>
-                        <div class="notification-dropdown" id="notification-dropdown">
-                            <h4>Notifications</h4>
-                            <ul id="notification-list">
-                                <li>No new notifications</li>
-                            </ul>
-                            <div style="text-align: center; padding: 10px;">
-                                <button id="mark-all-read" class="mark-read-btn">Mark All as Read</button>
-                                <button id="clear-all-notifications" class="mark-read-btn">Clear All</button>
-                            </div>
-                        </div>
-                    </div>
-                    <img src="https://via.placeholder.com/40" alt="User Avatar">
-                    <span>Admin</span>
-                    <a href="{% url 'login' %}" class="logout-btn">Logout</a>
-                </div>
-            </header>
-
-            <section class="stats-grid">
-                <div class="stat-card">
-                    <h3>Total Sales</h3>
-                    <p id="total-sales">$0.00</p>
-                </div>
-                <div class="stat-card">
-                    <h3>Total Orders</h3>
-                    <p id="total-orders">0</p>
-                </div>
-                <div class="stat-card">
-                    <h3>Pending Orders</h3>
-                    <p id="pending-orders">0</p>
-                </div>
-            </section>
-
-            <section class="orders-section">
-                <div class="orders-header">
-                    <h2>Recent Orders</h2>
-                    <button id="generate-order" class="mark-delivered-btn">Generate Sample Order</button>
-                </div>
-                <div class="order-list" id="order-list">
-                    <div class="order-item">No recent orders</div>
-                </div>
-            </section>
-        </main>
-    </div>
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
+document.addEventListener('DOMContentLoaded', function () {
     const notificationIcon = document.getElementById('notification-icon');
     const notificationDropdown = document.getElementById('notification-dropdown');
     const notificationList = document.getElementById('notification-list');
@@ -249,6 +174,3 @@
     renderOrders();
     renderNotifications();
 });
-    </script>
-</body>
-</html>

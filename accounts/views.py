@@ -4,7 +4,7 @@ from django.shortcuts import get_object_or_404, render, redirect
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm
-from .models import CartItem, Deal, New 
+from .models import Accessory, CartItem, Deal, New 
 from django.contrib.auth.models import User
 from django.contrib import messages
 from .models import Product
@@ -209,7 +209,11 @@ def active_view(request):
     return render(request, 'items/active.html')
 
 def accessories_view(request):
-    return render(request, 'items/accessories.html')
+    accessories = Accessory.objects.all()
+
+    return render(request, 'items/accessories.html', {'accessories': accessories})
+
+
 
 def lol_game(request):
     return render(request, 'games/lol.html')
