@@ -263,5 +263,221 @@
             </main>
         </div>
     </div>
+    <script>
+// Singleton CartManager to handle cart functionality
+class CartManager {
+    constructor() {
+        if (CartManager.instance) {
+            return CartManager.instance;
+        }
+        CartManager.instance = this;
+
+        this.cartItems = [];
+        this.isCheckoutInProgress = false; // Flag to prevent duplicate checkout
+        this.initializeCart();
+    }
+
+    initializeCart() {
+        this.cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
+        this.updateCartUI();
+    }
+
+    extractProductDetails(productCard) {
+        return {
+            id: productCard.dataset.productId || Date.now().toString(),
+            name: productCard.querySelector('.product-title').textContent.trim(),
+            price: parseFloat(productCard.querySelector('.discounted-price').textContent.replace('$', '')),
+            image: productCard.querySelector('.product-image').src,
+            color: 'Default',
+            quantity: 1
+        };
+    }
+
+    addToCart(product) {
+        if (typeof Storage === "undefined") {
+            alert('Local storage is not supported');
+            return;
+        }
+
+        const existingItemIndex = this.cartItems.findIndex(
+            item => item.id === product.id && item.color === product.color
+        );
+
+        if (existingItemIndex > -1) {
+            this.cartItems[existingItemIndex].quantity += product.quantity;
+        } else {
+            this.cartItems.push(product);
+        }
+
+        this.saveCart();
+        this.updateCartUI();
+        this.showAddToCartNotification(product);
+    }
+
+    saveCart() {
+        localStorage.setItem('cartItems', JSON.stringify(this.cartItems));
+    }
+
+    updateCartUI() {
+        const cartItemCount = this.getTotalItemCount();
+        const cartCountElement = document.querySelector('.cart-item-count');
+
+        if (cartCountElement) {
+            cartCountElement.textContent = cartItemCount;
+            cartCountElement.style.display = cartItemCount > 0 ? 'inline-block' : 'none';
+        }
+    }
+
+    showAddToCartNotification(product) {
+        const notification = document.createElement('div');
+        notification.classList.add('toast-notification');
+        notification.innerHTML = `
+            <img src="${product.image}" alt="${product.name}" class="notification-image">
+            <div class="notification-details">
+                <strong>${product.name}</strong> added to cart
+            </div>
+        `;
+        document.body.appendChild(notification);
+
+        setTimeout(() => {
+            notification.remove();
+        }, 3000);
+    }
+
+    checkout() {
+        if (this.isCheckoutInProgress) {
+            alert('Checkout already in progress. Please wait.');
+            return;
+        }
+
+        this.isCheckoutInProgress = true;
+        const checkoutButton = document.querySelector('.checkout-btn');
+        if (checkoutButton) {
+            checkoutButton.disabled = true;
+        }
+
+        const cartItems = this.cartItems;
+        const totalAmount = cartItems.reduce((total, item) => total + (item.price * item.quantity), 0);
+
+        if (cartItems.length === 0) {
+            alert('Your cart is empty');
+            this.isCheckoutInProgress = false;
+            if (checkoutButton) {
+                checkoutButton.disabled = false;
+            }
+            return;
+        }
+
+        console.log('Checkout initiated', {
+            items: cartItems,
+            total: totalAmount
+        });
+
+        alert(`Checkout successful! Total amount: $${totalAmount.toFixed(2)}`);
+        this.clearCart();
+
+        setTimeout(() => {
+            this.isCheckoutInProgress = false;
+            if (checkoutButton) {
+                checkoutButton.disabled = false;
+            }
+        }, 3000); // Simulate a 3-second processing delay
+    }
+
+    clearCart() {
+        this.cartItems = [];
+        localStorage.removeItem('cartItems');
+        this.updateCartUI();
+
+        if (document.querySelector('.cart-page')) {
+            this.renderCartItems();
+        }
+    }
+
+    getTotalItemCount() {
+        return this.cartItems.reduce((total, item) => total + item.quantity, 0);
+    }
+
+    static initialize() {
+        const cartManager = new CartManager();
+
+        const addToCartButtons = document.querySelectorAll('.add-to-cart');
+        addToCartButtons.forEach(button => {
+            const newButton = button.cloneNode(true);
+            button.parentNode.replaceChild(newButton, button);
+
+            newButton.addEventListener('click', (event) => {
+                const productCard = event.target.closest('.product-card');
+                const product = cartManager.extractProductDetails(productCard);
+                cartManager.addToCart(product);
+            });
+        });
+
+        const checkoutBtn = document.querySelector('.checkout-btn');
+        if (checkoutBtn) {
+            const newCheckoutBtn = checkoutBtn.cloneNode(true);
+            checkoutBtn.parentNode.replaceChild(newCheckoutBtn, checkoutBtn);
+
+            newCheckoutBtn.addEventListener('click', () => {
+                cartManager.checkout();
+            });
+        }
+
+        cartManager.updateCartUI();
+    }
+}
+
+// Add notification styles
+const style = document.createElement('style');
+style.textContent = `
+    .toast-notification {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        background-color: white;
+        border-radius: 8px;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        display: flex;
+        align-items: center;
+        padding: 15px;
+        z-index: 1000;
+        animation: slideIn 0.3s ease-out;
+    }
+
+    .toast-notification .notification-image {
+        width: 50px;
+        height: 50px;
+        object-fit: cover;
+        margin-right: 15px;
+        border-radius: 4px;
+    }
+
+    @keyframes slideIn {
+        from {
+            transform: translateX(100%);
+            opacity: 0;
+        }
+        to {
+            transform: translateX(0);
+            opacity: 1;
+        }
+    }
+
+    .cart-item-count {
+        background-color: red;
+        color: white;
+        border-radius: 50%;
+        padding: 2px 6px;
+        font-size: 0.8rem;
+        margin-left: 5px;
+        display: none;
+    }
+`;
+document.head.appendChild(style);
+
+// Initialize cart when DOM is loaded
+document.addEventListener('DOMContentLoaded', CartManager.initialize);
+
+    </script>
 </body>
 </html>
