@@ -53,26 +53,26 @@ class Profile(models.Model):
 
     def __str__(self):
         return self.user.username
-    
 class CartItem(models.Model):
     quantity = models.PositiveIntegerField(default=1)
     added_at = models.DateTimeField(default=datetime.now)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    product = models.ForeignKey('Product', on_delete=models.CASCADE) 
-    color = models.CharField(max_length= 20, default= "no color")
+    product = models.ForeignKey('Product', on_delete=models.CASCADE)
+    color = models.CharField(max_length=20, default="no color")
+    
     def __str__(self):
         return f"{self.product} ({self.quantity}) - {self.user.username}"
 
     @property
     def total_price(self):
         """
-        Calculate the total price for this cart item
+        Calculate the total price for this cart item.
         """
-        return self.quantity * self.price
+        return self.quantity * self.product.price  # Use product.price here
 
     class Meta:
         unique_together = ('user', 'product')
-        # ordering = ['-added_at']
+
 
 class Order(models.Model):
     STATUS_CHOICES = [
@@ -87,6 +87,7 @@ class Order(models.Model):
     date_ordered = models.DateTimeField(default=datetime.now)
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='PENDING')
     total_amount = models.DecimalField(max_digits=10, decimal_places=2)
+    products = models.TextField('Product', default="products")
 
     def __str__(self):
         return f'Order {self.id} by {self.user.username}'

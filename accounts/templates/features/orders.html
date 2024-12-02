@@ -6,186 +6,115 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Your Orders</title>
     <link rel="stylesheet" href="{% static 'css/features/orders.css' %}">
-
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-
-    </style>
 </head>
 <body>
     <header class="header">
         <a href="{% url 'home' %}" class="back-to-home">← Back to Shop</a>
         <h1>Your Orders</h1>
     </header>
-
+    
     <div class="orders-container">
         <div class="orders-section" id="active-orders-section">
             <h2 class="section-title">Active Orders</h2>
+            
             <div id="active-orders-container">
-                <!-- Active orders will be dynamically inserted here -->
+                {% if cart_items %}
+                    {% for item in cart_items %}
+                        <div class="order-card">
+                            <h3>Order #{{ item.id }}</h3>
+                            <p>Placed on {{ item.created_at|date:"M d, Y" }}</p>
+                            <div>
+                                {% for item in order.items.all %}
+                                <div class="order-item">
+                                    <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}">
+                                    <span>{{ item.product.name }} (x{{ item.quantity }})</span>
+                                    <span>${{ item.subtotal_price }}</span>
+                                </div>
+                                {% endfor %}
+                            </div>
+                            <div class="order-total">
+                                <strong>Total: ${{ item.total_price }}</strong>
+                            </div>
+                            <div class="order-actions">
+                                <button class="checkout-dashboard-btn" data-tracking-number="{{ order.id }}">Order Received</button>
+                                <button class="cancel-order-btn" data-tracking-number="{{ order.id }}">Cancel Order</button>
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="empty-orders">
+                        <h2>No active orders</h2>
+                        <p>You don't have any active orders.</p>
+                        <a href="{% url 'home' %}" style="display: inline-block; margin-top: 1rem; padding: 0.5rem 1rem; background: #f57224; color: white; text-decoration: none; border-radius: 4px;">
+                            Continue Shopping
+                        </a>
+                    </div>
+                {% endif %}
             </div>
         </div>
-
+        
         <div class="orders-section" id="order-history-section">
             <h2 class="section-title">Order History</h2>
             <div id="order-history-container">
-                <!-- Received orders will be dynamically inserted here -->
+                {% comment %}
+                    Note: You'll need to implement logic to track order history in your views
+                {% endcomment %}
             </div>
         </div>
     </div>
-
+    
     <script>
-       const StorageManager = {
-    getItem: function (key) {
-        try {
-            const item = localStorage.getItem(key);
-            return item ? JSON.parse(item) : [];
-        } catch (e) {
-            console.warn('localStorage access failed');
-            return [];
-        }
-    },
-    setItem: function (key, value) {
-        try {
-            localStorage.setItem(key, JSON.stringify(value));
-        } catch (e) {
-            console.warn('localStorage write failed');
-        }
-    }
-};
+        document.addEventListener('DOMContentLoaded', function() {
+            const activeOrdersContainer = document.getElementById('active-orders-container');
+            const orderHistoryContainer = document.getElementById('order-history-container');
 
-document.addEventListener('DOMContentLoaded', function () {
-    const activeOrdersContainer = document.getElementById('active-orders-container');
-    const orderHistoryContainer = document.getElementById('order-history-container');
-    let orders = StorageManager.getItem('orders') || [];
-    let dashboardNotifications = StorageManager.getItem('dashboardNotifications') || [];
-    let dashboardOrders = StorageManager.getItem('dashboardOrders') || [];
+            // Check if local storage is supported
+            if (typeof(Storage) !== "undefined") {
+                // Retrieve dashboard orders from local storage
+                let dashboardOrders = JSON.parse(localStorage.getItem('dashboardOrders')) || [];
+                let dashboardNotifications = JSON.parse(localStorage.getItem('dashboardNotifications')) || [];
 
-    function renderOrders() {
-        // Separate active and received orders
-        const activeOrders = orders.filter(order => order.status !== 'Received');
-        const receivedOrders = orders.filter(order => order.status === 'Received');
+                // Event listener for "Order Received" buttons
+                activeOrdersContainer.addEventListener('click', function(event) {
+                    const orderReceivedBtn = event.target.closest('.checkout-dashboard-btn');
+                    if (orderReceivedBtn) {
+                        const trackingNumber = orderReceivedBtn.getAttribute('data-tracking-number');
+                        const orderCard = orderReceivedBtn.closest('.order-card');
 
-        // Render Active Orders
-        activeOrdersContainer.innerHTML = ''; // Clear previous contents
-        if (activeOrders.length === 0) {
-            activeOrdersContainer.innerHTML = `
-                <div class="empty-orders">
-                    <h2>No active orders</h2>
-                    <p>You don't have any active orders.</p>
-                    <a href="{% url 'home' %}" style="display: inline-block; margin-top: 1rem; padding: 0.5rem 1rem; background: #f57224; color: white; text-decoration: none; border-radius: 4px;">
-                        Continue Shopping
-                    </a>
-                </div>`;
-        } else {
-            activeOrders.sort((a, b) => new Date(b.date) - new Date(a.date));
-            activeOrders.forEach((order, index) => {
-                activeOrdersContainer.innerHTML += createOrderCard(order, index, false);
-            });
-        }
+                        // Find the corresponding order in dashboard orders
+                        const orderIndex = dashboardOrders.findIndex(order => order.trackingNumber === trackingNumber);
 
-        // Render Order History
-        orderHistoryContainer.innerHTML = ''; // Clear previous contents
-        if (receivedOrders.length === 0) {
-            orderHistoryContainer.innerHTML = `
-                <div class="empty-orders">
-                    <h2>No order history</h2>
-                    <p>Your completed orders will appear here.</p>
-                </div>`;
-        } else {
-            receivedOrders.sort((a, b) => new Date(b.date) - new Date(a.date));
-            receivedOrders.forEach((order, index) => {
-                orderHistoryContainer.innerHTML += createOrderCard(order, index, true);
-            });
-        }
+                        if (orderIndex !== -1) {
+                            // Mark order as delivered
+                            dashboardOrders[orderIndex].delivered = true;
 
-        // Update total orders in localStorage
-        StorageManager.setItem('orders', orders);
-    }
+                            // Add notification to dashboard
+                            dashboardNotifications.push({
+                                message: `Order #${trackingNumber} received by customer`,
+                                date: new Date().toISOString(),
+                                read: false
+                            });
 
-    function createOrderCard(order, index, isHistoryOrder) {
-        return `
-            <div class="order-card" data-tracking-number="${order.trackingNumber}">
-                <div class="order-header">
-                    <h3>Order #${order.trackingNumber}</h3>
-                    <span class="order-date">${new Date(order.date).toLocaleString()}</span>
-                    <span class="order-total">Total: $${order.total.toFixed(2)}</span>
-                    <span class="order-status">Status: ${order.status}</span>
-                </div>
-                <div class="order-items">
-                    ${order.items.map(item => `
-                        <div class="order-item">
-                            <div style="display: flex; align-items: center;">
-                                <img src="${item.image}" alt="${item.name}">
-                                <span class="item-name">${item.name} (x${item.quantity})</span>
-                            </div>
-                            <span>$${(item.price * item.quantity).toFixed(2)}</span>
-                        </div>`).join('')}
-                </div>
-                <div class="order-summary">
-                    <p>Subtotal: $${order.subtotal.toFixed(2)}</p>
-                    <p>Tax: $${order.tax.toFixed(2)}</p>
-                </div>
-                ${!isHistoryOrder ? `
-                <div class="order-actions">
-                    <button class="checkout-dashboard-btn">Order Received</button>
-                    <button class="cancel-order-btn" data-tracking-number="${order.trackingNumber}">Cancel Order</button>
-                </div>` : ''}
-            </div>`;
-    }
+                            // Update local storage
+                            localStorage.setItem('dashboardOrders', JSON.stringify(dashboardOrders));
+                            localStorage.setItem('dashboardNotifications', JSON.stringify(dashboardNotifications));
 
-    activeOrdersContainer.addEventListener('click', function (e) {
-        if (e.target.classList.contains('checkout-dashboard-btn')) {
-            const orderCard = e.target.closest('.order-card');
-            const trackingNumber = orderCard.getAttribute('data-tracking-number');
+                            // Move order to order history
+                            const orderHistoryItem = orderCard.cloneNode(true);
+                            orderHistoryItem.querySelector('.order-actions').remove(); // Remove action buttons
+                            orderHistoryContainer.appendChild(orderHistoryItem);
+                            orderCard.remove();
 
-            const orderIndex = orders.findIndex(order => order.trackingNumber === trackingNumber);
-
-            if (orderIndex === -1) {
-                alert('Order not found.');
-                return;
+                            // Optional: show a confirmation message
+                            alert(`Order #${trackingNumber} has been marked as received.`);
+                        }
+                    }
+                });
+            } else {
+                console.error('Local storage is not supported');
             }
-
-            const selectedOrder = orders[orderIndex];
-
-            if (selectedOrder.status === 'Received') {
-                alert('This order is already marked as received.');
-                return;
-            }
-
-            selectedOrder.status = 'Received';
-
-            const notification = {
-                trackingNumber: selectedOrder.trackingNumber,
-                message: `Order #${selectedOrder.trackingNumber} has been marked as received.`,
-                date: new Date().toISOString(),
-                read: false
-            };
-
-            dashboardNotifications.push(notification);
-            dashboardOrders.push(selectedOrder);
-
-            StorageManager.setItem('dashboardNotifications', dashboardNotifications);
-            StorageManager.setItem('dashboardOrders', dashboardOrders);
-
-            renderOrders();
-            alert('Order marked as received and notification sent to admin.');
-        }
-
-        if (e.target.classList.contains('cancel-order-btn')) {
-            const trackingNumber = e.target.getAttribute('data-tracking-number');
-            const confirmation = confirm('Are you sure you want to cancel this order?');
-            if (confirmation) {
-                orders = orders.filter(order => order.trackingNumber !== trackingNumber);
-                StorageManager.setItem('orders', orders);
-                renderOrders();
-            }
-        }
-    });
-
-    renderOrders();
-});
-
+        });
     </script>
 </body>
 </html>

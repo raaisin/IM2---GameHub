@@ -29,25 +29,66 @@ def landing(request):
     print("Landing page view called") 
     return render(request, 'features/landing.html')
  
+from django.contrib.auth import authenticate, login
+from django.shortcuts import render, redirect
+from django.contrib.auth.models import User
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+
+# Signal to automatically create a profile for new users
+@receiver(post_save, sender=User)
+def create_user_profile(sender, instance, created, **kwargs):
+    if created:
+        Profile.objects.create(user=instance)
+
 def login_view(request):
+    """
+    Custom login view with role-based access control.
+    
+    - Admin users can only access the dashboard and admin-specific areas
+    - Regular users can only access the main website
+    - Prevents cross-role login attempts
+    """
     if request.method == 'POST':
-        username = request.POST['username']
-        password = request.POST['password']
+        # Extract login credentials
+        username = request.POST.get('username', '')
+        password = request.POST.get('password', '')
         login_type = request.POST.get('login_type', 'user')
         
+        # Authenticate the user
         user = authenticate(request, username=username, password=password)
         
         if user is not None:
-            if login_type == 'admin' and user.is_staff:
-                login(request, user)
-                return redirect('dashboard')  
-            elif login_type == 'user' and not user.is_staff:
-                login(request, user)
-                return redirect('home') 
+            # Admin login logic
+            if login_type == 'admin':
+                if user.is_staff and user.is_superuser:
+                    login(request, user)
+                    return redirect('dashboard')
+                else:
+                    return render(request, 'user/login.html', {
+                        'error': 'Admin access denied. Insufficient permissions.'
+                    })
+            
+            # Regular user login logic
+            elif login_type == 'user':
+                if not user.is_staff and not user.is_superuser:
+                    login(request, user)
+                    return redirect('home')
+                else:
+                    return render(request, 'user/login.html', {
+                        'error': 'User access denied. Administrative accounts cannot log in here.'
+                    })
+            
+            # Fallback for unexpected login type
             else:
-                return render(request, 'user/login.html', {'error': 'Unauthorized access'})
+                return render(request, 'user/login.html', {
+                    'error': 'Invalid login attempt'
+                })
         
-        return render(request, 'user/login.html', {'error': 'Invalid credentials'})
+        # Authentication failed
+        return render(request, 'user/login.html', {
+            'error': 'Invalid username or password'
+        })
     
     return render(request, 'user/login.html')
 @login_required
@@ -328,53 +369,6 @@ def mark_all_orders_delivered(request):
         'total_sales': float(total_sales)
     })
 
-@csrf_protect
-@require_http_methods(["POST"])
-def create_order(request):
-    """Handle order creation from cart checkout"""
-    if not request.user.is_authenticated:
-        return JsonResponse({'error': 'Please log in to place an order'}, status=401)
-    
-    try:
-        data = json.loads(request.body)
-        cart_items = data.get('items', [])
-        
-        if not cart_items:
-            return JsonResponse({'error': 'Cart is empty'}, status=400)
-        
-        total_amount = sum(
-            Decimal(str(item['price'])) * int(item['quantity'])
-            for item in cart_items
-        )
-        
-        order = Order.objects.create(
-            user=request.user,
-            total_amount=total_amount,
-            status='PENDING'
-        )
-        
-        for item in cart_items:
-            try:
-                product = Product.objects.get(name=item['name'])
-                OrderItem.objects.create(
-                    order=order,
-                    product=product,
-                    quantity=item['quantity'],
-                    price=Decimal(str(item['price']))
-                )
-            except Product.DoesNotExist:
-                order.delete()
-                return JsonResponse({
-                    'error': f'Product not found: {item["name"]}'
-                }, status=400)
-        
-        return JsonResponse({
-            'message': 'Order created successfully',
-            'orderId': order.id
-        })
-        
-    except Exception as e:
-        return JsonResponse({'error': str(e)}, status=400)
     
 def payment_view(request):
     return render(request, 'features/payment.html')
@@ -434,3 +428,66 @@ def add_cart_items(request):
         return JsonResponse({'success': False, 'error': 'Invalid JSON data'})
     except Exception as e:
         return JsonResponse({'success': False, 'error': str(e)}) 
+@csrf_exempt
+@require_POST   
+def create_orders(request):
+    try:
+        # Parse the JSON data from the request body
+        data = json.loads(request.body)
+        cart_items = data.get('cart_items', [])
+        
+
+        if not cart_items:
+            # If no cart items are provided, return an error response
+            return JsonResponse({'success': False, 'error': 'No cart items provided'})
+
+        new_cart_items = []
+        for item in cart_items:
+            quantity = item.get('quantity')
+            added_at = item.get('added_at')
+            user_id = item.get('user')
+            product_id = item.get('product_id')
+            color = item.get('color')
+
+            # Validate required fields
+            if not all([quantity, added_at, user_id, product_id]):
+                return JsonResponse({'success': False, 'error': 'Missing required fields in cart items'})
+
+            # Get product and user
+            product = get_object_or_404(Product, id=product_id)
+            user = get_object_or_404(User, id=user_id)
+
+            # Calculate the total amount if needed
+            total_amount = quantity * product.price
+
+            # Create a CartItem object
+            new_cart_items.append(
+                CartItem(
+                    quantity=quantity,
+                    added_at=added_at,
+                    user=user,
+                    product=product,
+                    color = color
+                )
+            )
+
+        # Bulk save all items
+        CartItem.objects.bulk_create(new_cart_items)
+
+        return JsonResponse({'success': True, 'message': 'Cart items added successfully'})
+    except json.JSONDecodeError:
+        return JsonResponse({'success': False, 'error': 'Invalid JSON data'})
+    except Exception as e:
+        return JsonResponse({'success': False, 'error': str(e)}) 
+    
+def orders_view(request):
+    print("dasdsa")
+    print("dasdsa")
+    print("dasdsa")
+    print("dasdsa")
+
+    cart_items = CartItem.objects.filter(user=request.user)
+    print(cart_items)
+    print("dasdsa")
+    return render(request, 'features/orders.html', {'cart_items': cart_items})
+

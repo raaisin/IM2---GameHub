@@ -28,13 +28,14 @@ urlpatterns = [
     path('active/', views.active_view, name='active'),
     path('accessories/', views.accessories_view, name='accessories'),
     path('orders/', views.orders, name='orders'),
-    path('api/create-order/', views.create_order, name='create_order'),
     path('payment/', views.payment_view, name="payment"),
-        path('dashboard/', views.dashboard_view, name="dashboard"),
+    path('dashboard/', views.dashboard_view, name="dashboard"),
     path('noitemsfound/', views.noitemsfound, name='noitemsfound'),  
     path('update_order_status/<int:order_id>/', views.update_order_status, name='update_order_status'),
     path('mark_all_orders_delivered/', views.mark_all_orders_delivered, name='mark_all_orders_delivered'),
     path('addCart/', views.add_cart_items, name='add_cart_items'),
+    path('orders_view/', views.orders_view, name='orders_view'),
+   
 
 
 
