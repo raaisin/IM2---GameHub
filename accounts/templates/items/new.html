@@ -1,0 +1,69 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GameHub - New Deals</title>
+    <link rel="stylesheet" href="{% static 'css/items/new.css' %}">
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">New</div>
+            <div class="search-bar">
+                <input type="text" class="search-input" placeholder="Search for games...">
+                <button class="search-button">🔍</button>
+            </div>
+            <nav class="nav-links">
+                <a href="{% url 'home' %}" class="nav-link">Home</a>
+                <a href="{% url 'carts' %}" class="nav-link cart-icon">🛒</a>
+            </nav>
+        </div>
+    </header>
+    
+    <main>
+        <section class="product-section">
+            {% for item in items %}
+            <div class="product-item">
+                {% if item.image %}
+                <img src="{{ item.image.url }}" alt="{{ item.name }}">
+                {% else %}
+                <img src="{% static 'images/placeholder.jpg' %}" alt="{{ item.name }}">
+                {% endif %}
+                
+                <h3 class="product-title">{{ item.name }}</h3>
+                <div class="product-rating">
+                    {% with rating=item.rating %}
+                        {% if rating >= 5.0 %}★★★★★
+                        {% elif rating >= 4.0 %}★★★★☆
+                        {% elif rating >= 3.0 %}★★★☆☆
+                        {% elif rating >= 2.0 %}★★☆☆☆
+                        {% else %}★☆☆☆☆
+                        {% endif %}
+                    {% endwith %}
+                </div>
+                <div class="product-sold">Sold: {{ item.sold }}</div>
+                <div class="product-price">${{ item.price }}</div>
+                
+                <div class="product-options">
+                    <!-- You might want to add dynamic options based on product type -->
+                    <label class="option-label" for="platform{{ forloop.counter }}">Platform:</label>
+                    <select id="platform{{ forloop.counter }}">
+                        <option value="default">Select Platform</option>
+                    </select>
+                </div>
+                <button class="add-to-cart">Add to Cart</button>
+            </div>
+            {% empty %}
+            <p>No items available.</p>
+            {% endfor %}
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 GameHub. All rights reserved.</p>
+    </footer>
+</body>
+</html>

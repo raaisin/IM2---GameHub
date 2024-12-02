@@ -1,0 +1,517 @@
+<<<<<<< HEAD:static/css/home.css
+=======
+
+>>>>>>> gamehub-main:static/css/features/home.css
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    text-decoration: none;
+}
+
+body {
+    font-family: 'Roboto', Arial, sans-serif;
+    background-size: cover;
+    background-attachment: fixed;
+    background-position: center;
+}
+
+/* Header Styles */
+.header {
+    background-color: #0f146d;
+    color: white;
+    padding: 10px 0;
+}
+
+.header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.logo a {
+    font-size: 24px;
+    font-weight: 600;
+    color: white;
+}
+
+.search-bar {
+    display: flex;
+    align-items: center;
+    background-color: #ffffff;
+    border: 2px solid #0f146d;
+    border-radius: 25px;
+    overflow: hidden;
+    width: 60%; /* Adjust width as needed */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.search-input {
+    padding: 12px 15px;
+    border: none;
+    flex: 1;
+    font-size: 16px;
+    outline: none;
+}
+
+.search-button {
+    padding: 12px 20px;
+    border: none;
+    background-color: #f57224;
+    color: white;
+    font-weight: bold;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    border-left: 2px solid #0f146d;
+}
+
+.search-button:hover {
+    background-color: #d45d1d;
+}
+
+.user-actions a {
+    color: white;
+    margin-left: 20px;
+}
+
+/* Navigation Styles */
+.nav {
+    background-color: white;
+    padding: 10px 0;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.nav-content {
+    display: flex;
+    justify-content: space-between;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.nav-content a {
+    color: #0f146d;
+    font-weight: 500;
+    padding: 10px 15px;
+    border-radius: 4px;
+    transition: background-color 0.3s;
+}
+
+.nav-content a:hover {
+    background-color: #d3d3d3;
+}
+
+/* Main Content Styles */
+.main-content {
+    max-width: 1200px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: rgba(255, 255, 255, 0.8);
+    border-radius: 10px;
+}
+
+/* Category Section Styles */
+.category-section {
+    max-width: 1200px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: rgba(255, 255, 255, 0.8);
+    border-radius: 10px;
+  }
+  
+  .category-label {
+    margin-bottom: 20px;
+  }
+  
+  .category-container {
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .category-grid {
+    display: flex;
+    gap: 20px;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    padding: 10px 0 20px 0;
+  }
+  
+  /* Custom Scrollbar Styles */
+  .category-grid::-webkit-scrollbar {
+    height: 8px;
+    display: block;
+  }
+  
+  .category-grid::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+  }
+  
+  .category-grid::-webkit-scrollbar-thumb {
+    background: #0f146d;
+    border-radius: 4px;
+    transition: background 0.3s ease;
+  }
+  
+  .category-grid::-webkit-scrollbar-thumb:hover {
+    background: #1a237e;
+  }
+  
+  /* For Firefox */
+  .category-grid {
+    scrollbar-width: thin;
+    scrollbar-color: #0f146d #f1f1f1;
+  }
+  
+  .category-item {
+    flex: 0 0 auto;
+    width: 180px;
+    text-align: center;
+    transition: transform 0.3s;
+  }
+  
+  .category-item:hover {
+    transform: translateY(-5px);
+  }
+  
+  /* Fixed image dimensions */
+  .category-item img {
+    width: 180px;  /* Match the category-item width */
+    height: 180px; /* Make it square */
+    object-fit: cover;
+    border-radius: 8px;
+    margin-bottom: 8px;
+  }
+  
+  .category-item p {
+    color: #333;
+    font-weight: 500;
+    margin: 0;
+  }
+  
+  /* Responsive Styles */
+  @media (max-width: 768px) {
+    .category-item {
+      width: 150px;
+    }
+    
+    .category-item img {
+      width: 150px;  /* Match the responsive category-item width */
+      height: 150px; /* Keep it square */
+    }
+  }
+@media (max-width: 480px) {
+    .category-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.category-item img {
+    width: 100%;
+    height: auto;
+    max-height: 150px;
+    object-fit: cover;
+    border-radius: 4px;
+}
+
+.category-item p {
+    margin-top: 5px;
+    font-size: 14px;
+    color: #333;
+}
+
+/* Carousel Styles */
+.carousel {
+    position: relative;
+    margin-bottom: 20px;
+}
+
+.carousel img {
+    width: 100%;
+    border-radius: 4px;
+}
+
+.prev, .next {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: rgba(0, 0, 0, 0.5);
+    padding: 12px;
+    width: 40px;
+    height: 40px;
+    color: white;
+    font-size: 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.prev:hover, .next:hover {
+    background-color: rgba(0, 0, 0, 0.7);
+}
+
+.prev {
+    left: 10px;
+}
+
+.next {
+    right: 10px;
+}
+
+/* Product Grid Styles */
+.product-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+}
+
+@media (max-width: 768px) {
+    .product-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 480px) {
+    .product-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.product-item {
+    background-color: white;
+    border-radius: 4px;
+    padding: 10px;
+    text-align: center;
+    transition: box-shadow 0.3s;
+}
+
+.product-item:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.product-item img {
+    width: 100%;
+    height: auto;
+    border-radius: 4px;
+}
+
+.product-item h3 {
+    font-size: 14px;
+    margin: 10px 0;
+    color: #0f146d;
+}
+
+.product-item p {
+    color: #f57224;
+    font-weight: bold;
+}
+
+.category-item img {
+    width: 150px; /* Adjust as needed */
+    height: 150px; /* Adjust as needed */
+    object-fit: cover;
+    display: block;
+    margin: 0 auto; /* Center images */
+}
+.category-item {
+    text-align: center; /* Center text below the images */
+<<<<<<< HEAD:static/css/home.css
+=======
+}
+
+       /* Dropdown Menu Styling */
+.nav-content {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.dropdown {
+    position: relative;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    top: 150%; /* Position below the "Phones" button */
+    left: 0;
+    background-color: white;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    border: 1px solid #ddd;
+    z-index: 10;
+    padding: 10px 0;
+    width: 200px; /* Adjust dropdown width */
+}
+
+.dropdown-content a {
+    display: block;
+    padding: 10px 15px;
+    text-decoration: none;
+    color: black;
+    font-size: 14px;
+    transition: background-color 0.3s ease;
+}
+
+.dropdown-content a:hover {
+    background-color: #f4f4f4;
+}
+
+.dropdown:hover .dropdown-content {
+    display: block; /* Show the dropdown when hovering */
+}
+.footer {
+background-color: #0f146d;
+color: white;
+padding: 40px 0 20px;
+margin-top: 40px;
+}
+
+.footer-content {
+max-width: 1200px;
+margin: 0 auto;
+display: grid;
+grid-template-columns: repeat(4, 1fr);
+gap: 30px;
+padding: 0 20px;
+}
+
+.footer-section h3 {
+color: #f57224;
+margin-bottom: 20px;
+font-size: 18px;
+}
+
+.footer-section p {
+line-height: 1.6;
+margin-bottom: 20px;
+}
+
+.footer-section ul {
+list-style: none;
+padding: 0;
+}
+
+.footer-section ul li {
+margin-bottom: 10px;
+}
+
+.footer-section ul li a {
+color: white;
+text-decoration: none;
+transition: color 0.3s ease;
+}
+
+.footer-section ul li a:hover {
+color: #f57224;
+}
+
+.social-links {
+display: flex;
+gap: 15px;
+margin-bottom: 20px;
+}
+
+.social-links a {
+font-size: 24px;
+color: white;
+text-decoration: none;
+transition: transform 0.3s ease;
+}
+
+.social-links a:hover {
+transform: translateY(-3px);
+}
+
+.newsletter h4 {
+margin-bottom: 15px;
+font-size: 16px;
+}
+
+.newsletter-form {
+display: flex;
+gap: 10px;
+}
+
+.newsletter-form input {
+padding: 8px 12px;
+border: none;
+border-radius: 4px;
+flex-grow: 1;
+}
+
+.newsletter-form button {
+padding: 8px 15px;
+background-color: #f57224;
+color: white;
+border: none;
+border-radius: 4px;
+cursor: pointer;
+transition: background-color 0.3s ease;
+}
+
+.newsletter-form button:hover {
+background-color: #d45d1d;
+}
+
+.footer-bottom {
+max-width: 1200px;
+margin: 40px auto 0;
+padding: 20px;
+border-top: 1px solid rgba(255, 255, 255, 0.1);
+display: flex;
+justify-content: space-between;
+align-items: center;
+}
+
+.footer-bottom-links {
+display: flex;
+gap: 20px;
+}
+
+.footer-bottom-links a {
+color: white;
+text-decoration: none;
+font-size: 14px;
+transition: color 0.3s ease;
+}
+
+.footer-bottom-links a:hover {
+color: #f57224;
+}
+
+@media (max-width: 1024px) {
+.footer-content {
+grid-template-columns: repeat(2, 1fr);
+}
+}
+
+@media (max-width: 768px) {
+.footer-content {
+grid-template-columns: 1fr;
+}
+
+.footer-bottom {
+flex-direction: column;
+text-align: center;
+gap: 15px;
+}
+
+.footer-bottom-links {
+justify-content: center;
+}
+}
+
+@media (max-width: 480px) {
+.newsletter-form {
+flex-direction: column;
+}
+
+.newsletter-form button {
+width: 100%;
+}
+>>>>>>> gamehub-main:static/css/features/home.css
+}

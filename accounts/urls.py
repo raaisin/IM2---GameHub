@@ -1,5 +1,7 @@
 from django.urls import path
-
+from django.conf import settings
+from django.conf.urls.static import static
+    
 from . import views
 
 urlpatterns = [
@@ -13,7 +15,6 @@ urlpatterns = [
     path('laptop/', views.laptop_view, name='laptop'),
     path('phone/', views.phone_view, name='phone'),
     path('gamingphone/', views.gamingphone_view, name='gamingphone'),
-    path('nongamingphone/', views.nongamingphone_view, name='nongamingphone'),
     path('new/', views.new_view, name='new'),
     path('deals/', views.deals_view, name='deals'),
     path('lol_game/', views.lol_game, name='lol_game'),
@@ -28,8 +29,13 @@ urlpatterns = [
     path('accessories/', views.accessories_view, name='accessories'),
     path('orders/', views.orders, name='orders'),
     path('api/create-order/', views.create_order, name='create_order'),
-        path('orders/<int:order_id>/mark-delivered/', views.mark_as_delivered, name='mark_delivered'),
     path('payment/', views.payment_view, name="payment"),
         path('dashboard/', views.dashboard_view, name="dashboard"),
+    path('noitemsfound/', views.noitemsfound, name='noitemsfound'),  
+    path('update_order_status/<int:order_id>/', views.update_order_status, name='update_order_status'),
+    path('mark_all_orders_delivered/', views.mark_all_orders_delivered, name='mark_all_orders_delivered'),
+
 
 ]
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

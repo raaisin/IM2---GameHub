@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Premium Gaming PCs | GameHub</title>
+    <link rel="stylesheet" href="{% static 'css/items/pc.css' %}">
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">New</div>
+            <div class="search-bar">
+                <input type="text" class="search-input" placeholder="Search for games...">
+                <button class="search-button">🔍</button>
+            </div>
+            <nav class="nav-links">
+                <a href="{% url 'home' %}" class="nav-link">Home</a>
+                <a href="{% url 'carts' %}" class="nav-link cart-icon">🛒</a>
+            </nav>
+        </div>
+    </header>
+
+    <div class="filters">
+        
+    </div>
+
+    <div class="product-section">
+        {% for product in products %}
+        <div class="product-item">
+            <div class="product-badge">{{ product.badge }}</div>
+            <div class="product-images">
+                <img src="{{ product.image_main.url }}" alt="{{ product.name }}" class="product-image">
+                <div class="image-gallery">
+                </div>
+            </div>
+            <div class="product-title">{{ product.name }}</div>
+            <div class="product-specs">
+                <div class="spec-item">
+                    <span class="spec-icon">🎮</span>
+                    {{ product.gpu }}
+                </div>
+                <div class="spec-item">
+                    <span class="spec-icon">⚡</span>
+                    {{ product.cpu }}
+                </div>
+                <div class="spec-item">
+                    <span class="spec-icon">💾</span>
+                    {{ product.ram }}
+                </div>
+                <div class="spec-item">
+                    <span class="spec-icon">💿</span>
+                    {{ product.storage }}
+                </div>
+                <div class="spec-item">
+                    <span class="spec-icon">❄️</span>
+                    {{ product.cooling }}
+                </div>
+            </div>
+            <div class="performance-metrics">
+                <div class="metric">
+                    <div class="metric-value">{{ product.fps_1440p }} FPS</div>
+                    <div class="metric-label">1440p Gaming</div>
+                </div>
+                <div class="metric">
+                    <div class="metric-value">{{ product.fps_4k }} FPS</div>
+                    <div class="metric-label">4K Gaming</div>
+                </div>
+                <div class="metric">
+                    <div class="metric-value">{{ product.ray_tracing|yesno:"Ray Tracing,No Ray Tracing" }}</div>
+                    <div class="metric-label">DLSS 3.0</div>
+                </div>
+                <div class="metric">
+                    <div class="metric-value">{{ product.psu }}</div>
+                    <div class="metric-label">PSU</div>
+                </div>
+            </div>
+            <div class="product-rating">
+                <div class="stars">★★★★★</div>
+                <div class="review-count">({{ product.rating }} • {{ product.review_count }} reviews)</div>
+            </div>
+            <div class="product-price">
+                ${{ product.price }}
+                <span class="original-price">${{ product.original_price }}</span>
+                <span class="savings">Save ${{ product.savings }}</span>
+            </div>
+            <div class="product-options">
+                <div>
+                    <label class="option-label">Case Lighting:</label>
+                    <select>
+                        {% for option in product.case_lighting_choices %}
+                            <option>{{ option }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div>
+                    <label class="option-label">RAM Configuration:</label>
+                    <select>
+                        {% for option in product.ram_configuration_choices %}
+                            <option>{{ option }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div>
+                    <label class="option-label">Warranty:</label>
+                    <select>
+                        {% for option in product.warranty_choices %}
+                            <option>{{ option }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div>
+                    <label class="option-label">Quantity:</label>
+                    <input type="number" value="1" min="1" max="5">
+                </div>
+            </div>
+            <button class="add-to-cart">
+                <span>🛒</span> Add to Cart
+            </button>
+            <div class="financing-info">
+                Starting at ${{ product.price|floatformat:0 }} /mo with GameHub Financing
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <script>
+        document.querySelectorAll('.add-to-cart').forEach(button => {
+            button.addEventListener('click', function () {
+                const productItem = this.closest('.product-item');
+                const productName = productItem.querySelector('.product-title').textContent.trim();
+                const productPrice = productItem.querySelector('.product-price').textContent.trim();
+                const productOptions = {};
+    
+                // Collect selected options
+                productItem.querySelectorAll('.product-options select').forEach(select => {
+                    const label = select.closest('div').querySelector('.option-label').textContent.trim();
+                    productOptions[label] = select.value;
+                });
+    
+                const quantity = productItem.querySelector('input[type="number"]').value;
+    
+                // Send data to the existing cart handler
+                fetch("{% url 'carts' %}", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "X-CSRFToken": "{{ csrf_token }}", // Django CSRF Token
+                    },
+                    body: JSON.stringify({
+                        product_name: productName,
+                        product_price: productPrice,
+                        product_options: productOptions,
+                        quantity: quantity
+                    }),
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // Update the cart icon count
+                        const cartCount = document.querySelector('.cart-count');
+                        cartCount.textContent = parseInt(cartCount.textContent) + parseInt(quantity);
+    
+                        // Indicate the item was added successfully
+                        button.classList.add('added-to-cart');
+                        button.textContent = '✓ Added to Cart';
+    
+                        // Optionally disable the button
+                        button.disabled = true;
+                    } else {
+                        alert(`Error: ${data.message}`);
+                    }
+                })
+                .catch(error => {
+                    console.error("Error:", error);
+                    alert("Failed to add item to the cart. Please try again.");
+                });
+            });
+        });
+    </script>
+</body>
+</html>

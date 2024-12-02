@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Deals</title>
+    <link rel="stylesheet" href="{% static 'css/items/deals.css' %}">
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --background-color: #f4f6f7;
+            --text-color: #2c3e50;
+            --border-color: #e0e4e6;
+            --border-radius: 6px;
+            --transition-speed: 0.3s;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', 'Arial', sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 30px;
+            background-color: white;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        .logo a {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--primary-color);
+            text-decoration: none;
+            letter-spacing: -0.5px;
+        }
+
+        .search-bar {
+            display: flex;
+            width: 300px;
+        }
+
+        .search-input {
+            flex-grow: 1;
+            padding: 10px;
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius) 0 0 var(--border-radius);
+            transition: border-color var(--transition-speed);
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--secondary-color);
+        }
+
+        .search-button {
+            padding: 10px 15px;
+            background-color: var(--secondary-color);
+            color: white;
+            border: none;
+            border-radius: 0 var(--border-radius) var(--border-radius) 0;
+            cursor: pointer;
+            transition: background-color var(--transition-speed);
+        }
+
+        .search-button:hover {
+            background-color: #2980b9;
+        }
+
+        .nav-link {
+            text-decoration: none;
+            color: var(--primary-color);
+            font-weight: 500;
+            margin-left: 15px;
+            transition: color var(--transition-speed);
+        }
+
+        .nav-link:hover {
+            color: var(--secondary-color);
+        }
+
+        .shop-layout {
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            gap: 30px;
+        }
+
+        .sidebar {
+            background: white;
+            border-radius: var(--border-radius);
+            border: 1px solid var(--border-color);
+            padding: 25px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        .filter-title {
+            font-size: 18px;
+            color: var(--primary-color);
+            margin-bottom: 15px;
+            font-weight: 600;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 10px;
+        }
+
+        #category-list {
+            list-style: none;
+        }
+
+        #category-list li {
+            padding: 12px 15px;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: background-color var(--transition-speed), color var(--transition-speed);
+        }
+
+        #category-list li:hover {
+            background-color: var(--secondary-color);
+            color: white;
+        }
+
+        .category-active {
+            background-color: var(--secondary-color);
+            color: white !important;
+        }
+
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 25px;
+        }
+
+        .product-card {
+            background: white;
+            border-radius: var(--border-radius);
+            border: 1px solid var(--border-color);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            transition: transform var(--transition-speed), box-shadow var(--transition-speed);
+            position: relative;
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .product-image {
+            width: 100%;
+            height: 220px;
+            object-fit: contain;
+            margin-bottom: 15px;
+            border-radius: 4px;
+            transition: opacity var(--transition-speed);
+        }
+
+        .product-title {
+            font-size: 16px;
+            font-weight: 500;
+            margin-bottom: 10px;
+            min-height: 48px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            color: var(--primary-color);
+        }
+
+        .product-price {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .original-price {
+            color: #7f8c8d;
+            text-decoration: line-through;
+            font-size: 14px;
+        }
+
+        .discounted-price {
+            color: var(--secondary-color);
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .add-to-cart {
+            width: 100%;
+            padding: 12px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-weight: 500;
+            cursor: pointer;
+            margin-top: auto;
+            transition: background-color var(--transition-speed);
+        }
+
+        .add-to-cart:hover {
+            background-color: #34495e;
+        }
+
+        @media (max-width: 1024px) {
+            .shop-layout {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header1">
+        <div class="header-content">
+            <div class="logo">
+                <a href="{% url 'home' %}">Deals</a>
+            </div>
+            <div class="search-bar">
+                <input type="text" class="search-input" placeholder="Search for products...">
+                <button class="search-button">🔍</button>
+            </div>
+            <div class="user-actions">
+                <a href="{% url 'home' %}" class="nav-link">Home</a>
+                <a href="{% url 'carts' %}" class="nav-link cart-icon">🛒</a>
+            </div>
+        </div>
+    </header>
+
+    <div class="shop-layout">
+        <aside class="sidebar">
+            <h3 class="filter-title">Categories</h3>
+            <ul id="category-list">
+                <li data-category="all" class="category-active">All Products</li>
+                <li data-category="Games Sale">Games Sale</li>
+                <li data-category="Sony">Sony</li>
+                <li data-category="JBL">JBL</li>
+                <li data-category="Logitech">Logitech</li>
+                <li data-category="Razer">Razer</li>
+            </ul>
+        </aside>
+
+        <main class="product-grid">
+            {% for deal in deals %}
+            <div class="product-card" data-category="{{ deal.category }}" data-price="{{ deal.discounted_price }}">
+                <img src="{{ deal.image.url }}" alt="{{ deal.name }}" class="product-image">
+                <h2 class="product-title">{{ deal.name }}</h2>
+                <div class="product-price">
+                    {% if deal.original_price %}
+                        <span class="original-price">₱{{ deal.original_price|floatformat:2 }}</span>
+                    {% endif %}
+                    <span class="discounted-price">₱{{ deal.discounted_price|floatformat:2 }}</span>
+                </div>
+                <button class="add-to-cart">Add to Cart</button>
+            </div>
+            {% endfor %}
+            
+            {% if not deals %}
+            <div class="no-results">No deals found!</div>
+            {% endif %}
+        </main>
+    </div>
+
+    <script>
+        // Select category list and all product cards
+        const categoryList = document.querySelectorAll("#category-list li");
+        const productCards = document.querySelectorAll(".product-card");
+
+        // Add click event listeners to each category
+        categoryList.forEach((category) => {
+            category.addEventListener("click", () => {
+                // Remove the active class from all categories
+                categoryList.forEach((cat) => cat.classList.remove("category-active"));
+
+                // Add the active class to the clicked category
+                category.classList.add("category-active");
+
+                // Get the selected category from the data attribute
+                const selectedCategory = category.getAttribute("data-category");
+
+                // Show or hide products based on the selected category
+                productCards.forEach((card) => {
+                    const cardCategory = card.getAttribute("data-category");
+
+                    // If "all" is selected or the product matches the category, show it
+                    if (selectedCategory === "all" || cardCategory === selectedCategory) {
+                        card.style.display = "flex";
+                    } else {
+                        card.style.display = "none";
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

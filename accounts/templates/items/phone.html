@@ -1,0 +1,209 @@
+    <!DOCTYPE html>
+{% load static %}
+<html lang="en">
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Initialize cart in localStorage if it doesn't exist
+    if (!localStorage.getItem('cartItems')) {
+        localStorage.setItem('cartItems', JSON.stringify([]));
+    }
+
+    // Cart Management
+    const addToCartButtons = document.querySelectorAll('.add-to-cart');
+    const checkoutButton = document.querySelector('.checkout-button');
+
+    addToCartButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            // Find the closest product item
+            const productItem = this.closest('.product-item');
+            
+            // Extract product details
+            const priceText = productItem.querySelector('.product-price').textContent;
+            const price = parseFloat(priceText.replace('₱', '').replace(',', '').trim());
+
+            const product = {
+                id: productItem.querySelector('img').getAttribute('alt'), // Using alt text as unique identifier
+                name: productItem.querySelector('.product-title').textContent,
+                price: price,
+                image: productItem.querySelector('img').src,
+                color: productItem.querySelector('select').value,
+                quantity: parseInt(productItem.querySelector('.quantity-input').value)
+            };
+
+            // Retrieve existing cart items
+            let cartItems = JSON.parse(localStorage.getItem('cartItems') || '[]');
+
+            // Check if product already exists in cart
+            const existingProductIndex = cartItems.findIndex(item => 
+                item.id === product.id && 
+                item.color === product.color
+            );
+
+            if (existingProductIndex !== -1) {
+                // Update quantity if product exists
+                cartItems[existingProductIndex].quantity += product.quantity;
+            } else {
+                // Add new product to cart
+                cartItems.push(product);
+            }
+
+            // Save updated cart
+            localStorage.setItem('cartItems', JSON.stringify(cartItems));
+
+            // Update button UI
+            this.textContent = 'Added to Cart';
+            this.style.backgroundColor = '#4CAF50';
+            this.style.color = 'white';
+            this.disabled = true;
+
+            // Optional: Show cart count
+            updateCartCount();
+        });
+    });
+
+    // Checkout functionality
+    if (checkoutButton) {
+        checkoutButton.addEventListener('click', function() {
+            const cartItems = JSON.parse(localStorage.getItem('cartItems') || '[]');
+
+            if (cartItems.length === 0) {
+                alert('Your cart is empty!');
+                return;
+            }
+
+            // Send order to backend
+            fetch('/api/create-order/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCookie('csrftoken')
+                },
+                body: JSON.stringify({ items: cartItems })
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                // Clear cart after successful order
+                localStorage.setItem('cartItems', JSON.stringify([]));
+                updateCartCount();
+                alert('Order placed successfully! Order ID: ' + data.orderId);
+                window.location.href = '/orders/';
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Error placing order. Please try again.');
+            });
+        });
+    }
+
+    // Function to update cart count
+    function updateCartCount() {
+        const cartItems = JSON.parse(localStorage.getItem('cartItems') || '[]');
+        const cartIcon = document.querySelector('.cart-icon');
+        if (cartIcon) {
+            const totalQuantity = cartItems.reduce((total, item) => total + item.quantity, 0);
+            cartIcon.textContent = `🛒 (${totalQuantity})`;
+        }
+    }
+
+    // Function to change quantity
+    function changeQuantity(button, change) {
+        const quantityInput = button.parentElement.querySelector('.quantity-input');
+        let currentValue = parseInt(quantityInput.value);
+        let newValue = currentValue + change;
+        
+        // Ensure value stays within min and max
+        newValue = Math.max(1, Math.min(newValue, 5));
+        quantityInput.value = newValue;
+    }
+
+    // Attach changeQuantity to global scope so it can be called from inline onclick
+    window.changeQuantity = changeQuantity;
+
+    // Initialize cart count on page load
+    updateCartCount();
+
+    // Function to get CSRF token from cookies
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+});
+    
+</script>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/items/phone.css' %}">
+    <title>Laptops</title>
+    
+</head>
+
+<body>
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">Phone Store</div>
+            <div class="search-bar">
+                <input type="text" class="search-input" placeholder="Search for phones...">
+                <button class="search-button">🔍</button>
+            </div>
+            <nav class="nav-links">
+                <a href="{% url 'home' %}" class="nav-link">Home</a>
+                <a href="#" class="nav-link">Categories</a>
+                <a href="{% url 'carts' %}" class="nav-link cart-icon">🛒</a>
+            </nav>
+        </div>
+    </header>
+
+    <div class="">
+        <div class="product-section">
+            {% for phone in phones %}
+            <div class="product-item">
+                <img src="{% if phone.image %}{{ phone.image.url }}{% else %}{% static 'images/placeholder.jpg' %}{% endif %}" alt="{{ phone.name }}">
+                <div class="product-title">{{ phone.name }}</div>
+                <div class="product-rating">
+                    {% with rating=phone.rating|floatformat:0 %}
+                        {% for i in "12345" %}
+                            {% if forloop.counter <= rating %}★{% else %}☆{% endif %}
+                        {% endfor %}
+                    {% endwith %}
+                    ({{ phone.rating }})
+                </div>
+                <div class="product-sold">{{ phone.sold }} sold</div>
+                <div class="product-price">${{ phone.price|floatformat:2 }}</div>
+                <div class="product-options">
+                    <label class="option-label">Color:</label>
+                    <select>
+                        {% for color in phone.colors %}
+                        <option>{{ color }}</option>
+                        {% endfor %}
+                    </select>
+                    <label class="option-label">Quantity:</label>
+                    <div class="quantity-controls">
+                        <button class="decrease" onclick="changeQuantity(this, -1)">-</button>
+                        <input type="number" class="quantity-input" value="1" min="1" max="5" readonly>
+                        <button class="increase" onclick="changeQuantity(this, 1)">+</button>
+                    </div>
+                </div>
+                <button class="add-to-cart">Add to Cart</button>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</body>
+</html>

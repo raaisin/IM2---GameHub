@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/features/home.css' %}">
+    <script src="{% static 'myproject/js/features/home.js' %}"></script>
+    <title>GameHub</title>
+
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">
+                <a href="{% url 'home' %}">GameHub 💻</a>
+            </div>
+            <div class="search-bar">
+                <form onsubmit="handleSearch(event)" style="display: flex; flex-grow: 1;">
+                    <input 
+                        type="text" 
+                        id="searchInput" 
+                        class="search-input" 
+                        placeholder="Search for laptops, phones, etc..." 
+                        aria-label="Search bar"
+                    />
+                    <button type="submit" class="search-button">Search</button>
+                </form>
+                <p id="noResults" style="display: none; color: red; margin-top: 10px;"></p>
+            </div>
+            
+            <div class="user-actions">
+                <a href="{% url 'carts' %}">🛒</a>
+                <a href="{% url 'profile' %}">Account</a>
+            </div>
+        </div>
+    </header>
+
+    <nav class="nav">
+        <div class="nav-content">
+            <a href="{% url 'new' %}">New 👀</a>
+            <a href="{% url 'deals' %}">Deals 🔥</a>
+            <a href="{% url 'active' %}">Active 📢</a>
+            <a href="{% url 'laptop' %}">Laptops 💻</a>
+            <div class="dropdown">
+                <a href="{% url 'phone' %}">Phones 📞</a>
+            </div>
+            <a href="{% url 'pc' %}">PC 👨</a>
+            <a href="{% url 'accessories' %}">Accessories ✨</a>
+        </div>
+    </nav>
+
+
+    <main class="main-content">
+        <div class="carousel">
+            <img src="{% static 'images/wildsale.jpg' %}" alt="Featured Game 1">
+            <a class="prev" onclick="moveCarousel(-1)">&#10094;</a>
+            <a class="next" onclick="moveCarousel(1)">&#10095;</a>
+        </div>
+
+        <section class="category-section">
+            <h2 class="category-label">Categories</h2>
+            <div class="category-container">
+                <div class="category-grid">
+                    <div class="category-item">
+                        <a href="{% url 'gamingphone' %}">
+                            <img src="{% static 'images/phonegamingacc.jpg' %}" alt="Phone Gaming Accessories">
+                        </a>
+                        <p>Phone Gaming</p>
+                    </div>
+                    <div class="category-item">
+                        <a href="{% url 'accessories' %}">
+                            <img src="{% static 'images/gaming-mouse.webp' %}" alt="Gaming Mouse">
+                        </a>
+                        <p>Gaming Mouse</p>
+                    </div>
+                    <div class="category-item">
+                        <a href="{% url 'accessories' %}">
+                            <img src="{% static 'images/mech-keyboard.jpg' %}" alt="Mechanical Keyboard">
+                        </a>
+                        <p>Keyboards</p>
+                    </div>
+                    <div class="category-item">
+                        <a href="{% url 'accessories' %}">
+                            <img src="{% static 'images/finger-sleeves.webp' %}" alt="Finger Sleeves">
+                        </a>
+                        <p>Finger Sleeves</p>
+                    </div>
+                    <div class="category-item">
+                        <a href="{% url 'accessories' %}">
+                            <img src="{% static 'images/controller.jpg' %}" alt="Controller">
+                        </a>
+                        <p>Controllers</p>
+                    </div>
+                    <div class="category-item">
+                        <a href="{% url 'accessories' %}">
+                            <img src="{% static 'images/cooling-pad.png' %}" alt="Cooling Pad">
+                        </a>
+                        <p>Cooling Pads</p>
+                    </div>
+                    <div class="category-item">
+                        <a href="{% url 'pc' %}">
+                            <img src="{% static 'images/pc.webp' %}" alt="PC">
+                        </a>
+                        <p>PC</p>
+                    </div>
+                    <div class="category-item">
+                        <a href="{% url 'gamingphone' %}">
+                            <img src="{% static 'images/gamingphone.webp' %}" alt="Gaming Phones">
+                        </a>
+                        <p>Gaming Phones</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+
+        <section class="category-section">
+            <h2 class="category-label">Just For You</h2>
+            <div class="product-grid">
+                <div class="product-item">
+                    <img src="{% static 'images/motherboard.webp' %}" alt="Gaming Mouse">
+                    <h3>N5105 ITX NAS DIY Motherboard 4 Cores 4</h3>
+                    <p>$149.99</p>
+                </div>
+                <div class="product-item">
+                    <img src="{% static 'images/cpu.webp' %}" alt="Gaming Mouse">
+                    <h3>CPU Unit Only AMD Desktop Ryzen 5 5600G Gaming PC</h3>
+                    <p>$149.99</p>
+                </div>
+                <div class="product-item">
+                    <img src="{% static 'images/ryzen.webp' %}" alt="Gaming Mouse">
+                    <h3>AMD Ryzen 5 3600 CPU, 16GB DDR4, B450M-PROS</h3>
+                    <p>$149.99</p>
+                </div>
+                <div class="product-item">
+                    <img src="{% static 'images/corsair.webp' %}" alt="Gaming Mouse">
+                    <h3>Corsair Vengeance RGB PRO 16GB</h3>
+                    <p>$149.99</p>
+                </div>
+                <div class="product-item">
+                    <img src="{% static 'images/asusrog.webp' %}" alt="Gaming Mouse">
+                    <h3>N5105 ITX NAS DIY Motherboard 4 Cores 4</h3>
+                    <p>$149.99</p>
+                </div>
+                <div class="product-item">
+                    <img src="{% static 'images/motherboard.webp' %}" alt="Gaming Mouse">
+                    <h3>N5105 ITX NAS DIY Motherboard 4 Cores 4</h3>
+                    <p>$149.99</p>
+                </div>
+            </div>
+        </section>
+    </main>
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>About GameHub</h3>
+                <p>Your one-stop destination for gaming gear, accessories, and the latest tech. We're passionate about bringing you the best gaming experience.</p>
+            </div>
+            
+            <div class="footer-section">
+                <h3>Quick Links</h3>
+                <ul>
+                    <li><a href="{% url 'new' %}">New Arrivals</a></li>
+                    <li><a href="{% url 'deals' %}">Special Deals</a></li>
+                    <li><a href="{% url 'laptop' %}">Gaming Laptops</a></li>
+                    <li><a href="{% url 'phone' %}">Gaming Phones</a></li>
+                    <li><a href="{% url 'accessories' %}">Accessories</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-section">
+                <h3>Customer Service</h3>
+                <ul>
+                    <li><a href="#">Contact Us</a></li>
+                    <li><a href="#">Shipping Info</a></li>
+                    <li><a href="#">Returns Policy</a></li>
+                    <li><a href="#">Order Status</a></li>
+                    <li><a href="#">FAQ</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-section">
+                <h3>Connect With Us</h3>
+                <div class="social-links">
+                    <a href="#" aria-label="Facebook">📘</a>
+                    <a href="#" aria-label="Twitter">🐦</a>
+                    <a href="#" aria-label="Instagram">📸</a>
+                    <a href="#" aria-label="YouTube">🎥</a>
+                </div>
+                <div class="newsletter">
+                    <h4>Subscribe to Our Newsletter</h4>
+                    <form class="newsletter-form">
+                        <input type="email" placeholder="Enter your email" aria-label="Email for newsletter">
+                        <button type="submit">Subscribe</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer-bottom">
+            <p>&copy; 2024 GameHub. All rights reserved.</p>
+            <div class="footer-bottom-links">
+                <a href="#">Privacy Policy</a>
+                <a href="#">Terms of Service</a>
+                <a href="#">Sitemap</a>
+            </div>
+        </div>
+    </footer>
+    <script>
+         function handleSearch(event) {
+        event.preventDefault();
+        const searchTerm = document.getElementById('searchInput').value.toLowerCase().trim();
+
+        // hardcode nalang pang search ahahha
+        const laptopKeywords = ['laptop', 'laptops', 'notebook', 'gaming laptop', 'gaming'];
+        const phoneKeywords = ['phones', 'cp', 'cellphone', 'CELLPHONE', 'phone', 'gaming'];
+        const pcKeywords = ['pc', 'gaming pc', 'cpu', 'gaming set up', 'set up', 'setup'];
+        const newKeywords = ['ps5 games', 'games', 'Games', 'PS5 GAMES', 'Ps5 Games'];
+        const dealsKeywords = ['jbl', 'speaker', 'sale', 'Sale', 'headphones', 'Headphones', 'nba', 'NBA', 'Logitech', 'logitech', 'razer', 'Razer', 'Sony', 'sony', 'razer', 'Razer'];
+
+
+        if (laptopKeywords.includes(searchTerm)) {
+        window.location.href = "{% url 'laptop' %}";
+        } else if (phoneKeywords.includes(searchTerm)) {
+        window.location.href = "{% url 'phone' %}";
+        } else if (pcKeywords.includes(searchTerm)) {
+        window.location.href = "{% url 'pc' %}";
+        }else if(newKeywords.includes(searchTerm)){
+        window.location.href = "{% url 'new' %}" 
+        }else if(dealsKeywords.includes(searchTerm)){
+        window.location.href = "{% url 'deals' %}"
+        }else {
+        window.location.href = `{% url 'noitemsfound' %}?q=${encodeURIComponent(searchTerm)}`;
+        }
+    }
+    </script>
+</body>
+</html>
