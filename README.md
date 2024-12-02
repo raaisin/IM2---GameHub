@@ -18,7 +18,7 @@ Para mapasar sa IM2 <3
 
 ## 🖼️ Preview
 
-#to add latur with figma
+#https://www.figma.com/design/2itXLcuX6kgIyFBwF4ELJX/IM2---GameHub?node-id=168-737&node-type=canvas&t=alwVIH0D3mLeqrZl-0
 
 ## Entity Relational Diagram
 ```mermaid
@@ -170,6 +170,9 @@ erDiagram
 - Product Details View
 - Update Cart Quantity
 
+- ### 📊 Gantt Chart Contributions
+[Click to preview](https://docs.google.com/spreadsheets/d/11PxER5bcgMxnkyM3OBweART3znoyU9kwjY-M0eOI7Ls/edit?gid=0#gid=0)
+
 ### ✨ Key Features -- TBC --
 - 📂 Comprehensive product catalog spanning video games, PC parts, gaming accessories, and electronics
 - 🛍️ Integrated e-commerce functionality
@@ -309,9 +312,6 @@ See `LICENSE` for more information.
 
 <hr>
 
-### 📊 Gantt Chart Contributions
-[Click to preview](./Nov27_Gantt-Chart.xlsx)
-
 ## 🚧 Future Roadmap
 - Implement advanced search and filtering
 - Add user reviews and ratings
@@ -352,10 +352,10 @@ Functional Requirements:
 
 
 Gantt chart:
-https://cebuinstituteoftechnology-my.sharepoint.com/:x:/g/personal/russelljoshua_palma_cit_edu/EW8BgyYGRYFMhLZZBPZv81IBRT8WtT-pP7IZIaXjFNUMWw?e=qDmzeW
+https://docs.google.com/spreadsheets/d/11PxER5bcgMxnkyM3OBweART3znoyU9kwjY-M0eOI7Ls/edit?gid=0#gid=0
 
 ERD:
 https://online.visual-paradigm.com/w/doxuyryq/app/diagrams/#diagram:workspace=doxuyryq&proj=0&id=11&type=ERDiagram&width=11&height=8.5&unit=inch
 
-UI/UX (Figma project):
-https://www.figma.com/design/2itXLcuX6kgIyFBwF4ELJX/IM2---GameHub?node-id=0-1&t=EAPgZgJwTsI49l2L-1
+UI/UX (Figma project)
+https://www.figma.com/design/2itXLcuX6kgIyFBwF4ELJX/IM2---GameHub?node-id=168-737&node-type=canvas&t=alwVIH0D3mLeqrZl-0
