@@ -1,103 +1,81 @@
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-        }
+:root {
+    --primary-color: #1a1a2e;
+    --secondary-color: #4a4e69;
+    --background-color: #f8f9fa;
+    --white-color: #ffffff;
+    --text-color: #2c3e50;
+    --accent-color: #6a4c93;
+    --border-color: #e9ecef;
+    --transition-speed: 0.3s;
+}
 
-        body {
-            background: #0f172a;
-            color: #e2e8f0;
-        }
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
 
-        .header {
-            background: rgba(30, 41, 59, 0.95);
-            backdrop-filter: blur(8px);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            padding: 1rem 0;
-            border-bottom: 1px solid #334155;
-        }
+body {
+    font-family: 'Nunito', 'Segoe UI', Roboto, sans-serif;
+    background-color: var(--background-color);
+    color: var(--text-color);
+    line-height: 1.7;
+}
 
-        .header-content {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 0 2rem;
-            display: flex;
-            align-items: center;
-            gap: 2rem;
-        }
+.container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 2rem;
+}
 
-        .logo {
-            font-size: 1.8rem;
-            font-weight: 700;
-            color: #60a5fa;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
+/* Navigation Styles */
+.navbar {
+    background-color: var(--white-color);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 2rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    margin-bottom: 2rem;
+    border-radius: 12px;
+}
 
-        .logo-icon {
-            font-size: 2rem;
-        }
+.navbar-brand {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--primary-color);
+    text-decoration: none;
+}
 
-        .search-bar {
-            flex: 1;
-            display: flex;
-            gap: 0.5rem;
-        }
+.nav-buttons {
+    display: flex;
+    gap: 1rem;
+}
 
-        .search-input {
-            flex: 1;
-            padding: 0.75rem 1.25rem;
-            border-radius: 8px;
-            border: 1px solid #334155;
-            background: #1e293b;
-            color: #e2e8f0;
-            font-size: 1rem;
-        }
+.nav-button {
+    text-decoration: none;
+    color: var(--white-color);
+    background-color: var(--accent-color);
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    transition: background-color var(--transition-speed) ease;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
 
-        .search-button {
-            padding: 0.75rem 1.5rem;
-            border-radius: 8px;
-            border: none;
-            background: #3b82f6;
-            color: white;
-            cursor: pointer;
-            transition: background 0.2s;
-        }
+.nav-button:hover {
+    background-color: var(--primary-color);
+}
 
-        .search-button:hover {
-            background: #2563eb;
-        }
-
-        .nav-links {
-            display: flex;
-            gap: 2rem;
-            align-items: center;
-        }
-
-        .nav-link {
-            color: #e2e8f0;
-            text-decoration: none;
-            font-size: 1.1rem;
-            transition: color 0.2s;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .nav-link:hover {
-            color: #60a5fa;
-        }
-
-        .cart-icon {
-            font-size: 1.4rem;
-            position: relative;
-        }
+.header {
+    background-color: var(--white-color);
+    border-radius: 12px;
+    padding: 2rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    text-align: center;
+}
 
         .cart-count {
             position: absolute;
