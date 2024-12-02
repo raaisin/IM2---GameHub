@@ -157,7 +157,26 @@
         </div>
         
         <div id="cart-items" class="cart-items">
-            <!-- Cart items will be dynamically inserted here -->
+            weqwe
+            {% for items in cart_items %}
+            <div class="cart-item">
+                <img src="http://127.0.0.1:8000/media/{{items.product.image}}" alt="Huawei MateBook">
+                <div class="item-details">
+                    <h3>{{items.product.name}}</h3>
+                    <p>Price: ${{items.product.price}}</p>
+                    <p>Color:{{items.color}}</p>
+                    <div class="quantity-control">
+                        <button onclick="cartManager.updateQuantity('3', '{'color': 'Space Gray'}', 0)">-</button>
+                        <input type="number" value="1" min="1" readonly="">
+                        <button onclick="cartManager.updateQuantity('3', '{'color': 'Space Gray'}', 2)">+</button>
+                        <button style="background-color: #ff4444; color: white; margin-left: 10px;" onclick="cartManager.updateQuantity('3', '{'color': 'Space Gray'}', 0)">
+                            Remove
+                        </button>
+                    </div>
+                    <p>Item Total: $899.99</p>
+                </div>
+            </div>
+            {% endfor %}
         </div>
         
         <div class="cart-summary">
@@ -169,9 +188,8 @@
             <button class="checkout-btn">Proceed to Checkout</button>
         </div>
     </div>
-
     <script>
-    class StorageManager {
+        class StorageManager {
         constructor() {
             this._storage = {};
             this._localStorageAvailable = this._checkLocalStorageAvailability();
@@ -253,21 +271,7 @@
             checkoutBtn.addEventListener('click', () => this.processCheckout());
         }
 
-        addToCart(product) {
-            const existingItemIndex = this.cartItems.findIndex(
-                item => item.id === product.id && item.color === product.color
-            );
-
-            if (existingItemIndex > -1) {
-                this.cartItems[existingItemIndex].quantity += product.quantity;
-            } else {
-                this.cartItems.push(product);
-            }
-
-            this.saveCart();
-            this.renderCart();
-        }
-
+        
         updateQuantity(id, color, quantity) {
             const itemIndex = this.cartItems.findIndex(
                 item => item.id === id && item.color === color
@@ -430,6 +434,7 @@
     window.goToProductPage = function() {
         alert('Navigate to product page (implement your own navigation logic)');
     }
+    
     </script>
 </body>
 </html>

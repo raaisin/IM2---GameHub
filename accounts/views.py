@@ -382,3 +382,55 @@ def payment_view(request):
 def noitemsfound(request):
     return render(request, 'features/noitemsfound.html')
 
+@csrf_exempt
+@require_POST
+def add_cart_items(request):
+    try:
+        # Parse the JSON data from the request body
+        data = json.loads(request.body)
+        cart_items = data.get('cart_items', [])
+        
+
+        if not cart_items:
+            # If no cart items are provided, return an error response
+            return JsonResponse({'success': False, 'error': 'No cart items provided'})
+
+        new_cart_items = []
+        for item in cart_items:
+            quantity = item.get('quantity')
+            added_at = item.get('added_at')
+            user_id = item.get('user')
+            product_id = item.get('product_id')
+            color = item.get('color')
+
+            # Validate required fields
+            if not all([quantity, added_at, user_id, product_id]):
+                return JsonResponse({'success': False, 'error': 'Missing required fields in cart items'})
+
+            # Get product and user
+            product = get_object_or_404(Product, id=product_id)
+            user = get_object_or_404(User, id=user_id)
+
+            # Calculate the total amount if needed
+            total_amount = quantity * product.price
+
+            # Create a CartItem object
+            new_cart_items.append(
+                CartItem(
+                    quantity=quantity,
+                    added_at=added_at,
+                    user=user,
+                    product=product,
+                    color = color
+                )
+            )
+
+        # Bulk save all items
+        CartItem.objects.bulk_create(new_cart_items)
+
+        return JsonResponse({'success': True, 'message': 'Cart items added successfully'})
+
+    except json.JSONDecodeError:
+        return JsonResponse({'success': False, 'error': 'Invalid JSON data'})
+    except Exception as e:
+        return JsonResponse({'success': False, 'error': str(e)}) 

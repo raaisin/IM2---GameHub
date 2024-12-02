@@ -5,6 +5,8 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" href="{% static 'css/items/laptop.css' %}">
+        <meta name="csrf-token" content="{{ csrf_token }}">
+
         <title>Laptops</title>
     </head>
     <body>
@@ -47,21 +49,27 @@
                 <div class="product-price">${{ product.price }}</div>
                 <div class="product-options">
                     <label class="option-label">Color:</label>
-                    <select class="product-color">
+                    
+                    <select id="color-{{ product.id }}" class="product-color">
                         {% for color in product.colors %}
-                            <option>{{ color }}</option>
+                            <option value="{{ color.color }}">{{ color.color }}</option>
                         {% endfor %}
                     </select>
                     <label class="option-label">Quantity:</label>
-                    <input type="number" class="product-quantity" value="1" min="1" max="5">
+                    <input id="quantity-{{ product.id }}" type="number" class="product-quantity" value="1" min="1" max="5">
                 </div>
-                <button class="add-to-cart" data-product-id="{{ product.id }}">Add to Cart</button>
+                <button class="add-to-cart" data-product-id="{{ product.id }}" onclick="addToCart(
+                    '{{ product.id }}',
+                    '{{ request.user.id }}',
+                    document.getElementById('quantity-{{ product.id }}').value,
+                    document.getElementById('color-{{ product.id }}').value
+                )">Add to Cart</button>
             </div>
             {% endfor %}
         </div>
 
-        <script>
-        document.addEventListener('DOMContentLoaded', function() {
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
             // Initialize cart in localStorage if it doesn't exist
             if (!localStorage.getItem('cartItems')) {
                 localStorage.setItem('cartItems', JSON.stringify([]));
@@ -187,7 +195,45 @@
                 }
                 return cookieValue;
             }
+            
         });
-        </script>
+        
+    function addToCart(productId, userId, quantity, color) {
+    const addedAt = new Date().toISOString(); // Current timestamp
+    const payload = {
+        cart_items: [
+            {
+                product_id: productId,
+                quantity: parseInt(quantity, 10),
+                user: userId,
+                added_at: addedAt,
+                color: color
+            }
+        ]
+    };
+
+    fetch('/addCart/', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': document.querySelector('[name=csrf-token]').content // CSRF token from meta tag
+        },
+        body: JSON.stringify(payload)
+    })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert('Product added to cart successfully!');
+            } else {
+                alert(`Error: ${data.error}`);
+ 
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('An error occurred while adding the product to the cart.');
+        });
+}
+</script>
     </body>
     </html>

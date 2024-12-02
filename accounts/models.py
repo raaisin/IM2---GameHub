@@ -58,10 +58,10 @@ class CartItem(models.Model):
     quantity = models.PositiveIntegerField(default=1)
     added_at = models.DateTimeField(default=datetime.now)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    product_name = models.ForeignKey('Product', on_delete=models.CASCADE) 
-
+    product = models.ForeignKey('Product', on_delete=models.CASCADE) 
+    color = models.CharField(max_length= 20, default= "no color")
     def __str__(self):
-        return f"{self.product_name} ({self.quantity}) - {self.user.username}"
+        return f"{self.product} ({self.quantity}) - {self.user.username}"
 
     @property
     def total_price(self):
@@ -71,7 +71,7 @@ class CartItem(models.Model):
         return self.quantity * self.price
 
     class Meta:
-        unique_together = ('user', 'product_name')
+        unique_together = ('user', 'product')
         # ordering = ['-added_at']
 
 class Order(models.Model):
