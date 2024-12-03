@@ -18,6 +18,7 @@ Para mapasar sa IM2 <3
 
 ## 🖼️ Preview
 
+![Figma 0](/figma0.png?raw=true)
 ![Figma 1](/figma1.png?raw=true)
 ![Figma 2](/figma2.png?raw=true)
 ![Figma 3](/figma3.png?raw=true)
