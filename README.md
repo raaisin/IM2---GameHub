@@ -18,7 +18,13 @@ Para mapasar sa IM2 <3
 
 ## 🖼️ Preview
 
-#https://www.figma.com/design/2itXLcuX6kgIyFBwF4ELJX/IM2---GameHub?node-id=168-737&node-type=canvas&t=alwVIH0D3mLeqrZl-0
+![Figma 1](/figma1.png?raw=true)
+![Figma 2](/figma2.png?raw=true)
+![Figma 3](/figma3.png?raw=true)
+![Figma 4](/figma4.png?raw=true)
+
+
+[Click to go to Figma](https://www.figma.com/design/2itXLcuX6kgIyFBwF4ELJX/IM2---GameHub?node-id=168-737&node-type=canvas&t=alwVIH0D3mLeqrZl-0)
 
 ## Entity Relational Diagram
 ```mermaid
@@ -29,7 +35,7 @@ erDiagram
     USER ||--o{ ORDER : "places"
     USER ||--o{ PAYMENT : "makes"
     USER {
-        PK int user_id
+        int user_id
         string email
         string password_hash
         string login_type
@@ -37,8 +43,8 @@ erDiagram
     }
 
     USER_PROFILE {
-        PK int profile_id
-        FK int user_id
+        int profile_id
+        int user_id
         string first_name
         string last_name
         string shipping_address
@@ -48,17 +54,17 @@ erDiagram
 
     CART ||--o{ CART_ITEM : "contains"
     CART {
-        PK int cart_id
-        FK int user_id
+        int cart_id
+        int user_id
         datetime created_at
         decimal total_price
     }
 
     CART_ITEM ||--|| PRODUCT : "references"
     CART_ITEM {
-        PK int cart_item_id
-        FK int cart_id
-        FK int product_id
+        int cart_item_id
+        int cart_id
+        int product_id
         int quantity
         decimal unit_price
     }
@@ -66,7 +72,7 @@ erDiagram
     PRODUCT ||--o{ PHYSICAL_PRODUCT : "is_type"
     PRODUCT ||--o{ VIRTUAL_PRODUCT : "is_type"
     PRODUCT {
-        PK int product_id
+        int product_id
         string name
         decimal price
         string description
@@ -77,9 +83,9 @@ erDiagram
 
     PHYSICAL_PRODUCT ||--|| SUBCATEGORY : "belongs_to"
     PHYSICAL_PRODUCT {
-        PK int physical_product_id
-        FK int product_id
-        FK int subcategory_id
+        int physical_product_id
+        int product_id
+        int subcategory_id
         string product_type
         string model_number
         decimal weight
@@ -87,7 +93,7 @@ erDiagram
     }
 
     SUBCATEGORY {
-        PK int subcategory_id
+        int subcategory_id
         string name
         string parent_category
     }
@@ -95,22 +101,22 @@ erDiagram
     VIRTUAL_PRODUCT ||--o{ GAME_PRODUCT : "is_type"
     VIRTUAL_PRODUCT ||--o{ IN_GAME_CURRENCY : "is_type"
     VIRTUAL_PRODUCT {
-        PK int virtual_product_id
-        FK int product_id
+        int virtual_product_id
+        int product_id
         string digital_delivery_method
     }
 
     GAME_PRODUCT {
-        PK int game_product_id
-        FK int virtual_product_id
+        int game_product_id
+        int virtual_product_id
         string game_platform
         string genre
         date release_date
     }
 
     IN_GAME_CURRENCY {
-        PK int currency_id
-        FK int virtual_product_id
+        int currency_id
+        int virtual_product_id
         string game_name
         string currency_type
     }
@@ -119,8 +125,8 @@ erDiagram
     ORDER ||--|| PAYMENT : "processed_by"
     ORDER ||--|| EMAIL_RECEIPT : "generates"
     ORDER {
-        PK int order_id
-        FK int user_id
+        int order_id
+        int user_id
         datetime order_date
         string order_status
         decimal total_amount
@@ -128,17 +134,17 @@ erDiagram
     }
 
     ORDER_ITEM {
-        PK int order_item_id
-        FK int order_id
-        FK int product_id
+        int order_item_id
+        int order_id
+        int product_id
         int quantity
         decimal unit_price
     }
 
     PAYMENT {
-        PK int payment_id
-        FK int order_id
-        FK int user_id
+        int payment_id
+        int order_id
+        int user_id
         string payment_method
         string transaction_id
         datetime payment_date
@@ -147,8 +153,8 @@ erDiagram
     }
 
     EMAIL_RECEIPT {
-        PK int receipt_id
-        FK int order_id
+        int receipt_id
+        int order_id
         string email_content
         datetime sent_at
         string recipient_email
