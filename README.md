@@ -177,9 +177,9 @@ erDiagram
 - Product Details View
 - Update Cart Quantity
 
-### 📊 Gantt Chart Contributions
-[Click to download](GanttChart_Gamehub.xlsx)
-[Click to preview](https://docs.google.com/spreadsheets/d/11PxER5bcgMxnkyM3OBweART3znoyU9kwjY-M0eOI7Ls/edit?gid=0#gid=0)
+## 📊 Gantt Chart Contributions
+- [Click to download](/GanttChart_Gamehub.xlsx)
+- [Click to preview](https://docs.google.com/spreadsheets/d/11PxER5bcgMxnkyM3OBweART3znoyU9kwjY-M0eOI7Ls/edit?gid=0#gid=0)
 
 ### ✨ Key Features -- TBC --
 - 📂 Comprehensive product catalog spanning video games, PC parts, gaming accessories, and electronics
