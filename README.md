@@ -29,7 +29,7 @@ erDiagram
     USER ||--o{ ORDER : "places"
     USER ||--o{ PAYMENT : "makes"
     USER {
-        int user_id PK
+        PK int user_id
         string email
         string password_hash
         string login_type
@@ -37,8 +37,8 @@ erDiagram
     }
 
     USER_PROFILE {
-        int profile_id PK
-        int user_id FK
+        PK int profile_id
+        FK int user_id
         string first_name
         string last_name
         string shipping_address
@@ -48,17 +48,17 @@ erDiagram
 
     CART ||--o{ CART_ITEM : "contains"
     CART {
-        int cart_id PK
-        int user_id FK
+        PK int cart_id
+        FK int user_id
         datetime created_at
         decimal total_price
     }
 
     CART_ITEM ||--|| PRODUCT : "references"
     CART_ITEM {
-        int cart_item_id PK
-        int cart_id FK
-        int product_id FK
+        PK int cart_item_id
+        FK int cart_id
+        FK int product_id
         int quantity
         decimal unit_price
     }
@@ -66,7 +66,7 @@ erDiagram
     PRODUCT ||--o{ PHYSICAL_PRODUCT : "is_type"
     PRODUCT ||--o{ VIRTUAL_PRODUCT : "is_type"
     PRODUCT {
-        int product_id PK
+        PK int product_id
         string name
         decimal price
         string description
@@ -77,9 +77,9 @@ erDiagram
 
     PHYSICAL_PRODUCT ||--|| SUBCATEGORY : "belongs_to"
     PHYSICAL_PRODUCT {
-        int physical_product_id PK
-        int product_id FK
-        int subcategory_id FK
+        PK int physical_product_id
+        FK int product_id
+        FK int subcategory_id
         string product_type
         string model_number
         decimal weight
@@ -87,7 +87,7 @@ erDiagram
     }
 
     SUBCATEGORY {
-        int subcategory_id PK
+        PK int subcategory_id
         string name
         string parent_category
     }
@@ -95,22 +95,22 @@ erDiagram
     VIRTUAL_PRODUCT ||--o{ GAME_PRODUCT : "is_type"
     VIRTUAL_PRODUCT ||--o{ IN_GAME_CURRENCY : "is_type"
     VIRTUAL_PRODUCT {
-        int virtual_product_id PK
-        int product_id FK
+        PK int virtual_product_id
+        FK int product_id
         string digital_delivery_method
     }
 
     GAME_PRODUCT {
-        int game_product_id PK
-        int virtual_product_id FK
+        PK int game_product_id
+        FK int virtual_product_id
         string game_platform
         string genre
         date release_date
     }
 
     IN_GAME_CURRENCY {
-        int currency_id PK
-        int virtual_product_id FK
+        PK int currency_id
+        FK int virtual_product_id
         string game_name
         string currency_type
     }
@@ -119,8 +119,8 @@ erDiagram
     ORDER ||--|| PAYMENT : "processed_by"
     ORDER ||--|| EMAIL_RECEIPT : "generates"
     ORDER {
-        int order_id PK
-        int user_id FK
+        PK int order_id
+        FK int user_id
         datetime order_date
         string order_status
         decimal total_amount
@@ -128,17 +128,17 @@ erDiagram
     }
 
     ORDER_ITEM {
-        int order_item_id PK
-        int order_id FK
-        int product_id FK
+        PK int order_item_id
+        FK int order_id
+        FK int product_id
         int quantity
         decimal unit_price
     }
 
     PAYMENT {
-        int payment_id PK
-        int order_id FK
-        int user_id FK
+        PK int payment_id
+        FK int order_id
+        FK int user_id
         string payment_method
         string transaction_id
         datetime payment_date
@@ -147,14 +147,14 @@ erDiagram
     }
 
     EMAIL_RECEIPT {
-        int receipt_id PK
-        int order_id FK
+        PK int receipt_id
+        FK int order_id
         string email_content
         datetime sent_at
         string recipient_email
     }
-
 ```
+
 
 ## 📋Functional Requirements
 - User Registration via Email 
@@ -170,7 +170,8 @@ erDiagram
 - Product Details View
 - Update Cart Quantity
 
-- ### 📊 Gantt Chart Contributions
+### 📊 Gantt Chart Contributions
+[Click to download](GanttChart_Gamehub.xlsx)
 [Click to preview](https://docs.google.com/spreadsheets/d/11PxER5bcgMxnkyM3OBweART3znoyU9kwjY-M0eOI7Ls/edit?gid=0#gid=0)
 
 ### ✨ Key Features -- TBC --
