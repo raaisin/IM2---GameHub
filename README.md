@@ -298,7 +298,8 @@ See `LICENSE` for more information.
 <img src="jeasprofile.png" alt="drawing" style="width:75px; border-radius: 75px;"/>
 <h3> Jeastel Mae Maratas </h3> 
 <ul>
-  <li> 🏗️ Project Manager </li>
+    <li> 🏗️ Project Manager </li>
+    <li> UI/UX Designer </li>
 </ul>
 
 <hr>
@@ -306,8 +307,8 @@ See `LICENSE` for more information.
 <img src="hanzprofile.png" alt="drawing" style="width:75px; border-radius: 75px;"/>
 <h3> Hanz Chester Bacus </h3>
 <ul>
-  <li> 👨‍💻 God of Coding </li>
-  <li> 🔧 Technical Adviser </li>
+    <li> 👨‍💻 God of Coding </li>
+    <li> 🔧 Technical Adviser </li>
 </ul>
 
 <hr>
@@ -315,7 +316,8 @@ See `LICENSE` for more information.
 <img src="raisinprofile.jpg" alt="drawing" style="width:75px; border-radius: 75px;"/>
 <h3> Russell Joshua Palma </h3>
 <ul>
-  <li> 🍜 Tig luto ug noodles </li>
+    <li> UI/UX Designer </li>
+    <li> 🍜 Tig luto ug noodles </li>
 </ul>
 
 <hr>
@@ -348,22 +350,4 @@ Project Link: https://github.com/raaisin/IM2---GameHub/
 
 <hr>
 
-OLD README
 
-# IM2---GameHub
-para sa IM2 
-Leader:  Jeastel Maratas
-Members: Hanz Chester Bacus
-         Russell Joshua Palma
-
-Functional Requirements:
-
-
-Gantt chart:
-https://docs.google.com/spreadsheets/d/11PxER5bcgMxnkyM3OBweART3znoyU9kwjY-M0eOI7Ls/edit?gid=0#gid=0
-
-ERD:
-https://online.visual-paradigm.com/w/doxuyryq/app/diagrams/#diagram:workspace=doxuyryq&proj=0&id=11&type=ERDiagram&width=11&height=8.5&unit=inch
-
-UI/UX (Figma project)
-https://www.figma.com/design/2itXLcuX6kgIyFBwF4ELJX/IM2---GameHub?node-id=168-737&node-type=canvas&t=alwVIH0D3mLeqrZl-0
